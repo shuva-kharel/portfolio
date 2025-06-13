@@ -129,7 +129,7 @@ export default function Contact({ darkMode }: ContactProps) {
           className={`border-t pt-8 ${darkMode ? "border-[#00ff99]/20" : "border-gray-200"}`}
         >
           <p className={`text-sm font-mono ${darkMode ? "text-[#f4f4f5]/50" : "text-gray-500"}`}>
-            © 2024 Shuva Kharel. Built with React & Tailwind CSS.
+            © 2025 Shuva Kharel. Built with React & Tailwind CSS.
           </p>
           <p className={`text-xs mt-2 ${darkMode ? "text-[#00ff99]/70" : "text-blue-600/70"}`}>
             Securing the digital world, one line of code at a time.

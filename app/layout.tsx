@@ -16,7 +16,8 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "Shuva Kharel - High School Student Portfolio",
+  metadataBase: new URL("https://shuvakharel.com.np"),
+  title: "Shuva Kharel - Portfolio",
   description:
     "High school student passionate about cybersecurity, technology, and networking from Kathmandu, Nepal.",
   keywords:
@@ -26,15 +27,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://shuva-kharel.com",
-    title: "Shuva Kharel - High School Student Portfolio",
+    url: "https://shuvakharel.com.np",
+    title: "Shuva Kharel - Portfolio",
     description:
       "High school student passionate about cybersecurity, technology, and networking from Kathmandu, Nepal.",
-    siteName: "Shuva Kharel Portfolio",
+    siteName: "Shuva Kharel - Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shuva Kharel - High School Student Portfolio",
+    title: "Shuva Kharel - Portfolio",
     description:
       "High school student passionate about cybersecurity, technology, and networking from Kathmandu, Nepal.",
   },
@@ -59,7 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${firaCode.variable}`}>
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className={`${inter.className} antialiased`}>{children}</body>

@@ -53,7 +53,7 @@ export default function TerminalLoader() {
     >
       <div className="w-full max-w-2xl p-8">
         <div className="border border-[#00ff99] bg-black p-6 shadow-[0_0_50px_#00ff99]">
-          <div className="text-[#00ff99] mb-4 text-sm">┌─[shuva@matrix]─[~] └──╼ sudo ./initialize_portfolio.sh</div>
+          <div className="text-[#00ff99] mb-4 text-sm">┌─[shuva@portfolio]─[~] └──╼ sudo ./initialize_portfolio.sh</div>
 
           <div className="space-y-2">
             {bootSequence.slice(0, currentLine + 1).map((line, index) => (

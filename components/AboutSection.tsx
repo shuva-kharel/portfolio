@@ -14,14 +14,14 @@ export default function AboutSection({ darkMode }: AboutSectionProps) {
       title: "Programming & Development",
       description:
         "Building web applications and exploring different programming languages",
-      year: "2022-Present",
+      year: "2018-Present",
     },
     {
       icon: Wifi,
       title: "Cybersecurity & Networking",
       description:
         "Learning about network security, ethical hacking, and digital forensics",
-      year: "2023-Present",
+      year: "2025-Present",
     },
     {
       icon: BookOpen,

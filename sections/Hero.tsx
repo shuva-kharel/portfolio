@@ -73,7 +73,7 @@ export default function Hero({ darkMode }: HeroProps) {
                 darkMode ? "text-[#00ff99]" : "text-blue-600"
               } text-sm font-mono ml-2`}
             >
-              shuva@matrix:~$
+              shuva@portfolio:~$
             </span>
           </div>
 
