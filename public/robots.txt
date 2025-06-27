@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://shuvakharel.com.np
+
+# Sitemaps
+Sitemap: https://shuvakharel.com.np/sitemap.xml
