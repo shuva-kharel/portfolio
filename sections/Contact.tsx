@@ -24,7 +24,7 @@ export default function Contact({ darkMode }: ContactProps) {
     {
       name: "Email",
       icon: Mail,
-      url: "mailto:shuva.kharel@example.com",
+      url: "mailto:admin@shuvakharel.com.np",
       color: darkMode ? "#ff0055" : "#dc2626",
     },
   ]
