@@ -1,5 +1,5 @@
 import type React from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
 
@@ -15,9 +15,20 @@ const firaCode = Fira_Code({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f7fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0f14" },
+  ],
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://shuvakharel.com.np"),
-  title: "Shuva Kharel - Portfolio",
+  title: "Shuva Kharel - Cybersecurity Enthusiast & Developer",
   description:
     "High school student passionate about cybersecurity, technology, and networking from Kathmandu, Nepal.",
   keywords:
@@ -31,10 +42,10 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://shuvakharel.com.np",
-    title: "Shuva Kharel - Portfolio",
+    title: "Shuva Kharel - Cybersecurity Enthusiast & Developer",
     description:
       "High school student passionate about cybersecurity, technology, and networking from Kathmandu, Nepal.",
-    siteName: "Shuva Kharel - Portfolio",
+    siteName: "Shuva Kharel Portfolio",
     images: [
       {
         url: "https://shuvakharel.com.np/og-image.png",
@@ -46,7 +57,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shuva Kharel - Portfolio",
+    title: "Shuva Kharel - Cybersecurity Enthusiast & Developer",
     description:
       "High school student passionate about cybersecurity, technology, and networking from Kathmandu, Nepal.",
     images: ["https://shuvakharel.com.np/og-image.png"],
@@ -64,7 +75,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: {
@@ -74,9 +84,8 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${firaCode.variable}`}>
       <head>
         <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   );
 }

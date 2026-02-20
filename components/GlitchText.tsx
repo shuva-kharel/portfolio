@@ -43,8 +43,8 @@ export default function GlitchText({
     <motion.span
       className={`${className} ${
         darkMode
-          ? "text-[#00ff99]"
-          : "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
+          ? "text-primary"
+          : "text-primary"
       }`}
       animate={{
         textShadow: darkMode

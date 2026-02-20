@@ -33,52 +33,52 @@ export default function AboutSection({ darkMode }: AboutSectionProps) {
   ];
 
   return (
-    <section id="about" className="py-20 relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="about" className="py-16 sm:py-20 relative">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-12 sm:mb-16"
         >
           <h2
-            className={`text-4xl md:text-5xl font-bold mb-6 font-mono ${
-              darkMode ? "text-[#f4f4f5]" : "text-gray-900"
+            className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-4 font-mono text-balance ${
+              darkMode ? "text-foreground" : "text-foreground"
             }`}
           >
             {"<"}
-            <span className={darkMode ? "text-[#00ff99]" : "text-blue-600"}>
-              About
-            </span>
+            <span className="text-primary">About</span>
             {" />"}
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
           {/* Left side - About text */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="flex flex-col gap-4 sm:gap-6"
           >
             <div
-              className={`p-6 rounded-xl backdrop-blur-md ${
+              className={`p-5 sm:p-6 rounded-xl backdrop-blur-md ${
                 darkMode
-                  ? "bg-black/50 border border-[#00ff99]/20"
-                  : "bg-white/50 border border-blue-200"
+                  ? "bg-card/60 border border-primary/15"
+                  : "bg-card border border-border"
               }`}
             >
               <h3
-                className={`text-2xl font-bold mb-4 ${
-                  darkMode ? "text-[#00ff99]" : "text-blue-600"
+                className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${
+                  darkMode ? "text-primary" : "text-primary"
                 }`}
               >
                 My Journey
               </h3>
               <p
-                className={`text-lg leading-relaxed ${
-                  darkMode ? "text-[#f4f4f5]/80" : "text-gray-700"
+                className={`text-base leading-relaxed ${
+                  darkMode ? "text-foreground/80" : "text-muted-foreground"
                 }`}
               >
                 I'm a high school student from Kathmandu, Nepal, with a deep
@@ -90,22 +90,22 @@ export default function AboutSection({ darkMode }: AboutSectionProps) {
             </div>
 
             <div
-              className={`p-6 rounded-xl backdrop-blur-md ${
+              className={`p-5 sm:p-6 rounded-xl backdrop-blur-md ${
                 darkMode
-                  ? "bg-black/50 border border-[#ff0055]/20"
-                  : "bg-white/50 border border-red-200"
+                  ? "bg-card/60 border border-accent/15"
+                  : "bg-card border border-border"
               }`}
             >
               <h3
-                className={`text-2xl font-bold mb-4 ${
-                  darkMode ? "text-[#ff0055]" : "text-red-600"
+                className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${
+                  darkMode ? "text-accent" : "text-accent"
                 }`}
               >
                 What Drives Me
               </h3>
               <p
-                className={`text-lg leading-relaxed ${
-                  darkMode ? "text-[#f4f4f5]/80" : "text-gray-700"
+                className={`text-base leading-relaxed ${
+                  darkMode ? "text-foreground/80" : "text-muted-foreground"
                 }`}
               >
                 Technology fascinates me because it's constantly evolving. I
@@ -118,56 +118,58 @@ export default function AboutSection({ darkMode }: AboutSectionProps) {
 
           {/* Right side - Interests */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            viewport={{ once: true }}
+            className="flex flex-col gap-4 sm:gap-6"
           >
             {interests.map((interest, index) => {
               const IconComponent = interest.icon;
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  className={`flex items-start space-x-4 p-6 rounded-xl backdrop-blur-md transition-all duration-300 hover:scale-105 ${
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className={`flex items-start gap-4 p-5 sm:p-6 rounded-xl backdrop-blur-md transition-all duration-300 hover:translate-y-[-2px] ${
                     darkMode
-                      ? "bg-black/50 border border-[#00ff99]/20 hover:border-[#00ff99]/50"
-                      : "bg-white/50 border border-blue-200 hover:border-blue-400"
+                      ? "bg-card/60 border border-primary/15 hover:border-primary/40"
+                      : "bg-card border border-border hover:border-primary/40 hover:shadow-md"
                   }`}
                 >
                   <div
-                    className={`p-3 rounded-full ${
+                    className={`p-2.5 sm:p-3 rounded-xl flex-shrink-0 ${
                       darkMode
-                        ? "bg-[#00ff99]/20 text-[#00ff99]"
-                        : "bg-blue-100 text-blue-600"
+                        ? "bg-primary/15 text-primary"
+                        : "bg-primary/10 text-primary"
                     }`}
                   >
-                    <IconComponent className="w-6 h-6" />
+                    <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 mb-2">
                       <h4
-                        className={`font-bold text-lg ${
-                          darkMode ? "text-[#f4f4f5]" : "text-gray-900"
+                        className={`font-bold text-base sm:text-lg ${
+                          darkMode ? "text-foreground" : "text-foreground"
                         }`}
                       >
                         {interest.title}
                       </h4>
                       <span
-                        className={`text-sm font-mono px-3 py-1 rounded-full ${
+                        className={`text-xs font-mono px-2.5 py-1 rounded-full w-fit ${
                           darkMode
-                            ? "bg-[#ff0055]/20 text-[#ff0055]"
-                            : "bg-red-100 text-red-600"
+                            ? "bg-accent/15 text-accent"
+                            : "bg-accent/10 text-accent"
                         }`}
                       >
                         {interest.year}
                       </span>
                     </div>
                     <p
-                      className={`${
-                        darkMode ? "text-[#f4f4f5]/70" : "text-gray-600"
+                      className={`text-sm sm:text-base ${
+                        darkMode ? "text-foreground/60" : "text-muted-foreground"
                       }`}
                     >
                       {interest.description}

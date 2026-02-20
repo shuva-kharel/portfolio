@@ -15,7 +15,7 @@ export default function InteractiveSkills({
   const [activeCategory, setActiveCategory] = useState("all");
 
   const skillCategories = [
-    { id: "all", label: "All Skills", count: skills.length },
+    { id: "all", label: "All", count: skills.length },
     {
       id: "programming",
       label: "Programming",
@@ -52,11 +52,11 @@ export default function InteractiveSkills({
   };
 
   const categoryColors = {
-    programming: darkMode ? "#00ff99" : "#3b82f6",
-    web: darkMode ? "#ff0055" : "#dc2626",
-    tools: darkMode ? "#ffff00" : "#f59e0b",
-    security: darkMode ? "#00ffff" : "#06b6d4",
-    personal: darkMode ? "#ff69b4" : "#ec4899",
+    programming: darkMode ? "#00ff99" : "hsl(162, 72%, 45%)",
+    web: darkMode ? "#ff0055" : "hsl(347, 77%, 50%)",
+    tools: darkMode ? "#ffff00" : "hsl(45, 93%, 47%)",
+    security: darkMode ? "#00ffff" : "hsl(187, 92%, 40%)",
+    personal: darkMode ? "#ff69b4" : "hsl(330, 80%, 60%)",
   };
 
   const filteredSkills = skills.filter((skill) => {
@@ -65,142 +65,128 @@ export default function InteractiveSkills({
   });
 
   return (
-    <div className="py-16">
+    <div className="py-8 sm:py-12">
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        className="text-center mb-12"
+        viewport={{ once: true }}
+        className="text-center mb-8 sm:mb-12"
       >
         <h3
-          className={`text-3xl font-bold font-mono mb-4 ${
-            darkMode ? "text-[#f4f4f5]" : "text-gray-900"
+          className={`text-2xl sm:text-3xl font-bold font-mono mb-3 ${
+            darkMode ? "text-foreground" : "text-foreground"
           }`}
         >
           My Skills & Interests
         </h3>
         <p
-          className={`text-lg ${
-            darkMode ? "text-[#f4f4f5]/70" : "text-gray-600"
+          className={`text-sm sm:text-lg ${
+            darkMode ? "text-foreground/60" : "text-muted-foreground"
           }`}
         >
           Technologies I'm learning and personal interests I enjoy
         </p>
       </motion.div>
 
-      {/* Category Filter */}
+      {/* Category Filter - scrollable on mobile */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
-        className="flex flex-wrap items-center justify-center gap-4 mb-12"
+        viewport={{ once: true }}
+        className="mb-8 sm:mb-12"
       >
-        <div
-          className={`flex items-center space-x-2 ${
-            darkMode ? "text-[#f4f4f5]" : "text-gray-700"
-          }`}
-        >
-          <Filter className="w-4 h-4" />
-          <span className="text-sm font-medium">Filter:</span>
-        </div>
-
-        {skillCategories.map((category) => {
-          const IconComponent =
-            category.id !== "all"
-              ? categoryIcons[category.id as keyof typeof categoryIcons]
-              : Filter;
-          return (
-            <motion.button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                activeCategory === category.id
-                  ? darkMode
-                    ? "bg-[#ff0055] text-black"
-                    : "bg-blue-600 text-white"
-                  : darkMode
-                  ? "bg-black/50 text-[#f4f4f5] border border-[#00ff99]/20 hover:border-[#00ff99]/50"
-                  : "bg-white/50 text-gray-700 border border-gray-200 hover:border-blue-300"
-              }`}
-              data-cursor="hover"
-            >
-              {IconComponent && <IconComponent className="w-4 h-4" />}
-              <span>{category.label}</span>
-              <span
-                className={`ml-2 px-2 py-1 text-xs rounded-full ${
+        <div className="flex flex-nowrap sm:flex-wrap items-center justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
+          {skillCategories.map((category) => {
+            const IconComponent =
+              category.id !== "all"
+                ? categoryIcons[category.id as keyof typeof categoryIcons]
+                : Filter;
+            return (
+              <motion.button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                whileTap={{ scale: 0.95 }}
+                className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                   activeCategory === category.id
                     ? darkMode
-                      ? "bg-black/20 text-black"
-                      : "bg-white/20 text-white"
+                      ? "bg-accent text-accent-foreground"
+                      : "bg-primary text-primary-foreground"
                     : darkMode
-                    ? "bg-[#00ff99]/20 text-[#00ff99]"
-                    : "bg-blue-100 text-blue-600"
+                    ? "bg-card text-foreground border border-primary/15 hover:border-primary/40"
+                    : "bg-card text-foreground border border-border hover:border-primary/30"
                 }`}
+                data-cursor="hover"
               >
-                {category.count}
-              </span>
-            </motion.button>
-          );
-        })}
+                {IconComponent && <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+                <span>{category.label}</span>
+                <span
+                  className={`px-1.5 py-0.5 text-xs rounded-md ${
+                    activeCategory === category.id
+                      ? "bg-background/20 text-inherit"
+                      : darkMode
+                      ? "bg-primary/10 text-primary"
+                      : "bg-primary/10 text-primary"
+                  }`}
+                >
+                  {category.count}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
       </motion.div>
 
       {/* Skills Grid */}
       <motion.div
         key={activeCategory}
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6"
+        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-5"
       >
         {filteredSkills.map((skill, index) => (
           <motion.div
             key={skill.name}
-            initial={{ opacity: 0, scale: 0.5 }}
+            initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+            transition={{ duration: 0.4, delay: index * 0.05 }}
             whileHover={{
-              scale: 1.1,
-              rotate: [0, -5, 5, 0],
-              transition: { duration: 0.3 },
+              scale: 1.06,
+              transition: { duration: 0.2 },
             }}
-            className={`group relative p-6 rounded-xl text-center transition-all duration-300 cursor-pointer ${
+            className={`group relative p-3 sm:p-5 rounded-xl text-center transition-all duration-300 cursor-pointer ${
               darkMode
-                ? "bg-gradient-to-br from-[#0b0c10] to-[#111215] border border-[#00ff99]/20 hover:border-[#00ff99]/50"
-                : "bg-white border border-gray-200 hover:border-blue-300 shadow-lg hover:shadow-xl"
+                ? "bg-card border border-primary/15 hover:border-primary/40"
+                : "bg-card border border-border hover:border-primary/30 hover:shadow-md"
             }`}
             data-cursor="hover"
-            style={{
-              boxShadow: darkMode
-                ? "0 0 0 rgba(0, 255, 153, 0)"
-                : "0 0 0 rgba(37, 99, 235, 0)",
-            }}
             onMouseEnter={(e) => {
               const color =
                 categoryColors[skill.category as keyof typeof categoryColors];
-              e.currentTarget.style.boxShadow = `0 10px 30px ${color}30`;
+              e.currentTarget.style.boxShadow = `0 8px 24px ${color}20`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "0 0 0 rgba(0, 0, 0, 0)";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
-            <div className="mb-4">
+            <div className="mb-2 sm:mb-3">
               {skill.category === "personal" ? (
-                <div className="text-4xl mx-auto w-12 h-12 flex items-center justify-center">
+                <div className="text-2xl sm:text-3xl mx-auto w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
                   {skill.icon}
                 </div>
               ) : (
                 <img
                   src={skill.icon || "/placeholder.svg"}
                   alt={skill.name}
-                  className="w-12 h-12 mx-auto transition-transform duration-300 group-hover:scale-110"
+                  className="w-10 h-10 sm:w-12 sm:h-12 mx-auto transition-transform duration-300 group-hover:scale-110"
                 />
               )}
             </div>
             <h3
-              className={`font-semibold text-sm ${
+              className={`font-semibold text-xs sm:text-sm ${
                 darkMode
-                  ? "text-[#f4f4f5] group-hover:text-[#00ff99]"
-                  : "text-gray-900 group-hover:text-blue-600"
+                  ? "text-foreground group-hover:text-primary"
+                  : "text-foreground group-hover:text-primary"
               } transition-colors duration-300`}
             >
               {skill.name}
@@ -208,40 +194,32 @@ export default function InteractiveSkills({
 
             {/* Category indicator */}
             <div
-              className="absolute top-2 right-2 w-3 h-3 rounded-full opacity-60"
+              className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full opacity-50"
               style={{
                 backgroundColor:
                   categoryColors[skill.category as keyof typeof categoryColors],
               }}
             />
-
-            {/* Glowing border effect on hover */}
-            <div
-              className={`absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
-                darkMode
-                  ? "bg-gradient-to-r from-[#00ff99]/20 to-[#ff0055]/20"
-                  : "bg-gradient-to-r from-blue-500/20 to-red-500/20"
-              } -z-10 blur-xl`}
-            />
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Quote Text - Positioned at the end of skills section */}
+      {/* Quote Text */}
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
-        className="mt-20 mb-8 text-center"
+        transition={{ duration: 0.6, delay: 0.3 }}
+        viewport={{ once: true }}
+        className="mt-12 sm:mt-16 text-center"
       >
         <div
-          className={`inline-block px-6 py-3 rounded-lg font-mono text-sm ${
+          className={`inline-block px-5 py-2.5 rounded-lg font-mono text-xs sm:text-sm ${
             darkMode
-              ? "bg-[#00ff99]/10 text-[#00ff99] border border-[#00ff99]/30"
-              : "bg-blue-50 text-blue-600 border border-blue-200"
+              ? "bg-primary/10 text-primary border border-primary/20"
+              : "bg-primary/5 text-primary border border-primary/15"
           }`}
         >
-          Learning something new every day! 🚀
+          Learning something new every day
         </div>
       </motion.div>
     </div>

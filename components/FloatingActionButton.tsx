@@ -35,7 +35,7 @@ export default function FloatingActionButton({
   ];
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40">
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -92,15 +92,15 @@ export default function FloatingActionButton({
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className={`w-14 h-14 rounded-full backdrop-blur-md transition-all duration-300 flex items-center justify-center ${
+        className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl backdrop-blur-md transition-all duration-300 flex items-center justify-center ${
           darkMode
-            ? "bg-[#ff0055] hover:bg-[#00ff99] text-black border-2 border-[#ff0055] hover:border-[#00ff99]"
-            : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-pink-600 text-white border-2 border-blue-600"
+            ? "bg-accent hover:bg-primary text-accent-foreground hover:text-primary-foreground border border-accent/50 hover:border-primary/50"
+            : "bg-primary hover:bg-accent text-primary-foreground hover:text-accent-foreground border border-primary/30"
         }`}
         style={{
           boxShadow: darkMode
-            ? "0 0 30px rgba(255, 0, 85, 0.5)"
-            : "0 0 30px rgba(59, 130, 246, 0.5)",
+            ? "0 4px 20px rgba(255, 0, 85, 0.3)"
+            : "0 4px 20px rgba(0, 0, 0, 0.15)",
         }}
         data-cursor="hover"
       >
