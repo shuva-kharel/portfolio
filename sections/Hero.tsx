@@ -38,59 +38,50 @@ export default function Hero({ darkMode }: HeroProps) {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
+      className="min-h-[100dvh] flex items-center justify-center relative overflow-hidden px-4 py-24 sm:py-20"
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <div className="w-full max-w-5xl mx-auto sm:px-6 lg:px-8 text-center relative z-10">
         {/* Main Terminal Window */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className={`${
             darkMode
-              ? "bg-black border-[#00ff99] shadow-[0_0_50px_rgba(0,255,153,0.3)]"
-              : "bg-white border-blue-500 shadow-[0_0_50px_rgba(59,130,246,0.3)]"
-          } border-2 rounded-lg p-8 mb-12 backdrop-blur-md`}
+              ? "bg-[#0a0b0e]/90 border-[#00ff99]/40 shadow-[0_0_60px_rgba(0,255,153,0.15)]"
+              : "bg-card border-border shadow-[0_8px_40px_rgba(0,0,0,0.08)]"
+          } border rounded-xl p-5 sm:p-8 mb-8 sm:mb-12 backdrop-blur-xl`}
         >
-          <div className="flex items-center mb-6">
-            <div
-              className={`w-3 h-3 ${
-                darkMode ? "bg-[#ff0055]" : "bg-red-500"
-              } rounded-full mr-2`}
-            ></div>
-            <div
-              className={`w-3 h-3 ${
-                darkMode ? "bg-[#ffff00]" : "bg-yellow-500"
-              } rounded-full mr-2`}
-            ></div>
-            <div
-              className={`w-3 h-3 ${
-                darkMode ? "bg-[#00ff99]" : "bg-green-500"
-              } rounded-full mr-2`}
-            ></div>
+          {/* Terminal title bar */}
+          <div className="flex items-center gap-2 mb-5 sm:mb-6">
+            <div className="flex items-center gap-1.5">
+              <div className={`w-3 h-3 rounded-full ${darkMode ? "bg-[#ff5f57]" : "bg-red-400"}`} />
+              <div className={`w-3 h-3 rounded-full ${darkMode ? "bg-[#febc2e]" : "bg-yellow-400"}`} />
+              <div className={`w-3 h-3 rounded-full ${darkMode ? "bg-[#28c840]" : "bg-green-400"}`} />
+            </div>
             <span
               className={`${
-                darkMode ? "text-[#00ff99]" : "text-blue-600"
-              } text-sm font-mono ml-2`}
+                darkMode ? "text-[#00ff99]/70" : "text-muted-foreground"
+              } text-xs sm:text-sm font-mono ml-2`}
             >
               shuva@portfolio:~$
             </span>
           </div>
 
           <motion.h1
-            className={`text-5xl md:text-7xl lg:text-8xl font-bold mb-8 font-mono ${
-              darkMode ? "text-[#f4f4f5]" : "text-gray-900"
+            className={`text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mb-5 sm:mb-8 font-mono leading-tight ${
+              darkMode ? "text-foreground" : "text-foreground"
             }`}
-            initial={{ scale: 0.5, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
             <GlitchText text="SHUVA" darkMode={darkMode} />
             <br />
             <GlitchText
               text="KHAREL"
               darkMode={darkMode}
-              className="text-[#ff0055]"
+              className="text-accent"
             />
           </motion.h1>
 
@@ -98,25 +89,25 @@ export default function Hero({ darkMode }: HeroProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="flex items-center justify-center space-x-4 mb-8"
+            className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mb-4 sm:mb-8"
           >
             <Terminal
-              className={`w-6 h-6 ${
-                darkMode ? "text-[#00ff99]" : "text-blue-600"
+              className={`w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 ${
+                darkMode ? "text-primary" : "text-primary"
               }`}
             />
             <span
-              className={`text-lg md:text-xl font-mono ${
+              className={`text-sm sm:text-lg md:text-xl font-mono text-balance ${
                 darkMode
-                  ? "text-[#ff0055]"
-                  : "bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent font-semibold"
+                  ? "text-accent"
+                  : "text-accent font-semibold"
               }`}
             >
               Aspiring Cybersecurity Engineer & Developer
             </span>
             <Shield
-              className={`w-6 h-6 ${
-                darkMode ? "text-[#ff0055]" : "text-red-600"
+              className={`w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 ${
+                darkMode ? "text-accent" : "text-accent"
               }`}
             />
           </motion.div>
@@ -124,51 +115,51 @@ export default function Hero({ darkMode }: HeroProps) {
 
         {/* Typing Animation */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className={`max-w-4xl mx-auto mb-12 text-lg md:text-xl leading-relaxed ${
-            darkMode ? "text-[#f4f4f5]/80" : "text-gray-700"
-          }`}
+          className="max-w-3xl mx-auto mb-8 sm:mb-12"
         >
           <div
             className={`${
               darkMode
-                ? "bg-black border-[#00ff99] shadow-[0_0_30px_rgba(0,255,153,0.2)]"
-                : "bg-gray-50 border-blue-200 shadow-[0_0_30px_rgba(59,130,246,0.2)]"
-            } border rounded-lg p-6 font-mono min-h-[120px] flex items-center justify-center backdrop-blur-md`}
+                ? "bg-[#0a0b0e]/80 border-primary/20 shadow-[0_0_30px_rgba(0,255,153,0.08)]"
+                : "bg-card border-border shadow-[0_4px_24px_rgba(0,0,0,0.05)]"
+            } border rounded-xl p-4 sm:p-6 font-mono text-sm sm:text-base md:text-lg leading-relaxed min-h-[100px] sm:min-h-[120px] flex items-center justify-center backdrop-blur-xl ${
+              darkMode ? "text-foreground/80" : "text-muted-foreground"
+            }`}
           >
-            {displayText}
+            <span>{displayText}</span>
             <motion.span
               animate={{ opacity: [1, 0] }}
               transition={{ duration: 0.8, repeat: Number.POSITIVE_INFINITY }}
               className={`ml-1 ${
-                darkMode ? "text-[#00ff99]" : "text-blue-600"
+                darkMode ? "text-primary" : "text-primary"
               }`}
             >
-              █
+              {"_"}
             </motion.span>
           </div>
         </motion.div>
 
         {/* CTA Button */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2 }}
         >
           <motion.button
             onClick={scrollToContact}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className={`px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 font-mono ${
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            className={`px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all duration-300 font-mono ${
               darkMode
-                ? "bg-[#ff0055] hover:bg-[#00ff99] text-black hover:shadow-[0_0_30px_#00ff99] border border-[#ff0055] hover:border-[#00ff99]"
-                : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-pink-600 text-white hover:shadow-[0_0_30px_rgba(139,92,246,0.8)] shadow-lg"
+                ? "bg-accent hover:bg-primary text-accent-foreground hover:text-primary-foreground hover:shadow-[0_0_40px_rgba(0,255,153,0.3)] border border-accent hover:border-primary"
+                : "bg-primary hover:bg-accent text-primary-foreground hover:text-accent-foreground shadow-lg hover:shadow-xl"
             }`}
             data-cursor="hover"
           >
-            {darkMode ? ">> INITIATE_CONTACT.exe" : "Contact Me"}
+            {darkMode ? ">> INITIATE_CONTACT.exe" : "Get In Touch"}
           </motion.button>
         </motion.div>
 
@@ -177,14 +168,14 @@ export default function Hero({ darkMode }: HeroProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2"
         >
           <motion.div
-            animate={{ y: [0, 10, 0] }}
+            animate={{ y: [0, 8, 0] }}
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-            className={darkMode ? "text-[#00ff99]" : "text-blue-600"}
+            className="text-primary"
           >
-            <ChevronDown className="w-8 h-8" />
+            <ChevronDown className="w-6 h-6 sm:w-8 sm:h-8" />
           </motion.div>
         </motion.div>
       </div>

@@ -49,19 +49,21 @@ export default function TerminalLoader() {
     <motion.div
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black flex items-center justify-center z-50 font-mono"
+      className="fixed inset-0 bg-[#0a0b0e] flex items-center justify-center z-50 font-mono"
     >
-      <div className="w-full max-w-2xl p-8">
-        <div className="border border-[#00ff99] bg-black p-6 shadow-[0_0_50px_#00ff99]">
-          <div className="text-[#00ff99] mb-4 text-sm">┌─[shuva@portfolio]─[~] └──╼ sudo ./initialize_portfolio.sh</div>
+      <div className="w-full max-w-2xl px-4 sm:px-8">
+        <div className="border border-primary/40 bg-[#0a0b0e] p-4 sm:p-6 rounded-xl shadow-[0_0_40px_rgba(0,255,153,0.15)]">
+          <div className="text-primary/80 mb-4 text-xs sm:text-sm break-all sm:break-normal">
+            {"shuva@portfolio:~$ sudo ./initialize_portfolio.sh"}
+          </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             {bootSequence.slice(0, currentLine + 1).map((line, index) => (
-              <div key={index} className="text-[#00ff99] text-sm">
+              <div key={index} className="text-primary text-xs sm:text-sm">
                 {index === currentLine ? (
                   <>
                     {line.slice(0, currentChar)}
-                    {showCursor && <span className="bg-[#00ff99] text-black">█</span>}
+                    {showCursor && <span className="bg-primary text-primary-foreground">{"_"}</span>}
                   </>
                 ) : (
                   line
@@ -70,18 +72,14 @@ export default function TerminalLoader() {
             ))}
           </div>
 
-          <motion.div
-            className="mt-6 h-2 bg-gray-800 rounded overflow-hidden"
-            initial={{ width: 0 }}
-            animate={{ width: "100%" }}
-          >
+          <div className="mt-4 sm:mt-6 h-1.5 sm:h-2 bg-secondary rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-[#00ff99] to-[#ff0055]"
+              className="h-full bg-primary rounded-full"
               initial={{ width: "0%" }}
               animate={{ width: `${((currentLine + 1) / bootSequence.length) * 100}%` }}
               transition={{ duration: 0.3 }}
             />
-          </motion.div>
+          </div>
         </div>
       </div>
     </motion.div>

@@ -1,16 +1,18 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Menu, X } from "lucide-react"
+import { useState, useEffect, useCallback } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Menu, X, Sun, Moon } from "lucide-react"
 
 interface NavbarProps {
   darkMode: boolean
+  setDarkMode: (value: boolean) => void
 }
 
-export default function Navbar({ darkMode }: NavbarProps) {
+export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("home")
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   const navItems = [
     { id: "home", label: "Home" },
@@ -22,6 +24,8 @@ export default function Navbar({ darkMode }: NavbarProps) {
 
   useEffect(() => {
     const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+
       const sections = navItems.map((item) => document.getElementById(item.id))
       const scrollPosition = window.scrollY + 200
 
@@ -33,121 +37,185 @@ export default function Navbar({ darkMode }: NavbarProps) {
         }
       }
 
-      // Special handling for contact section at bottom of page
       const contactSection = document.getElementById("contact")
       if (contactSection) {
         const windowHeight = window.innerHeight
         const documentHeight = document.documentElement.scrollHeight
-
         if (window.scrollY + windowHeight >= documentHeight - 100) {
           setActiveSection("contact")
         }
       }
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const scrollToSection = (sectionId: string) => {
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isMenuOpen])
+
+  const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
     }
     setIsMenuOpen(false)
-  }
+  }, [])
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b transition-all duration-300 ${
-        darkMode ? "bg-[#0b0c10]/80 border-[#00ff99]/20" : "bg-white/20 border-blue-200/30 shadow-lg shadow-blue-500/5"
-      }`}
-      style={{
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className={`font-bold text-xl font-mono cursor-pointer ${
-              darkMode
-                ? "text-[#00ff99]"
-                : "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
-            }`}
-            onClick={() => scrollToSection("home")}
-          >
-            {"<Shuva />"}
-          </motion.div>
+    <>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "glass-card shadow-lg"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            {/* Logo */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="font-mono font-bold text-base sm:text-lg text-primary"
+              onClick={() => scrollToSection("home")}
+              aria-label="Go to home"
+            >
+              {"<SK />"}
+            </motion.button>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
-            {navItems.map((item) => (
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`relative px-3 lg:px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                    activeSection === item.id
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {item.label}
+                  {activeSection === item.id && (
+                    <motion.div
+                      layoutId="activeNav"
+                      className="absolute inset-0 rounded-lg bg-primary/10"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                </button>
+              ))}
+
+              {/* Desktop theme toggle */}
+              <div className="ml-2 pl-2 border-l border-border">
+                <button
+                  onClick={() => setDarkMode(!darkMode)}
+                  className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  aria-label="Toggle theme"
+                >
+                  {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile: theme toggle + hamburger */}
+            <div className="flex items-center gap-1 md:hidden">
               <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 ${
-                  activeSection === item.id
-                    ? darkMode
-                      ? "text-[#00ff99]"
-                      : "text-blue-600 font-semibold"
-                    : darkMode
-                      ? "text-[#f4f4f5] hover:text-[#00ff99]"
-                      : "text-gray-700 hover:text-blue-600"
-                }`}
+                onClick={() => setDarkMode(!darkMode)}
+                className="p-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                aria-label="Toggle theme"
               >
-                {item.label}
-                {activeSection === item.id && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className={`absolute bottom-0 left-0 right-0 h-0.5 ${
-                      darkMode ? "bg-[#00ff99]" : "bg-gradient-to-r from-blue-500 to-purple-600"
-                    }`}
-                    style={{
-                      boxShadow: darkMode ? "0 0 10px #00ff99" : "0 0 10px rgba(59, 130, 246, 0.8)",
-                    }}
-                  />
-                )}
+                {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
-            ))}
+              <button
+                className="p-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                onClick={() => setIsMenuOpen(true)}
+                aria-label="Open navigation menu"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            </div>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? (
-              <X className={`w-6 h-6 ${darkMode ? "text-[#f4f4f5]" : "text-gray-800"}`} />
-            ) : (
-              <Menu className={`w-6 h-6 ${darkMode ? "text-[#f4f4f5]" : "text-gray-800"}`} />
-            )}
-          </button>
         </div>
+      </motion.nav>
 
-        {/* Mobile Navigation */}
-        <motion.div initial={false} animate={{ height: isMenuOpen ? "auto" : 0 }} className="md:hidden overflow-hidden">
-          <div className="py-4 space-y-2">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`block w-full text-left px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg ${
-                  activeSection === item.id
-                    ? darkMode
-                      ? "text-[#00ff99] bg-[#00ff99]/10"
-                      : "text-blue-600 bg-blue-50 font-semibold"
-                    : darkMode
-                      ? "text-[#f4f4f5] hover:text-[#00ff99]"
-                      : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </motion.nav>
+      {/* Mobile Drawer Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-background/60 backdrop-blur-md md:hidden"
+              onClick={() => setIsMenuOpen(false)}
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed top-0 right-0 bottom-0 z-50 w-[280px] max-w-[85vw] bg-card border-l border-border shadow-2xl md:hidden"
+            >
+              <div className="flex flex-col h-full">
+                <div className="flex items-center justify-between p-4 border-b border-border">
+                  <span className="font-mono font-bold text-primary text-sm">Navigation</span>
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="p-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                    aria-label="Close navigation menu"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <nav className="flex-1 p-4" aria-label="Mobile navigation">
+                  <ul className="flex flex-col gap-1">
+                    {navItems.map((item, index) => (
+                      <motion.li
+                        key={item.id}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                      >
+                        <button
+                          onClick={() => scrollToSection(item.id)}
+                          className={`w-full text-left px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 ${
+                            activeSection === item.id
+                              ? "text-primary bg-primary/10"
+                              : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </nav>
+
+                <div className="p-4 border-t border-border">
+                  <p className="text-xs text-muted-foreground font-mono">
+                    Shuva Kharel
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   )
 }

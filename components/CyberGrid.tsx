@@ -85,8 +85,13 @@ export default function CyberGrid({ darkMode }: CyberGridProps) {
       }
     }
 
+    // Reduce counts on mobile for performance
+    const isMobile = canvas.width < 768;
+    const streamCount = isMobile ? 6 : 15;
+    const hexCount = isMobile ? 5 : 12;
+
     // Create data streams
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < streamCount; i++) {
       dataStreams.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -105,7 +110,7 @@ export default function CyberGrid({ darkMode }: CyberGridProps) {
     }
 
     // Create floating hexagons
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < hexCount; i++) {
       hexagons.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -243,7 +248,7 @@ export default function CyberGrid({ darkMode }: CyberGridProps) {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none opacity-40"
+      className="fixed inset-0 pointer-events-none opacity-25 sm:opacity-30"
       style={{ zIndex: 1 }}
     />
   );

@@ -15,7 +15,6 @@ export default function Projects({ darkMode }: ProjectsProps) {
   const [hoveredProject, setHoveredProject] = useState<number | null>(null)
   const [activeFilter, setActiveFilter] = useState("all")
 
-  // Filter projects based on active filter
   const filteredProjects = projects.filter((project) => {
     if (activeFilter === "all") return true
     if (activeFilter === "security") return project.category === "security"
@@ -29,67 +28,72 @@ export default function Projects({ darkMode }: ProjectsProps) {
   }
 
   return (
-    <section id="projects" className="py-20 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="projects" className="py-16 sm:py-20 relative">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-10 sm:mb-16"
         >
           <h2
-            className={`text-4xl md:text-5xl font-bold mb-6 font-mono ${darkMode ? "text-[#f4f4f5]" : "text-gray-900"}`}
+            className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 font-mono text-balance ${
+              darkMode ? "text-foreground" : "text-foreground"
+            }`}
           >
             {"<"}
-            <span className={darkMode ? "text-[#00ff99]" : "text-blue-600"}>Projects</span>
+            <span className="text-primary">Projects</span>
             {" />"}
           </h2>
-          <p className={`text-xl max-w-3xl mx-auto ${darkMode ? "text-[#f4f4f5]/70" : "text-gray-600"}`}>
+          <p className={`text-base sm:text-xl max-w-3xl mx-auto ${darkMode ? "text-foreground/60" : "text-muted-foreground"}`}>
             A collection of cybersecurity tools, web applications, and security research projects
           </p>
         </motion.div>
 
         <ProjectFilter darkMode={darkMode} onFilterChange={setActiveFilter} activeFilter={activeFilter} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 mb-12">
           {filteredProjects.slice(0, visibleProjects).map((project, index) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -6 }}
               onHoverStart={() => setHoveredProject(index)}
               onHoverEnd={() => setHoveredProject(null)}
               className={`relative group rounded-xl overflow-hidden transition-all duration-300 ${
                 darkMode
-                  ? "bg-gradient-to-br from-[#0b0c10] to-[#111215] border border-[#00ff99]/20"
-                  : "bg-white border border-gray-200 shadow-lg"
+                  ? "bg-card border border-primary/15 hover:border-primary/40"
+                  : "bg-card border border-border hover:border-primary/30 hover:shadow-lg"
               }`}
               style={{
                 boxShadow:
                   hoveredProject === index
                     ? darkMode
-                      ? "0 20px 40px rgba(0, 255, 153, 0.2)"
-                      : "0 20px 40px rgba(37, 99, 235, 0.2)"
+                      ? "0 16px 40px rgba(0, 255, 153, 0.12)"
+                      : "0 16px 40px rgba(0, 0, 0, 0.1)"
                     : "none",
               }}
             >
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-40 sm:h-48 overflow-hidden">
                 <img
                   src={project.image || "/placeholder.svg"}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div
                   className={`absolute inset-0 transition-opacity duration-300 ${
                     hoveredProject === index ? "opacity-100" : "opacity-0"
-                  } ${darkMode ? "bg-[#00ff99]/20" : "bg-blue-600/20"}`}
+                  } ${darkMode ? "bg-primary/15" : "bg-primary/10"}`}
                 />
 
+                {/* Quick action buttons on hover */}
                 <div
-                  className={`absolute top-4 right-4 flex space-x-2 transition-opacity duration-300 ${
-                    hoveredProject === index ? "opacity-100" : "opacity-0"
+                  className={`absolute top-3 right-3 flex gap-2 transition-all duration-300 ${
+                    hoveredProject === index ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
                   }`}
                 >
                   {project.liveUrl && (
@@ -97,10 +101,10 @@ export default function Projects({ darkMode }: ProjectsProps) {
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`p-2 rounded-full transition-colors duration-200 ${
+                      className={`p-2 rounded-lg backdrop-blur-md transition-colors duration-200 ${
                         darkMode
-                          ? "bg-[#ff0055] hover:bg-[#00ff99] text-black"
-                          : "bg-red-600 hover:bg-blue-600 text-white"
+                          ? "bg-accent/90 hover:bg-primary/90 text-accent-foreground hover:text-primary-foreground"
+                          : "bg-accent/90 hover:bg-primary/90 text-accent-foreground hover:text-primary-foreground"
                       }`}
                       data-cursor="hover"
                     >
@@ -111,10 +115,10 @@ export default function Projects({ darkMode }: ProjectsProps) {
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`p-2 rounded-full transition-colors duration-200 ${
+                    className={`p-2 rounded-lg backdrop-blur-md transition-colors duration-200 ${
                       darkMode
-                        ? "bg-[#ff0055] hover:bg-[#00ff99] text-black"
-                        : "bg-red-600 hover:bg-blue-600 text-white"
+                        ? "bg-primary/90 hover:bg-accent/90 text-primary-foreground hover:text-accent-foreground"
+                        : "bg-foreground/80 hover:bg-foreground text-background"
                     }`}
                     data-cursor="hover"
                   >
@@ -123,22 +127,22 @@ export default function Projects({ darkMode }: ProjectsProps) {
                 </div>
               </div>
 
-              <div className="p-6">
-                <h3 className={`text-xl font-bold mb-2 ${darkMode ? "text-[#f4f4f5]" : "text-gray-900"}`}>
+              <div className="p-4 sm:p-5">
+                <h3 className={`text-lg font-bold mb-2 ${darkMode ? "text-foreground" : "text-foreground"}`}>
                   {project.title}
                 </h3>
-                <p className={`text-sm mb-4 ${darkMode ? "text-[#f4f4f5]/70" : "text-gray-600"}`}>
+                <p className={`text-sm mb-4 leading-relaxed ${darkMode ? "text-foreground/60" : "text-muted-foreground"}`}>
                   {project.description}
                 </p>
 
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-1.5 mb-4">
                   {project.techStack.map((tech, techIndex) => (
                     <span
                       key={techIndex}
-                      className={`px-3 py-1 text-xs font-mono rounded-full ${
+                      className={`px-2.5 py-1 text-xs font-mono rounded-md ${
                         darkMode
-                          ? "bg-[#00ff99]/20 text-[#00ff99] border border-[#00ff99]/30"
-                          : "bg-blue-100 text-blue-800 border border-blue-200"
+                          ? "bg-primary/10 text-primary border border-primary/20"
+                          : "bg-primary/5 text-primary border border-primary/15"
                       }`}
                     >
                       {tech}
@@ -146,16 +150,16 @@ export default function Projects({ darkMode }: ProjectsProps) {
                   ))}
                 </div>
 
-                <div className="flex space-x-3">
+                <div className="flex gap-3">
                   {project.liveUrl && (
                     <a
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                      className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
                         darkMode
-                          ? "bg-[#ff0055] hover:bg-[#00ff99] text-black"
-                          : "bg-red-600 hover:bg-blue-600 text-white"
+                          ? "bg-accent hover:bg-primary text-accent-foreground hover:text-primary-foreground"
+                          : "bg-primary hover:bg-accent text-primary-foreground hover:text-accent-foreground"
                       }`}
                       data-cursor="hover"
                     >
@@ -167,10 +171,10 @@ export default function Projects({ darkMode }: ProjectsProps) {
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 ${
+                    className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors duration-200 ${
                       darkMode
-                        ? "border-[#00ff99]/30 text-[#00ff99] hover:bg-[#00ff99]/10"
-                        : "border-blue-300 text-blue-600 hover:bg-blue-50"
+                        ? "border-primary/25 text-primary hover:bg-primary/10"
+                        : "border-border text-foreground hover:bg-secondary"
                     }`}
                     data-cursor="hover"
                   >
@@ -187,12 +191,12 @@ export default function Projects({ darkMode }: ProjectsProps) {
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center">
             <motion.button
               onClick={showMoreProjects}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`px-8 py-3 font-semibold rounded-lg transition-all duration-300 ${
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              className={`px-6 sm:px-8 py-3 font-semibold rounded-xl transition-all duration-300 ${
                 darkMode
-                  ? "bg-[#ff0055] hover:bg-[#00ff99] text-black hover:shadow-[0_0_20px_#00ff99]"
-                  : "bg-red-600 hover:bg-blue-600 text-white hover:shadow-[0_0_20px_#2563eb]"
+                  ? "bg-accent hover:bg-primary text-accent-foreground hover:text-primary-foreground hover:shadow-[0_0_30px_rgba(0,255,153,0.2)]"
+                  : "bg-primary hover:bg-accent text-primary-foreground hover:text-accent-foreground shadow-md hover:shadow-lg"
               }`}
               data-cursor="hover"
             >
