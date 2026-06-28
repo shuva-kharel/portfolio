@@ -614,9 +614,9 @@ export default function HUD() {
   // GitHub handle, derived once from socials and shared by both the live-stats
   // panel and the contribution heatmap.
   const githubUsername = useMemo(() => {
-    const item = (
-      data?.commands.socials?.items as Social[] | undefined
-    )?.find((s) => s.platform.toLowerCase() === "github");
+    const item = (data?.commands.socials?.items as Social[] | undefined)?.find(
+      (s) => s.platform.toLowerCase() === "github",
+    );
     return item?.link?.split("github.com/")[1]?.replace(/\/+$/, "") || null;
   }, [data]);
 
@@ -632,20 +632,24 @@ export default function HUD() {
         if (!res.ok) throw new Error("failed");
         return res.json();
       })
-      .then((json: { contributions?: Array<{ date: string; count: number; level: number }> }) => {
-        if (cancelled) return;
-        const cutoff = new Date();
-        cutoff.setDate(cutoff.getDate() - 26 * 7);
-        const map: ContribMap = new Map();
-        let total = 0;
-        for (const d of json.contributions ?? []) {
-          if (new Date(d.date) >= cutoff) {
-            map.set(d.date, { count: d.count, level: d.level });
-            if (d.count > 0) total++;
+      .then(
+        (json: {
+          contributions?: Array<{ date: string; count: number; level: number }>;
+        }) => {
+          if (cancelled) return;
+          const cutoff = new Date();
+          cutoff.setDate(cutoff.getDate() - 26 * 7);
+          const map: ContribMap = new Map();
+          let total = 0;
+          for (const d of json.contributions ?? []) {
+            if (new Date(d.date) >= cutoff) {
+              map.set(d.date, { count: d.count, level: d.level });
+              if (d.count > 0) total++;
+            }
           }
-        }
-        setContrib({ map, total });
-      })
+          setContrib({ map, total });
+        },
+      )
       .catch(() => {
         if (!cancelled) setContrib(null);
       });
@@ -1114,7 +1118,11 @@ export default function HUD() {
         {/* ROW 3: HEATMAP */}
         <div className="bento-full">
           <Panel label="// ACTIVITY.HEATMAP" icon={FiZap} index={5}>
-            <Heatmap seed={heatSeed} weeks={isMobile ? 16 : 26} />
+            <Heatmap
+              seed={heatSeed}
+              weeks={isMobile ? 16 : 26}
+              contrib={contrib}
+            />
           </Panel>
         </div>
 
