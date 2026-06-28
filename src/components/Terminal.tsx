@@ -15,6 +15,36 @@ import InputLine, { type InputLineHandle } from "./InputLine";
 import BootSequence from "./BootSequence";
 
 const VISITED_KEY = "terminal_portfolio_visited";
+const SOUND_KEY = "sound_enabled";
+
+// A short mechanical key click synthesised with the Web Audio API (white noise
+// with a steep exponential decay) — no external audio file. Only plays when
+// the user has enabled sound via the `sound on` command.
+function playClick() {
+  if (localStorage.getItem(SOUND_KEY) !== "1") return;
+  try {
+    const Ctx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext })
+        .webkitAudioContext;
+    const ctx = new Ctx();
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.02, ctx.sampleRate);
+    const ch = buf.getChannelData(0);
+    for (let i = 0; i < ch.length; i++) {
+      ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / ch.length, 8);
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.08;
+    src.connect(gain);
+    gain.connect(ctx.destination);
+    src.start();
+    src.onended = () => ctx.close();
+  } catch {
+    /* audio unavailable — ignore */
+  }
+}
 
 interface Props {
   data: Portfolio;
@@ -53,6 +83,34 @@ export default function Terminal({ data, onSetTheme }: Props) {
   const idRef = useRef(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<InputLineHandle>(null);
+
+  // Mobile: track input focus (with a short grace period) so the helper
+  // toolbar stays visible while a toolbar button is being tapped.
+  const [focused, setFocused] = useState(false);
+  const blurTimer = useRef<number | undefined>(undefined);
+  const handleFocusChange = useCallback((isFocused: boolean) => {
+    if (blurTimer.current) window.clearTimeout(blurTimer.current);
+    if (isFocused) setFocused(true);
+    else blurTimer.current = window.setTimeout(() => setFocused(false), 200);
+  }, []);
+
+  // Mobile: track the on-screen keyboard height via the visualViewport API so
+  // the terminal can shrink to keep the input line above the keyboard.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const handler = () => {
+      const keyboard = Math.max(0, window.innerHeight - vv.height);
+      document.documentElement.style.setProperty(
+        "--keyboard-height",
+        `${keyboard}px`
+      );
+      const el = scrollRef.current;
+      if (el) el.scrollTop = el.scrollHeight;
+    };
+    vv.addEventListener("resize", handler);
+    return () => vv.removeEventListener("resize", handler);
+  }, []);
 
   // ---- effect handling -----------------------------------------------------
   const handleEffect = useCallback(
@@ -172,6 +230,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
     localStorage.setItem(VISITED_KEY, "1");
     setBooting(false);
     execute("welcome", false);
+    execute("motd", false);
     // focus once the input mounts
     requestAnimationFrame(() => inputRef.current?.focus());
   }, [execute]);
@@ -184,6 +243,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
     didInit.current = true;
     if (!booting) {
       execute("welcome", false);
+      execute("motd", false);
       requestAnimationFrame(() => inputRef.current?.focus());
     }
     // run once on mount only
@@ -205,7 +265,14 @@ export default function Terminal({ data, onSetTheme }: Props) {
   }
 
   return (
-    <div className="terminal" ref={scrollRef} onClick={handleContainerClick}>
+    <div
+      className="terminal"
+      ref={scrollRef}
+      onClick={handleContainerClick}
+      role="log"
+      aria-live="polite"
+      aria-label="Terminal output"
+    >
       <div className="terminal-inner">
         {booting ? (
           <BootSequence lines={data.boot_sequence} onDone={finishBoot} />
@@ -223,10 +290,40 @@ export default function Terminal({ data, onSetTheme }: Props) {
               onTabComplete={handleTabComplete}
               onClear={handleClear}
               onCancel={handleCancel}
+              onFocusChange={handleFocusChange}
+              onType={playClick}
             />
           </>
         )}
       </div>
+
+      {/* Mobile-only helper toolbar above the keyboard. Hidden on desktop via
+          CSS. mousedown is prevented so tapping doesn't blur the input. */}
+      {!booting && focused && (
+        <div
+          className="kbd-toolbar"
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          <button className="kbd-btn" onClick={() => inputRef.current?.tab()}>
+            TAB
+          </button>
+          <button className="kbd-btn" onClick={() => inputRef.current?.prev()}>
+            ↑
+          </button>
+          <button className="kbd-btn" onClick={() => inputRef.current?.next()}>
+            ↓
+          </button>
+          <button
+            className="kbd-btn"
+            onClick={() => {
+              handleClear();
+              inputRef.current?.focus();
+            }}
+          >
+            CLEAR
+          </button>
+        </div>
+      )}
     </div>
   );
 }

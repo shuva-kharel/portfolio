@@ -100,10 +100,35 @@ a:hover {
 .terminal {
   width: 100vw;
   height: 100vh;
-  height: 100dvh; /* account for mobile browser chrome */
+  /* shrink to sit above the on-screen keyboard when it opens (mobile) */
+  height: calc(100dvh - var(--keyboard-height, 0px));
   overflow-y: auto;
+  overflow-x: hidden;
   background: var(--bg);
   cursor: text;
+  transition: height 150ms ease;
+}
+
+/* ---- mobile keyboard helper toolbar ------------------------------------- */
+.kbd-toolbar {
+  display: none; /* desktop: hidden; shown under 768px */
+}
+.kbd-btn {
+  flex: 1;
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--link);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border);
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+.kbd-btn:last-child {
+  border-right: none;
+}
+.kbd-btn:active {
+  background: var(--border);
 }
 .terminal-inner {
   padding: 20px 22px 40px;
@@ -533,6 +558,19 @@ a:hover {
   font-style: italic;
 }
 
+/* ---- motd ---------------------------------------------------------------- */
+.motd-line {
+  color: rgba(0, 212, 255, 0.4);
+}
+
+/* ---- resume -------------------------------------------------------------- */
+.resume-pre {
+  margin: 0 0 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text);
+}
+
 /* ---- flag / hall-of-fame ------------------------------------------------ */
 .flag-ok {
   color: var(--success);
@@ -592,10 +630,16 @@ a:hover {
   cursor: default;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .terminal-inner {
-    padding: 14px 16px 40px;
-    font-size: 13px;
+    padding: 8px 10px 40px;
+    font-size: 12px;
+  }
+  /* wrap long output cleanly — no horizontal scroll on the terminal */
+  .term-line,
+  .echo-command,
+  .input-typed {
+    word-break: break-all;
   }
   .ascii-art {
     font-size: 10px;
@@ -608,5 +652,17 @@ a:hover {
   }
   .table-cat {
     flex-basis: 140px;
+  }
+  /* show the keyboard helper toolbar, pinned above the keyboard */
+  .kbd-toolbar {
+    position: fixed;
+    bottom: var(--keyboard-height, 0px);
+    left: 0;
+    right: 0;
+    height: 36px;
+    display: flex;
+    z-index: 50;
+    background: #0d1420;
+    border-top: 1px solid rgba(0, 212, 255, 0.15);
   }
 }

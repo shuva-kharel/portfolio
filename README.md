@@ -1,200 +1,100 @@
-# Terminal Portfolio
+# ghost@parrot — Terminal Portfolio
 
-A terminal-style cybersecurity portfolio built with **React + Vite + TypeScript**
-and plain CSS. The entire site — every command, project, write-up, theme, and
-even the boot animation — is driven by a single file: **`public/portfolio.json`**.
+A terminal-based cybersecurity portfolio with a second visual "HUD" view.
+All content is managed through a single JSON file.
 
-> Want to change something? Edit the JSON. No code changes, no rebuild of the
-> engine. The terminal re-reads `portfolio.json` on every page load.
+- `/` — the interactive terminal (fully usable on desktop **and** mobile)
+- `/hud` — a bento-grid SOC dashboard rendered from the same data
+- Type `gui` in the terminal to jump to the HUD; `← RETURN TO TERMINAL` (or
+  `g` then `h`) to come back.
 
----
-
-## Quick start
+## Quick Start
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm run build    # production build into dist/
-npm run preview  # preview the production build
+npm run dev
 ```
 
-Deploy `dist/` to **Vercel**, **Netlify**, GitHub Pages, or any static host.
-On Vercel/Netlify the defaults just work: build command `npm run build`,
-output directory `dist`.
+## Updating Content
 
----
+Edit `public/portfolio.json` — everything on the site comes from this file.
+No code changes needed.
 
-## How it works
+## Adding a New Command
 
-```
-public/portfolio.json   ← the single source of truth for ALL content
-src/
-  core/
-    CommandEngine.ts     reads the JSON, maps a typed command → output
-    FileSystem.ts        virtual filesystem (pwd, ls, cd, cat)
-    HistoryManager.ts    up/down arrow command history
-  components/
-    Terminal.tsx         the shell: input, scrollback, effects, boot
-    InputLine.tsx        prompt + hidden input + blinking cursor
-    OutputBlock.tsx      one command + its rendered output
-    BootSequence.tsx     startup animation (first visit only)
-    MobileReplay.tsx     read-only auto-demo for phones
-  renderers/             one renderer per output_type
-  hooks/usePortfolio.ts  fetches & caches portfolio.json once
-```
+Add a key to the `commands` object in portfolio.json:
 
-When you type a command, `CommandEngine` looks it up in `portfolio.json` and
-returns a result tagged with an `output_type`. The matching renderer in
-`src/renderers/` draws it. That's the whole loop.
-
----
-
-## Editing `portfolio.json`
-
-### Change who you are
-
-Edit `meta` and the `whoami` command:
-
-```jsonc
-"meta": {
-  "user": "ghost",          // shows in the prompt: [ghost@parrot]
-  "host": "parrot",
-  "prompt_symbol": "$",
-  "theme": "amber"          // default theme on first load
-}
-```
-
-### Add a new command
-
-Add an entry under `commands`. The `output_type` decides how it renders:
-
-```jsonc
-"commands": {
-  "blog": {
-    "description": "read my latest posts",   // shown in `help`
-    "output_type": "list",
-    "items": [
-      { "name": "Why I love nmap", "desc": "A love letter", "link": "https://..." }
-    ]
-  }
-}
-```
-
-It appears in `help` automatically and is tab-completable. **Zero code.**
-
-#### Available `output_type` values
-
-| output_type | What it renders                                            |
-|-------------|------------------------------------------------------------|
-| `welcome`   | ASCII-art hero + tagline + hint                            |
-| `text`      | a list of `lines[]`, printed verbatim                      |
-| `table`     | `categories` map → bordered category/skill table           |
-| `projects`  | project blocks with tags, stars, and a link                |
-| `list`      | numbered list of `{ name, desc, link }`                    |
-| `timeline`  | `items[]` with `year / title / institution / details`      |
-| `certs`     | `items[]` with a coloured `status` badge                   |
-| `socials`   | platform / handle / link rows                              |
-| `email`     | prints an address and opens the mail client                |
-| `themes`    | lists themes with colour swatches                          |
-| `scan`      | types `lines[]` out one by one (nmap-style)                |
-| `sudo`      | like `scan`, pauses on the password line, then `redirect_command` |
-| `alias`     | silently re-runs another command (`"target": "whoami"`)    |
-| `builtin`   | handled in code: `pwd ls cd cat echo history clear help`   |
-
-### Add a project
-
-Append to the `projects` command's `items` array:
-
-```jsonc
+```json
 {
-  "name": "my-tool",
-  "desc": "What it does.",
-  "tags": ["python", "security"],
-  "link": "https://github.com/you/my-tool",
-  "stars": 0
-}
-```
-
-### Add a hidden easter egg
-
-Anything under `easter_eggs` works as a command but never appears in `help`.
-Match is on the full typed string (case-insensitive, whitespace-collapsed):
-
-```jsonc
-"easter_eggs": {
-  "matrix": {
-    "hidden": true,
+  "mycommand": {
+    "description": "shown in help",
     "output_type": "text",
-    "lines": ["Wake up, Neo..."]
+    "lines": ["line 1", "line 2"]
   }
 }
 ```
 
-### Add or edit a theme
+That's it. The command is live immediately and appears in `help`.
 
-Add a palette under `themes`. Every key maps to a CSS variable applied live:
+## Adding an Easter Egg
 
-```jsonc
-"themes": {
-  "purple": {
-    "background": "#0d0a14",
-    "prompt_user": "#b388ff",
-    "prompt_host": "#80d8ff",
-    "prompt_path": "#6a6a8a",
-    "output_text": "#d0c8e0",
-    "output_dim": "#5a4a6a",
-    "accent": "#b388ff",
-    "error": "#ff6b6b",
-    "link": "#80d8ff",
-    "success": "#69f0ae",
-    "table_border": "#2a1a3a",
-    "cursor": "#b388ff"
-  }
-}
-```
+Same as above but in `easter_eggs` instead of `commands`. Easter eggs don't
+appear in `help` output. They're matched on the exact typed string, so
+multi-word eggs like `cat /etc/passwd` work.
 
-Switch at runtime with `themes set purple`. The choice is saved to
-`localStorage` and restored on the next visit.
+## Changing Themes
 
-### The virtual filesystem
+Edit `meta.theme` in portfolio.json, or run `themes set <name>` live.
+Available: amber · green · blue · red
 
-`ls`, `cd`, and `cat` read from `filesystem`:
+## Extra Commands & Surfaces
 
-- **Directories** are keyed by absolute path (`"/projects"`) with a `children`
-  array. Directory names end in `/`.
-- **File contents** live under `filesystem.files`, keyed by the full path
-  (`"/writeups/htb-lame.md"`) or a bare name for root files (`"skills.txt"`).
-- Use `\n` inside a string for line breaks.
+- `now`, `pgp`, `uses` — read the matching top-level objects in portfolio.json
+- `resume` — assembles a terminal resume from the `resume` object and links to
+  `public/resume.pdf`
+- `sound on` / `sound off` — toggle synthesised key-click sounds (off by default)
+- `motd` — daily quote, auto-printed after the welcome banner
+- `hall-of-fame` — CTF solvers (stored in localStorage)
+- There is a hidden 5-layer CTF. Start at `/robots.txt`.
 
-### The boot sequence
+## HUD Notes
 
-`boot_sequence` is an array of `{ text, delay }`. Lines print on their own
-delays on the **first** visit only (tracked in `localStorage`). Visitors can
-press any key to skip.
+- The `// GITHUB.LIVE` panel fetches `api.github.com` for the handle in your
+  socials. It loads lazily on scroll and is hidden silently if the API fails.
+- Command palette: `⌘K` / `Ctrl+K`. Jump to sections with `1`–`5`.
 
----
+## Deploy to Vercel
 
-## Built-in commands & shortcuts
+Push to GitHub → Import in Vercel → Deploy. No environment variables needed.
 
-| Command / key      | Action                                              |
-|--------------------|-----------------------------------------------------|
-| `help`             | list all visible commands                           |
-| `pwd / ls / cd / cat` | navigate the virtual filesystem                  |
-| `ls -la`           | long listing with (fake) permissions and sizes      |
-| `echo`, `history`  | as in a real shell                                  |
-| `clear` / `Ctrl+L` | clear the screen                                    |
-| `themes`           | list themes; `themes set <name>` to switch          |
-| `↑ / ↓`            | cycle command history                               |
-| `Tab`              | autocomplete commands and filesystem paths          |
-| `Ctrl+C`           | cancel the current input line                       |
+- Framework preset: **Vite**
+- Build command: `npm run build`
+- Output directory: `dist`
 
-Plus a handful of hidden easter eggs — go find them.
+`vercel.json` ships the SPA rewrite (so `/hud` doesn't 404 on refresh),
+security headers, a CSP, and cache headers. Enable **Analytics** in the Vercel
+project settings after the first deploy (it's off by default).
 
----
+Once deployed, `curl <your-domain>` returns a plain-text version of the
+portfolio (handled by the `api/index.ts` Edge Function); browsers get the app.
 
-## Notes
+## Deployment Checklist
 
-- **No CSS frameworks, no UI libraries.** All colour flows through CSS variables
-  set from the active theme, so theming is instant and reload-free.
-- On screens under 768px the site switches to a read-only auto-playing demo.
-- `portfolio.json` is fetched once and cached for the session.
+Before the first `git push`:
+
+- [ ] `public/portfolio.json` — all placeholder data replaced
+- [ ] `public/resume.pdf` — actual resume uploaded
+- [ ] `public/og.png` — generated from `scripts/generate-og.html` (screenshot at 1200×630)
+- [x] `public/icon-192.png` + `public/icon-512.png` + `public/apple-touch-icon.png` —
+      generated from `public/favicon.svg` via `npm run icons` (re-run if you change the favicon)
+- [ ] `index.html` — replace `ghost.dev` with the real domain in the meta tags
+- [ ] `npm run build` — completes without errors
+- [ ] `npm run preview` — confirm `/hud` doesn't 404 on refresh
+
+After the first Vercel deploy:
+
+- [ ] Enable Analytics: Vercel dashboard → project → Analytics
+- [ ] Preview the social card at https://www.opengraph.xyz
+- [ ] Check headers at https://securityheaders.com
+- [ ] Verify `/hud` works when typed directly (not just linked)
+- [ ] Test on a real mobile device

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { CommandResult } from "../types";
+import type { CommandDef, CommandResult } from "../types";
 import { addHofEntry, xorDecodeHex } from "../hof";
 
 // The "flag" command — the CTF endpoint. Three modes:
@@ -10,7 +10,7 @@ import { addHofEntry, xorDecodeHex } from "../hof";
 // The correct flag is never stored in plaintext: it is XOR-decoded at runtime
 // from the same encrypted hex that lives in /secret/flag.txt.
 export default function FlagRenderer({ result }: { result: CommandResult }) {
-  const def = result.def ?? {};
+  const def: CommandDef | Record<string, unknown> = result.def ?? {};
   const args = result.args ?? [];
   const format = (def.format as string | undefined) ?? "CTF{...}";
   const hint = (def.hint as string | undefined) ?? "";

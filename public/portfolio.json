@@ -30,6 +30,22 @@
     "vpn": "Mullvad"
   },
 
+  "resume": {
+    "download_url": "/resume.pdf",
+    "sections": {
+      "experience": [],
+      "education": [
+        {
+          "year": "2022-Present",
+          "title": "B.Sc. Computer Science (Cybersecurity)",
+          "institution": "Your University"
+        }
+      ],
+      "skills_summary": "Penetration Testing · Web Security · Python · Bash · CTFs",
+      "certifications_summary": "eJPT · Google Cybersecurity · OSCP (in progress)"
+    }
+  },
+
   "themes": {
     "amber": {
       "background": "#0d0d0d",
@@ -255,17 +271,26 @@
         {
           "name": "HTB: Lame",
           "desc": "Samba exploitation via CVE-2007-2447",
-          "link": "https://blog.ghost.dev/htb-lame"
+          "link": "https://blog.ghost.dev/htb-lame",
+          "severity": "HIGH",
+          "platform": "HackTheBox",
+          "date": "2024-03-12"
         },
         {
           "name": "THM: Relevant",
           "desc": "SMB + PrintSpoofer privilege escalation",
-          "link": "https://blog.ghost.dev/thm-relevant"
+          "link": "https://blog.ghost.dev/thm-relevant",
+          "severity": "MED",
+          "platform": "TryHackMe",
+          "date": "2024-02-04"
         },
         {
           "name": "PicoCTF 2024",
           "desc": "Top 500 finish. 8 challenges solved.",
-          "link": "https://blog.ghost.dev/picoctf-2024"
+          "link": "https://blog.ghost.dev/picoctf-2024",
+          "severity": "LOW",
+          "platform": "PicoCTF",
+          "date": "2024-03-28"
         }
       ]
     },
@@ -321,7 +346,7 @@
         {
           "platform": "GitHub",
           "handle": "@ghost",
-          "link": "https://github.com/ghost"
+          "link": "https://github.com/shuva-kharel"
         },
         {
           "platform": "LinkedIn",
@@ -428,10 +453,38 @@
       "description": "view CTF solvers",
       "output_type": "hof",
       "message": "These people read the source code."
+    },
+
+    "resume": {
+      "description": "view and download my resume",
+      "output_type": "resume"
+    },
+
+    "sound": {
+      "description": "toggle typing sound effects",
+      "output_type": "builtin"
+    },
+
+    "motd": {
+      "description": "message of the day",
+      "output_type": "motd",
+      "quotes": [
+        "The quieter you become, the more you can hear.",
+        "Security is a process, not a product.",
+        "There are two types of companies: those hacked, and those who don't know it yet.",
+        "Amateurs hack systems. Professionals hack people.",
+        "Privacy is not something I'm merely entitled to, it's an absolute prerequisite.",
+        "The best defense is knowing how to attack.",
+        "Root is not a privilege, it's a responsibility.",
+        "If you know the enemy and know yourself, you need not fear the result of a hundred battles."
+      ]
     }
   },
 
   "easter_eggs": {
+    "sound on": { "hidden": true, "output_type": "sound_on" },
+    "sound off": { "hidden": true, "output_type": "sound_off" },
+
     "nmap": {
       "hidden": true,
       "output_type": "scan",
@@ -485,7 +538,10 @@
       "output_type": "flag_submit",
       "format": "CTF{...}",
       "hint": "There are 5 layers. Start with robots.txt.",
-      "check": { "hex": "01160439307176261d362a711d3172373021711d2e3729713f", "xor": 66 }
+      "check": {
+        "hex": "01160439307176261d362a711d3172373021711d2e3729713f",
+        "xor": 66
+      }
     },
     "uname -a": {
       "hidden": true,

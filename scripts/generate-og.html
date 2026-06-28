@@ -1,0 +1,143 @@
+<!doctype html>
+<!--
+  OG IMAGE GENERATOR (dev tool — NOT deployed)
+
+  How to use:
+    1. Open this file in a browser (or `npm run dev` then visit
+       /scripts/generate-og.html if you move it under public/).
+    2. The card below is exactly 1200x630.
+    3. Screenshot just the .og-card element at 1200x630
+       (DevTools → device toolbar → set 1200x630, or use a
+       full-element screenshot extension).
+    4. Save the result as public/og.png
+
+  All values are hardcoded here to mirror portfolio.json. If you
+  change the portfolio name / role / stats, update them here too
+  and regenerate.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>OG card generator — 1200x630</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        background: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        font-family: "JetBrains Mono", monospace;
+      }
+      .og-card {
+        width: 1200px;
+        height: 630px;
+        background: #080d14;
+        position: relative;
+        overflow: hidden;
+        padding: 64px;
+        box-sizing: border-box;
+        color: #a0b4c8;
+      }
+      .og-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: repeating-linear-gradient(
+            to right,
+            rgba(0, 212, 255, 0.04) 0,
+            rgba(0, 212, 255, 0.04) 1px,
+            transparent 1px,
+            transparent 40px
+          ),
+          repeating-linear-gradient(
+            to bottom,
+            rgba(0, 212, 255, 0.04) 0,
+            rgba(0, 212, 255, 0.04) 1px,
+            transparent 1px,
+            transparent 40px
+          );
+        pointer-events: none;
+      }
+      .prompt {
+        position: relative;
+        font-size: 22px;
+        letter-spacing: 1px;
+      }
+      .prompt .u {
+        color: #e8a838;
+      }
+      .prompt .h {
+        color: #5ce0b8;
+      }
+      .ascii {
+        position: relative;
+        margin: 28px 0 0;
+        color: #00d4ff;
+        font-weight: 700;
+        font-size: 26px;
+        line-height: 1.1;
+        white-space: pre;
+      }
+      .role {
+        position: relative;
+        margin-top: 26px;
+        font-size: 22px;
+        color: #4a6a7a;
+        letter-spacing: 2px;
+      }
+      .stats {
+        position: absolute;
+        left: 64px;
+        bottom: 64px;
+        display: flex;
+        gap: 48px;
+      }
+      .stat .n {
+        font-size: 40px;
+        font-weight: 700;
+        color: #00d4ff;
+      }
+      .stat .l {
+        font-size: 13px;
+        letter-spacing: 2px;
+        color: #4a6a7a;
+        margin-top: 4px;
+      }
+      .domain {
+        position: absolute;
+        right: 64px;
+        bottom: 64px;
+        font-size: 22px;
+        color: #e8f4f8;
+        letter-spacing: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="og-card">
+      <div class="prompt">
+        [<span class="u">ghost</span>@<span class="h">parrot</span>][~]$ whoami
+      </div>
+      <pre class="ascii">
+  ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗
+  ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝
+  ██║  ███╗███████║██║   ██║███████╗   ██║
+  ██║   ██║██╔══██║██║   ██║╚════██║   ██║
+  ╚██████╔╝██║  ██║╚██████╔╝███████║   ██║
+   ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝</pre
+      >
+      <div class="role">SECURITY RESEARCHER · CTF PLAYER · TOOL BUILDER</div>
+      <div class="stats">
+        <div class="stat"><div class="n">3</div><div class="l">PROJECTS</div></div>
+        <div class="stat"><div class="n">3</div><div class="l">CERTS</div></div>
+        <div class="stat"><div class="n">3</div><div class="l">WRITEUPS</div></div>
+      </div>
+      <div class="domain">ghost.dev</div>
+    </div>
+  </body>
+</html>

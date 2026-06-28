@@ -17,7 +17,10 @@ const BUILTINS = new Set([
   "history",
   "clear",
   "help",
+  "sound",
 ]);
+
+const SOUND_KEY = "sound_enabled";
 
 export class CommandEngine {
   readonly fs: FileSystem;
@@ -146,6 +149,17 @@ export class CommandEngine {
 
       case "clear":
         return { type: "empty", effect: { kind: "clear" } };
+
+      case "sound": {
+        const on = localStorage.getItem(SOUND_KEY) === "1";
+        return {
+          type: "text",
+          lines: [
+            `Typing sound is currently ${on ? "ON" : "OFF"}.`,
+            "Use 'sound on' or 'sound off' to change it.",
+          ],
+        };
+      }
 
       case "help":
         return { type: "help", lines: this.buildHelp() };

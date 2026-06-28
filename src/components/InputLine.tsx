@@ -9,6 +9,9 @@ import Prompt from "./Prompt";
 
 export interface InputLineHandle {
   focus: () => void;
+  tab: () => void;
+  prev: () => void;
+  next: () => void;
 }
 
 interface Props {
@@ -19,10 +22,13 @@ interface Props {
   onTabComplete: (value: string) => string | null;
   onClear: () => void;
   onCancel: () => void;
+  onFocusChange?: (focused: boolean) => void;
+  onType?: () => void;
 }
 
 // The live prompt + editable input. A hidden real <input> captures keystrokes
 // while a styled span mirrors the value with a blinking block cursor on top.
+// The input is hidden but kept in the DOM (focusable) so mobile keyboards work.
 const InputLine = forwardRef<InputLineHandle, Props>(function InputLine(
   {
     path,
@@ -32,15 +38,42 @@ const InputLine = forwardRef<InputLineHandle, Props>(function InputLine(
     onTabComplete,
     onClear,
     onCancel,
+    onFocusChange,
+    onType,
   },
   ref
 ) {
   const [value, setValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useImperativeHandle(ref, () => ({
-    focus: () => inputRef.current?.focus(),
-  }));
+  const doTab = () => {
+    const completed = onTabComplete(value);
+    if (completed !== null) setValue(completed);
+    inputRef.current?.focus();
+  };
+  const doPrev = () => {
+    const prev = onHistoryPrev();
+    if (prev !== null) setValue(prev);
+    inputRef.current?.focus();
+  };
+  const doNext = () => {
+    const next = onHistoryNext();
+    if (next !== null) setValue(next);
+    inputRef.current?.focus();
+  };
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      focus: () => inputRef.current?.focus(),
+      tab: doTab,
+      prev: doPrev,
+      next: doNext,
+    }),
+    // recreated when value changes so the toolbar acts on the latest input
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [value]
+  );
 
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     // Ctrl+L — clear the screen, like a real terminal.
@@ -57,6 +90,9 @@ const InputLine = forwardRef<InputLineHandle, Props>(function InputLine(
       return;
     }
 
+    // Typing sound for any character/backspace key.
+    if (onType && (e.key.length === 1 || e.key === "Backspace")) onType();
+
     switch (e.key) {
       case "Enter": {
         e.preventDefault();
@@ -66,20 +102,17 @@ const InputLine = forwardRef<InputLineHandle, Props>(function InputLine(
       }
       case "ArrowUp": {
         e.preventDefault();
-        const prev = onHistoryPrev();
-        if (prev !== null) setValue(prev);
+        doPrev();
         break;
       }
       case "ArrowDown": {
         e.preventDefault();
-        const next = onHistoryNext();
-        if (next !== null) setValue(next);
+        doNext();
         break;
       }
       case "Tab": {
         e.preventDefault();
-        const completed = onTabComplete(value);
-        if (completed !== null) setValue(completed);
+        doTab();
         break;
       }
       default:
@@ -97,14 +130,18 @@ const InputLine = forwardRef<InputLineHandle, Props>(function InputLine(
       <input
         ref={inputRef}
         className="real-input"
+        type="text"
+        inputMode="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
+        onFocus={() => onFocusChange?.(true)}
+        onBlur={() => onFocusChange?.(false)}
         autoComplete="off"
         autoCapitalize="off"
         autoCorrect="off"
         spellCheck={false}
-        aria-label="terminal input"
+        aria-label="Command input"
       />
     </label>
   );

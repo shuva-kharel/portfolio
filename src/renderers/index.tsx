@@ -16,6 +16,9 @@ import UsesRenderer from "./UsesRenderer";
 import FortuneRenderer from "./FortuneRenderer";
 import FlagRenderer from "./FlagRenderer";
 import HofRenderer from "./HofRenderer";
+import MotdRenderer from "./MotdRenderer";
+import ResumeRenderer from "./ResumeRenderer";
+import SoundRenderer from "./SoundRenderer";
 
 // Maps a result's output_type to its renderer. New output types only need a
 // renderer here plus a corresponding output_type in portfolio.json.
@@ -59,6 +62,13 @@ export function renderResult(
       return <FlagRenderer result={result} />;
     case "hof":
       return <HofRenderer result={result} />;
+    case "motd":
+      return <MotdRenderer result={result} />;
+    case "resume":
+      return <ResumeRenderer result={result} />;
+    case "sound_on":
+    case "sound_off":
+      return <SoundRenderer result={result} />;
     case "text":
     case "help":
     default:

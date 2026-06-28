@@ -65,6 +65,10 @@ export interface Portfolio {
   now?: Record<string, string>;
   pgp?: Record<string, string>;
   uses?: Record<string, string>;
+  resume?: {
+    download_url?: string;
+    sections?: Record<string, unknown>;
+  };
 }
 
 // ---------------------------------------------------------------------------
