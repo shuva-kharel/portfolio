@@ -1,9 +1,8 @@
-# *
 User-agent: *
-Allow: /
+Disallow: /secret/
 
-# Host
-Host: https://shuvakharel.com.np
-
-# Sitemaps
-Sitemap: https://shuvakharel.com.np/sitemap.xml
+# Nice try.
+# If you're reading this, you might be one of us.
+# Hint 1/5: You've already found it.
+# Decode what's in the page source for hint 2.
+# Or just type `help` at ghost.dev

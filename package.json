@@ -1,34 +1,23 @@
 {
-  "name": "shuva-portfolio",
-  "version": "0.1.0",
+  "name": "terminal-portfolio",
   "private": true,
+  "version": "2.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d out"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "framer-motion": "^10.16.4",
-    "lucide-react": "^0.294.0",
-    "next": "14.0.0",
-    "next-sitemap": "^4.2.3",
-    "postcss": "^8",
-    "react": "^18",
-    "react-dom": "^18",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.0"
   },
   "devDependencies": {
-    "eslint": "^8",
-    "eslint-config-next": "14.0.0",
-    "gh-pages": "^6.1.0"
-  },
-  "homepage": "https://shuva-kharel.github.io/portfolio"
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
 }

@@ -1,0 +1,612 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+/* ---------------------------------------------------------------------------
+   Theme variables. These defaults match the "amber" theme so the very first
+   paint looks right before applyTheme() runs. Every colour below is replaced
+   at runtime by theme.ts pulling values from portfolio.json.
+--------------------------------------------------------------------------- */
+:root {
+  --bg: #0d0d0d;
+  --prompt-user: #e8a838;
+  --prompt-host: #5ce0b8;
+  --prompt-path: #a0a0a0;
+  --text: #c8c8b4;
+  --dim: #6b6b6b;
+  --accent: #e8a838;
+  --error: #e05c5c;
+  --link: #5ce0b8;
+  --success: #5ce0b8;
+  --border: #333333;
+  --cursor: #e8a838;
+
+  --font: "JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas,
+    monospace;
+  --fs: 14px;
+  --lh: 1.6;
+}
+
+* {
+  box-sizing: border-box;
+  border-radius: 0 !important; /* this is a terminal — nothing is rounded */
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs);
+  line-height: var(--lh);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--text);
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---- scrollbar ---------------------------------------------------------- */
+.terminal::-webkit-scrollbar {
+  width: 8px;
+}
+.terminal::-webkit-scrollbar-track {
+  background: transparent;
+}
+.terminal::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+.terminal::-webkit-scrollbar-thumb:hover {
+  background: var(--dim);
+}
+.terminal {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* ---- scanline overlay --------------------------------------------------- */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* ---- terminal shell ----------------------------------------------------- */
+.terminal {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh; /* account for mobile browser chrome */
+  overflow-y: auto;
+  background: var(--bg);
+  cursor: text;
+}
+.terminal-inner {
+  padding: 20px 22px 40px;
+  min-height: 100%;
+}
+
+.app-status {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dim);
+  background: var(--bg);
+}
+.app-error {
+  color: var(--error);
+}
+
+/* ---- prompt ------------------------------------------------------------- */
+.prompt {
+  white-space: pre;
+}
+.prompt-bracket {
+  color: var(--dim);
+}
+.prompt-user {
+  color: var(--prompt-user);
+  font-weight: 700;
+}
+.prompt-at {
+  color: var(--dim);
+}
+.prompt-host {
+  color: var(--prompt-host);
+  font-weight: 700;
+}
+.prompt-path {
+  color: var(--prompt-path);
+}
+.prompt-symbol {
+  color: var(--text);
+}
+
+/* ---- output blocks ------------------------------------------------------ */
+.output-block {
+  margin-bottom: 10px;
+}
+.command-echo {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.echo-command {
+  color: var(--text);
+}
+.command-output {
+  margin-top: 2px;
+}
+
+.term-line {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text);
+}
+.term-error {
+  color: var(--error);
+}
+.term-link {
+  color: var(--link);
+}
+
+/* ---- input line --------------------------------------------------------- */
+.input-line {
+  display: flex;
+  align-items: baseline;
+  position: relative;
+  cursor: text;
+}
+.input-mirror {
+  white-space: pre-wrap;
+  word-break: break-word;
+  position: relative;
+}
+.input-typed {
+  color: var(--text);
+}
+.cursor-block {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 1px;
+  transform: translateY(0.18em);
+  background: var(--cursor);
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+.real-input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  border: none;
+  background: transparent;
+  color: transparent;
+  outline: none;
+  padding: 0;
+  font: inherit;
+}
+
+/* ---- boot sequence ------------------------------------------------------ */
+.boot-sequence {
+  color: var(--text);
+}
+.boot-line {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.boot-skip-hint {
+  margin-top: 14px;
+  color: var(--dim);
+  font-style: italic;
+}
+
+/* ---- welcome / ascii ---------------------------------------------------- */
+.renderer-welcome {
+  margin: 4px 0 6px;
+}
+.ascii-art {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: pre;
+  overflow-x: auto;
+}
+.welcome-tagline {
+  margin: 12px 0 0;
+  color: var(--text);
+}
+.welcome-version {
+  margin: 6px 0 0;
+  color: var(--dim);
+}
+.welcome-hint {
+  margin: 6px 0 0;
+  color: var(--accent);
+}
+
+/* ---- skills table ------------------------------------------------------- */
+.renderer-table {
+  border: 1px solid var(--border);
+  display: inline-block;
+  min-width: min(680px, 100%);
+}
+.table-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.table-row:last-child {
+  border-bottom: none;
+}
+.table-cat {
+  flex: 0 0 190px;
+  padding: 6px 12px;
+  color: var(--accent);
+  font-weight: 700;
+  border-right: 1px solid var(--border);
+}
+.table-skills {
+  padding: 6px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.skill-badge {
+  color: var(--text);
+}
+.skill-badge::after {
+  content: "·";
+  color: var(--dim);
+  margin-left: 6px;
+}
+.skill-badge:last-child::after {
+  content: "";
+  margin: 0;
+}
+
+/* ---- projects ----------------------------------------------------------- */
+.renderer-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.project-block {
+  border-left: 2px solid var(--accent);
+  padding-left: 12px;
+}
+.project-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.project-name {
+  color: var(--accent);
+  font-weight: 700;
+}
+.project-stars {
+  color: var(--dim);
+}
+.project-desc {
+  margin: 4px 0;
+  color: var(--text);
+}
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.tag-badge {
+  color: var(--prompt-host);
+}
+
+/* ---- list (writeups) ---------------------------------------------------- */
+.renderer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.list-item {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.list-index {
+  color: var(--dim);
+}
+.list-name {
+  color: var(--accent);
+  font-weight: 500;
+}
+.list-desc {
+  color: var(--text);
+}
+.list-link {
+  display: block;
+}
+
+/* ---- timeline (education) ----------------------------------------------- */
+.renderer-timeline {
+  display: flex;
+  flex-direction: column;
+}
+.timeline-row {
+  display: grid;
+  grid-template-columns: 160px 24px 1fr;
+  align-items: start;
+}
+.timeline-year {
+  color: var(--accent);
+  padding-top: 1px;
+}
+.timeline-marker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.timeline-dot {
+  width: 9px;
+  height: 9px;
+  margin-top: 6px;
+  background: var(--accent);
+}
+.timeline-line {
+  flex: 1;
+  width: 1px;
+  min-height: 28px;
+  background: var(--border);
+  margin-top: 2px;
+}
+.timeline-body {
+  padding-bottom: 18px;
+}
+.timeline-title {
+  color: var(--text);
+  font-weight: 500;
+}
+.timeline-inst {
+  color: var(--prompt-host);
+}
+.timeline-details {
+  color: var(--dim);
+}
+
+/* ---- certs -------------------------------------------------------------- */
+.renderer-certs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cert-row {
+  display: grid;
+  grid-template-columns: 220px 200px 70px auto;
+  align-items: center;
+  gap: 10px;
+}
+.cert-name {
+  color: var(--accent);
+  font-weight: 500;
+}
+.cert-issuer {
+  color: var(--text);
+}
+.cert-year {
+  color: var(--dim);
+}
+.cert-status {
+  justify-self: start;
+  padding: 0 8px;
+  border: 1px solid currentColor;
+  font-size: 0.85em;
+}
+.status-active {
+  color: var(--success);
+}
+.status-in-progress {
+  color: var(--accent);
+}
+
+/* ---- socials ------------------------------------------------------------ */
+.renderer-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.social-row {
+  display: grid;
+  grid-template-columns: 130px 160px auto;
+  gap: 10px;
+  align-items: baseline;
+}
+.social-platform {
+  color: var(--accent);
+}
+.social-handle {
+  color: var(--text);
+}
+
+/* ---- email -------------------------------------------------------------- */
+.email-label {
+  color: var(--accent);
+}
+
+/* ---- themes ------------------------------------------------------------- */
+.renderer-themes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.theme-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.theme-swatches {
+  display: inline-flex;
+}
+.swatch {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border);
+}
+.swatch + .swatch {
+  margin-left: -1px;
+}
+.theme-name {
+  color: var(--text);
+  min-width: 70px;
+}
+.theme-active {
+  color: var(--accent);
+}
+.theme-usage {
+  margin-top: 8px;
+  color: var(--dim);
+}
+
+/* ---- scan / sudo -------------------------------------------------------- */
+.renderer-scan .scan-line {
+  color: var(--text);
+}
+.scan-cursor {
+  color: var(--accent);
+  animation: blink 1s steps(1) infinite;
+}
+
+/* ---- key/value renderers (now / pgp / uses) ----------------------------- */
+.renderer-kv .kv-title {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 500;
+}
+.renderer-kv .kv-rule {
+  margin: 0;
+  color: var(--dim);
+}
+.renderer-kv .kv-row {
+  margin: 0;
+  white-space: pre-wrap;
+  color: var(--text);
+}
+.renderer-kv .kv-key {
+  color: var(--accent);
+}
+
+/* ---- fortune ------------------------------------------------------------ */
+.fortune-quote {
+  color: var(--text);
+  font-style: italic;
+}
+
+/* ---- flag / hall-of-fame ------------------------------------------------ */
+.flag-ok {
+  color: var(--success);
+}
+.hof-message {
+  color: var(--dim);
+  margin-bottom: 6px;
+}
+.hof-empty {
+  color: var(--dim);
+}
+.renderer-hof .hof-rank {
+  color: var(--dim);
+}
+.renderer-hof .hof-handle {
+  color: var(--accent);
+}
+.renderer-hof .hof-date {
+  color: var(--dim);
+}
+
+/* ---- mobile replay ------------------------------------------------------ */
+.mobile-banner {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 16px;
+  background: var(--bg);
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8em;
+}
+.mobile-banner-text {
+  color: var(--dim);
+  letter-spacing: 1px;
+}
+.mobile-hud-btn {
+  flex: 0 0 auto;
+  background: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font: inherit;
+  font-size: 1em;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.mobile-hud-btn:active {
+  background: var(--accent);
+  color: var(--bg);
+}
+.mobile-replay {
+  cursor: default;
+}
+
+@media (max-width: 767px) {
+  .terminal-inner {
+    padding: 14px 16px 40px;
+    font-size: 13px;
+  }
+  .ascii-art {
+    font-size: 10px;
+  }
+  .cert-row,
+  .social-row,
+  .timeline-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .table-cat {
+    flex-basis: 140px;
+  }
+}

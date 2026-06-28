@@ -1,0 +1,691 @@
+{
+  "meta": {
+    "user": "ghost",
+    "host": "parrot",
+    "prompt_symbol": "$",
+    "version": "2.0",
+    "title": "Ghost's Portfolio",
+    "theme": "amber"
+  },
+
+  "now": {
+    "learning": "Rust for low-level exploit development",
+    "building": "A passive recon automation tool",
+    "reading": "The Web Application Hacker's Handbook",
+    "playing": "HackTheBox — Insane track"
+  },
+
+  "pgp": {
+    "fingerprint": "A1B2 C3D4 E5F6 7890 ABCD EF12 3456 7890",
+    "key_server": "keys.openpgp.org",
+    "note": "Verify before you trust. Always."
+  },
+
+  "uses": {
+    "os": "Parrot OS Security Edition",
+    "editor": "Neovim",
+    "terminal": "Kitty",
+    "shell": "Zsh + Oh My Zsh",
+    "browser": "Firefox (hardened)",
+    "vpn": "Mullvad"
+  },
+
+  "themes": {
+    "amber": {
+      "background": "#0d0d0d",
+      "prompt_user": "#e8a838",
+      "prompt_host": "#5ce0b8",
+      "prompt_path": "#a0a0a0",
+      "output_text": "#c8c8b4",
+      "output_dim": "#6b6b6b",
+      "accent": "#e8a838",
+      "error": "#e05c5c",
+      "link": "#5ce0b8",
+      "success": "#5ce0b8",
+      "table_border": "#333333",
+      "cursor": "#e8a838"
+    },
+    "green": {
+      "background": "#0a0f0a",
+      "prompt_user": "#00ff41",
+      "prompt_host": "#00cc33",
+      "prompt_path": "#008f11",
+      "output_text": "#ccffcc",
+      "output_dim": "#3a5c3a",
+      "accent": "#00ff41",
+      "error": "#ff4444",
+      "link": "#00ffcc",
+      "success": "#00ff41",
+      "table_border": "#1a3a1a",
+      "cursor": "#00ff41"
+    },
+    "blue": {
+      "background": "#080d1a",
+      "prompt_user": "#4fc3f7",
+      "prompt_host": "#81d4fa",
+      "prompt_path": "#546e7a",
+      "output_text": "#b0bec5",
+      "output_dim": "#37474f",
+      "accent": "#4fc3f7",
+      "error": "#ef5350",
+      "link": "#80cbc4",
+      "success": "#4caf50",
+      "table_border": "#1a2a3a",
+      "cursor": "#4fc3f7"
+    },
+    "red": {
+      "background": "#0d0808",
+      "prompt_user": "#ff4444",
+      "prompt_host": "#cc0000",
+      "prompt_path": "#7a3030",
+      "output_text": "#ffcccc",
+      "output_dim": "#5c3030",
+      "accent": "#ff4444",
+      "error": "#ff6b6b",
+      "link": "#ff8c69",
+      "success": "#ff4444",
+      "table_border": "#3a1a1a",
+      "cursor": "#ff4444"
+    }
+  },
+
+  "boot_sequence": [
+    { "text": "GNU GRUB version 2.06", "delay": 0 },
+    { "text": "", "delay": 100 },
+    { "text": "Loading ParrotOS...", "delay": 300 },
+    { "text": "Kernel 6.1.0-parrot1-amd64 loaded.", "delay": 200 },
+    { "text": "Mounting filesystems...", "delay": 150 },
+    { "text": "Starting threat intelligence modules... [ OK ]", "delay": 200 },
+    { "text": "Initializing network interfaces... [ OK ]", "delay": 150 },
+    { "text": "Loading portfolio data... [ OK ]", "delay": 200 },
+    { "text": "", "delay": 100 },
+    { "text": "Welcome back, ghost.", "delay": 400 },
+    { "text": "TIP: type 'gui' to launch the visual HUD.", "delay": 250 }
+  ],
+
+  "filesystem": {
+    "/": {
+      "type": "dir",
+      "children": [
+        "projects/",
+        "writeups/",
+        "certs/",
+        "skills.txt",
+        "contact.md",
+        "README.md"
+      ]
+    },
+    "/projects": {
+      "type": "dir",
+      "children": ["nmapper/", "phishdetect/", "keylogger-edu/"]
+    },
+    "/projects/nmapper": {
+      "type": "dir",
+      "children": ["README.md", "requirements.txt", "demo.sh"]
+    },
+    "/projects/phishdetect": {
+      "type": "dir",
+      "children": ["README.md", "model.py"]
+    },
+    "/projects/keylogger-edu": {
+      "type": "dir",
+      "children": ["README.md"]
+    },
+    "/writeups": {
+      "type": "dir",
+      "children": ["htb-lame.md", "thm-relevant.md", "picoctf-2024.md"]
+    },
+    "/certs": {
+      "type": "dir",
+      "children": ["ejpt.md", "google-cybersec.md"]
+    },
+    "/secret": {
+      "type": "dir",
+      "children": ["flag.txt", ".note"]
+    },
+    "files": {
+      "README.md": "# Terminal Portfolio v2.0\nType 'help' to get started.\nThis portfolio is JSON-driven. All content lives in portfolio.json.",
+      "skills.txt": "[ OFFENSIVE ]\nNmap, Burp Suite, Metasploit, Gobuster, Nikto, SQLmap\n\n[ DEFENSIVE ]\nSplunk, Wireshark, Suricata, YARA\n\n[ LANGUAGES ]\nPython, Bash, Go, JavaScript\n\n[ OS ]\nParrot OS, Kali Linux, Ubuntu, Windows",
+      "contact.md": "Email    : ghost@proton.me\nGitHub   : github.com/ghost\nLinkedIn : linkedin.com/in/ghost\nTryHackMe: tryhackme.com/p/ghost",
+      "/projects/nmapper/README.md": "# nmapper\nA Python wrapper around Nmap with clean JSON output and port diffing.\nGitHub: github.com/ghost/nmapper",
+      "/projects/nmapper/requirements.txt": "python-nmap==0.7.1\nclick==8.1.7\nrich==13.7.0",
+      "/projects/nmapper/demo.sh": "#!/bin/bash\n# Quick demo of nmapper\npython3 nmapper.py --target scanme.nmap.org --json out.json\npython3 nmapper.py --diff old.json out.json",
+      "/projects/phishdetect/README.md": "# PhishDetect\nML-based phishing URL detector. Trained on 50k URLs. 94% accuracy.\nGitHub: github.com/ghost/phishdetect",
+      "/projects/phishdetect/model.py": "# PhishDetect - feature extraction stub\nfrom sklearn.ensemble import RandomForestClassifier\n\ndef extract_features(url: str) -> list[float]:\n    return [len(url), url.count('-'), url.count('.'), int('@' in url)]\n\nclf = RandomForestClassifier(n_estimators=200)",
+      "/projects/keylogger-edu/README.md": "# keylogger-edu\nEducational keylogger with encrypted log storage.\nFor learning only. Never deployed against anyone.\nGitHub: github.com/ghost/keylogger-edu",
+      "/writeups/htb-lame.md": "# HTB: Lame\nExploited Samba 3.0.20 via CVE-2007-2447 using Metasploit.\nUser: daemon | Root: root",
+      "/writeups/thm-relevant.md": "# THM: Relevant\nUploaded an aspx reverse shell via an anonymous SMB share,\nthen escalated from iis apppool to SYSTEM with PrintSpoofer.\nUser + Root flags captured.",
+      "/writeups/picoctf-2024.md": "# PicoCTF 2024\nTop 500 finish. 8 challenges solved across web, crypto, and forensics.\n\npicoCTF{json_driven_p0rtf0li0_ftw}",
+      "/certs/ejpt.md": "# eJPT - eLearnSecurity Junior Penetration Tester\nIssued: 2024\nScore : 18/20",
+      "/certs/google-cybersec.md": "# Google Cybersecurity Professional Certificate\nIssuer : Google / Coursera\nIssued : 2023\n8 courses covering SIEM, Linux, SQL, Python, and incident response.",
+      "/secret/flag.txt": "Almost. The flag needs a key.\nTry XOR with 0x42.\nEncrypted: 01160439307176261d362a711d3172373021711d2e3729713f\n\nWhen you've decoded it, submit with:\n  flag CTF{...}",
+      "/secret/.note": "flag format: CTF{...}\nDecode the hex in flag.txt, XOR each byte with 0x42."
+    }
+  },
+
+  "commands": {
+    "welcome": {
+      "description": "display hero section",
+      "output_type": "welcome",
+      "ascii": [
+        "  ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗",
+        "  ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝",
+        "  ██║  ███╗███████║██║   ██║███████╗   ██║   ",
+        "  ██║   ██║██╔══██║██║   ██║╚════██║   ██║   ",
+        "  ╚██████╔╝██║  ██║╚██████╔╝███████║   ██║   ",
+        "   ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝  "
+      ],
+      "tagline": "Security Researcher. CTF Player. I break things to learn how to fix them.",
+      "version": "Portfolio v2.0",
+      "hint": "Type 'help' for commands, or 'gui' to launch the visual HUD."
+    },
+
+    "whoami": {
+      "description": "about current user",
+      "output_type": "text",
+      "lines": [
+        "Name    : Ghost",
+        "Role    : Cybersecurity Student & Researcher",
+        "Focus   : Penetration Testing, Web Security, CTFs",
+        "Based   : [Your City]",
+        "Status  : Open to internships & entry-level roles",
+        "",
+        "I'm a cybersecurity student passionate about offensive security.",
+        "I spend my weekends solving CTF challenges on HackTheBox and TryHackMe.",
+        "When I'm not breaking things, I'm building tools to break them faster."
+      ]
+    },
+
+    "about": {
+      "description": "about me",
+      "output_type": "alias",
+      "target": "whoami"
+    },
+
+    "skills": {
+      "description": "view my skillset",
+      "output_type": "table",
+      "categories": {
+        "Offensive Security": [
+          "Nmap",
+          "Burp Suite",
+          "Metasploit",
+          "Gobuster",
+          "SQLmap"
+        ],
+        "Defensive Security": ["Splunk", "Wireshark", "Suricata", "YARA"],
+        "Programming": ["Python", "Bash", "Go", "JavaScript"],
+        "Platforms": ["HackTheBox", "TryHackMe", "PicoCTF"],
+        "Operating Systems": ["Parrot OS", "Kali Linux", "Ubuntu"]
+      }
+    },
+
+    "projects": {
+      "description": "view my projects",
+      "output_type": "projects",
+      "items": [
+        {
+          "name": "nmapper",
+          "desc": "Python wrapper for Nmap with clean JSON output and port diffing between scans.",
+          "tags": ["python", "networking", "nmap"],
+          "link": "https://github.com/ghost/nmapper",
+          "stars": 12
+        },
+        {
+          "name": "phishdetect",
+          "desc": "ML-based phishing URL detector. Trained on 50k URLs. 94% detection accuracy.",
+          "tags": ["python", "ml", "security"],
+          "link": "https://github.com/ghost/phishdetect",
+          "stars": 7
+        },
+        {
+          "name": "keylogger-edu",
+          "desc": "Educational keylogger with encrypted log storage. For learning only. Never deployed.",
+          "tags": ["python", "malware-analysis", "educational"],
+          "link": "https://github.com/ghost/keylogger-edu",
+          "stars": 23
+        }
+      ]
+    },
+
+    "writeups": {
+      "description": "view CTF writeups",
+      "output_type": "list",
+      "items": [
+        {
+          "name": "HTB: Lame",
+          "desc": "Samba exploitation via CVE-2007-2447",
+          "link": "https://blog.ghost.dev/htb-lame"
+        },
+        {
+          "name": "THM: Relevant",
+          "desc": "SMB + PrintSpoofer privilege escalation",
+          "link": "https://blog.ghost.dev/thm-relevant"
+        },
+        {
+          "name": "PicoCTF 2024",
+          "desc": "Top 500 finish. 8 challenges solved.",
+          "link": "https://blog.ghost.dev/picoctf-2024"
+        }
+      ]
+    },
+
+    "education": {
+      "description": "my education background",
+      "output_type": "timeline",
+      "items": [
+        {
+          "year": "2022 - Present",
+          "title": "B.Sc. Computer Science (Cybersecurity Track)",
+          "institution": "Your University",
+          "details": "Relevant: Network Security, Cryptography, Ethical Hacking, OS Internals"
+        },
+        {
+          "year": "2022",
+          "title": "Higher Secondary Education",
+          "institution": "Your School",
+          "details": "Science Stream — Computer Science Major"
+        }
+      ]
+    },
+
+    "certifications": {
+      "description": "certifications earned",
+      "output_type": "certs",
+      "items": [
+        {
+          "name": "eJPT",
+          "issuer": "eLearnSecurity",
+          "year": "2024",
+          "status": "active"
+        },
+        {
+          "name": "Google Cybersecurity",
+          "issuer": "Google/Coursera",
+          "year": "2023",
+          "status": "active"
+        },
+        {
+          "name": "OSCP",
+          "issuer": "Offensive Security",
+          "year": "2025",
+          "status": "in-progress"
+        }
+      ]
+    },
+
+    "socials": {
+      "description": "check my social accounts",
+      "output_type": "socials",
+      "items": [
+        {
+          "platform": "GitHub",
+          "handle": "@ghost",
+          "link": "https://github.com/ghost"
+        },
+        {
+          "platform": "LinkedIn",
+          "handle": "ghost-sec",
+          "link": "https://linkedin.com/in/ghost"
+        },
+        {
+          "platform": "TryHackMe",
+          "handle": "ghost",
+          "link": "https://tryhackme.com/p/ghost",
+          "rank": "Top 5%",
+          "progress": 88
+        },
+        {
+          "platform": "HackTheBox",
+          "handle": "ghost",
+          "link": "https://app.hackthebox.com/profile/ghost",
+          "rank": "Pro Hacker",
+          "progress": 74
+        },
+        {
+          "platform": "Twitter",
+          "handle": "@0xghost",
+          "link": "https://twitter.com/0xghost"
+        }
+      ]
+    },
+
+    "email": {
+      "description": "send me an email",
+      "output_type": "email",
+      "address": "ghost@proton.me",
+      "message": "Opening mail client..."
+    },
+
+    "themes": {
+      "description": "list & switch themes",
+      "output_type": "themes",
+      "usage": "themes set <name>"
+    },
+
+    "pwd": {
+      "description": "print current working directory",
+      "output_type": "builtin"
+    },
+
+    "ls": {
+      "description": "list directory contents",
+      "output_type": "builtin"
+    },
+
+    "cd": {
+      "description": "change directory",
+      "output_type": "builtin"
+    },
+
+    "cat": {
+      "description": "read a file",
+      "output_type": "builtin"
+    },
+
+    "echo": {
+      "description": "print text to terminal",
+      "output_type": "builtin"
+    },
+
+    "history": {
+      "description": "view command history",
+      "output_type": "builtin"
+    },
+
+    "clear": {
+      "description": "clear the terminal",
+      "output_type": "builtin"
+    },
+
+    "help": {
+      "description": "list available commands",
+      "output_type": "builtin"
+    },
+
+    "gui": {
+      "description": "launch the visual HUD interface",
+      "output_type": "gui",
+      "text": ["Opening HUD interface...", "→ /hud"]
+    },
+
+    "now": {
+      "description": "what i'm currently up to",
+      "output_type": "now"
+    },
+
+    "pgp": {
+      "description": "my PGP public key info",
+      "output_type": "pgp"
+    },
+
+    "uses": {
+      "description": "tools and setup i use daily",
+      "output_type": "uses"
+    },
+
+    "hall-of-fame": {
+      "description": "view CTF solvers",
+      "output_type": "hof",
+      "message": "These people read the source code."
+    }
+  },
+
+  "easter_eggs": {
+    "nmap": {
+      "hidden": true,
+      "output_type": "scan",
+      "lines": [
+        "Starting Nmap 7.94 ( https://nmap.org )",
+        "Nmap scan report for ghost.dev (127.0.0.1)",
+        "Host is up (0.0001s latency).",
+        "",
+        "PORT      STATE  SERVICE    VERSION",
+        "80/tcp    open   http       Resume",
+        "443/tcp   open   https      GitHub Portfolio",
+        "22/tcp    open   ssh        Always Learning",
+        "1337/tcp  open   elite      CTF Skills",
+        "8080/tcp  open   projects   Side Projects",
+        "",
+        "Nmap done: 1 IP address (1 host up) scanned in 2.34 seconds"
+      ]
+    },
+    "sudo hire me": {
+      "hidden": true,
+      "output_type": "sudo",
+      "lines": [
+        "[sudo] password for recruiter: ",
+        "Verifying credentials...",
+        "Access granted.",
+        "",
+        "Redirecting to contact info..."
+      ],
+      "redirect_command": "email"
+    },
+    "sudo rm -rf /": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": ["Nice try.", "This is a portfolio, not a production server."]
+    },
+    "hack": {
+      "hidden": true,
+      "output_type": "scan",
+      "lines": [
+        "Initiating hack sequence...",
+        "Bypassing firewall... [################] 100%",
+        "Cracking encryption... [################] 100%",
+        "Accessing mainframe... [################] 100%",
+        "",
+        "Just kidding. Real hacking is way less dramatic.",
+        "Type 'projects' to see actual security work."
+      ]
+    },
+    "flag": {
+      "hidden": true,
+      "output_type": "flag_submit",
+      "format": "CTF{...}",
+      "hint": "There are 5 layers. Start with robots.txt.",
+      "check": { "hex": "01160439307176261d362a711d3172373021711d2e3729713f", "xor": 66 }
+    },
+    "uname -a": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": [
+        "ParrotOS 5.3 ghost-portfolio #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux"
+      ]
+    },
+    "ifconfig": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": [
+        "eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500",
+        "      inet 192.168.1.337  netmask 255.255.255.0",
+        "      ether de:ad:be:ef:ca:fe  txqueuelen 1000",
+        "",
+        "lo:   flags=73<UP,LOOPBACK,RUNNING>  mtu 65536",
+        "      inet 127.0.0.1  netmask 255.0.0.0"
+      ]
+    },
+
+    "ping ghost.dev": {
+      "hidden": true,
+      "output_type": "scan",
+      "lines": [
+        "PING ghost.dev (127.0.0.1): 56 data bytes",
+        "64 bytes from ghost.dev: icmp_seq=0 ttl=64 time=0.31 ms",
+        "64 bytes from ghost.dev: icmp_seq=1 ttl=64 time=0.28 ms",
+        "64 bytes from ghost.dev: icmp_seq=2 ttl=64 time=0.30 ms",
+        "",
+        "--- ghost.dev ping statistics ---",
+        "3 packets transmitted, 3 received, 0% packet loss",
+        "round-trip min/avg/max = 0.28/0.30/0.31 ms"
+      ]
+    },
+
+    "whois ghost": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": [
+        "% IANA WHOIS server",
+        "% for more information on IANA, visit http://www.iana.org",
+        "",
+        "domain:       GHOST",
+        "organisation: Ghost Security Research",
+        "status:       ACTIVE",
+        "",
+        "contact:      ghost@proton.me",
+        "github:       github.com/ghost",
+        "focus:        Breaking things responsibly",
+        "",
+        "source: GHOST-DB"
+      ]
+    },
+
+    "fortune": {
+      "hidden": true,
+      "output_type": "fortune",
+      "quotes": [
+        "The quieter you become, the more you can hear. — Kali motto",
+        "There are two types of companies: those that have been hacked and those who don't know it. — John Chambers",
+        "Security is not a product, but a process. — Bruce Schneier",
+        "If you think technology can solve your security problems, then you don't understand the problems. — Bruce Schneier",
+        "The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a lead-lined room. — Gene Spafford",
+        "Amateurs hack systems, professionals hack people. — Bruce Schneier",
+        "Hackers are breaking the systems for profit. Before, it was about intellectual curiosity. — Kevin Mitnick",
+        "Being able to break security doesn't make you a hacker any more than being able to hotwire a car makes you an automotive engineer.",
+        "Privacy is not something that I'm merely entitled to, it's an absolute prerequisite. — Marlon Brando",
+        "The internet is the world's largest library. It's just that all the books are on the floor. — John Allen Paulos"
+      ]
+    },
+
+    "man whoami": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": [
+        "WHOAMI(1)              Ghost Manual              WHOAMI(1)",
+        "",
+        "NAME",
+        "       whoami - print effective userid",
+        "",
+        "SYNOPSIS",
+        "       whoami [OPTION]",
+        "",
+        "DESCRIPTION",
+        "       Print the username associated with the current effective",
+        "       user ID — a security researcher who gets too invested",
+        "       in CTF challenges at 2am.",
+        "",
+        "       --verbose    Reveals an unhealthy obsession with nmap",
+        "       --help       You're already reading it",
+        "       --version    Still a work in progress",
+        "",
+        "BUGS",
+        "       Occasionally forgets to eat when deep in a box.",
+        "       Reports bugs to: ghost@proton.me",
+        "",
+        "Ghost                      2024                      WHOAMI(1)"
+      ]
+    },
+
+    "traceroute ghost.dev": {
+      "hidden": true,
+      "output_type": "scan",
+      "lines": [
+        "traceroute to ghost.dev, 30 hops max, 60 byte packets",
+        " 1  192.168.1.1 (192.168.1.1)  0.812 ms  0.756 ms",
+        " 2  10.0.0.1 (10.0.0.1)  3.214 ms  3.108 ms",
+        " 3  isp-gateway.net  8.432 ms  8.391 ms",
+        " 4  core1.backbone.net  12.773 ms  12.641 ms",
+        " 5  * * *",
+        " 6  * * *",
+        " 7  edge.ghost.dev  18.442 ms  18.310 ms",
+        " 8  ghost.dev (you found me)  0.001 ms"
+      ]
+    },
+
+    "cat /etc/passwd": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": [
+        "root:x:0:0:root:/root:/bin/bash",
+        "ghost:x:1337:1337:Ghost,,,:/home/ghost:/bin/zsh",
+        "recruiter:x:404:404::/dev/null:/bin/false",
+        "coffee:x:9999:9999:Essential Process:/dev/stdin:/bin/sh"
+      ]
+    },
+
+    "uptime": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": [
+        "up 847 days, 14:22, 1 user, load average: curiosity, coffee, terminal",
+        "still learning. still building. still breaking things."
+      ]
+    },
+
+    "gpg --verify me": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": [
+        "gpg: Signature made using RSA key",
+        "gpg: Good signature from \"Ghost <ghost@proton.me>\"",
+        "gpg: aka \"Ghost (Security Researcher)\"",
+        "Primary key fingerprint: A1B2 C3D4 E5F6 7890 ABCD",
+        "gpg: WARNING: This key is not certified with a trusted signature",
+        "gpg: There is no indication that the signature belongs to the owner",
+        "gpg: ...but you should probably reach out anyway."
+      ]
+    },
+
+    "ls -la /": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": [
+        "total 1337",
+        "drwxr-xr-x  ghost ghost   projects/",
+        "drwxr-xr-x  ghost ghost   writeups/",
+        "drwxr-xr-x  ghost ghost   certs/",
+        "drwx------  ghost ghost   secret/",
+        "-rw-r--r--  ghost ghost   skills.txt",
+        "-rw-r--r--  ghost ghost   contact.md",
+        "-rw-r--r--  ghost ghost   README.md",
+        "-r--------  ghost ghost   pgp.asc",
+        "----------  ghost ghost   .diary  (nice try)"
+      ]
+    },
+
+    "exit": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": ["logout", "There is no escape.", "You are already home."]
+    },
+
+    "rm -rf /": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": [
+        "rm: it is dangerous to operate recursively on '/'",
+        "rm: use --no-preserve-root to override this failsafe",
+        "",
+        "Nice reflex. That's the right instinct.",
+        "This is a portfolio though, not a server."
+      ]
+    },
+
+    "ssh ghost@ghost.dev": {
+      "hidden": true,
+      "output_type": "text",
+      "lines": [
+        "ssh: connect to host ghost.dev port 22",
+        "The authenticity of host 'ghost.dev' can't be established.",
+        "RSA key fingerprint is A1:B2:C3:D4:E5:F6",
+        "Are you sure you want to continue connecting? (yes/no): yes",
+        "",
+        "Warning: Permanently added 'ghost.dev' to known hosts.",
+        "ghost@ghost.dev: Permission denied (publickey).",
+        "",
+        "...but I respect the attempt."
+      ]
+    }
+  }
+}
