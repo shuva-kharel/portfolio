@@ -1123,6 +1123,7 @@ export default function HUD() {
               weeks={isMobile ? 16 : 26}
               contrib={contrib}
             />
+            <pre className="feed">{feed.join("\n")}</pre>
           </Panel>
         </div>
 
