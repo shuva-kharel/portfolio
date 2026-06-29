@@ -8,7 +8,11 @@ import type { CommandResult } from "../types";
 // Blank lines are preserved so spacing in the JSON survives verbatim.
 export default function TextRenderer({ result }: { result: CommandResult }) {
   const lines = result.lines ?? (result.def?.lines as string[] | undefined) ?? [];
-  const cls = result.isError ? "term-line term-error" : "term-line";
+  const cls = result.isError
+    ? "term-line term-error"
+    : result.dim
+      ? "term-line term-dim"
+      : "term-line";
 
   return (
     <div className="renderer-text">

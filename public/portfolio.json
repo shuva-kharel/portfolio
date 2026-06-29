@@ -1,18 +1,19 @@
 {
   "meta": {
-    "user": "ghost",
+    "user": "shuva",
     "host": "parrot",
     "prompt_symbol": "$",
     "version": "2.0",
-    "title": "Ghost's Portfolio",
-    "theme": "amber"
+    "title": "Shuva Kharel — Portfolio",
+    "theme": "amber",
+    "location_city": "Kathmandu"
   },
 
   "now": {
-    "learning": "Rust for low-level exploit development",
-    "building": "A passive recon automation tool",
-    "reading": "The Web Application Hacker's Handbook",
-    "playing": "HackTheBox — Insane track"
+    "learning": "C++ for low-level exploit development",
+    "building": "",
+    "reading": "The Linux Command Line A Complete Introduction",
+    "playing": "TryHackMe CTFs"
   },
 
   "pgp": {
@@ -115,8 +116,14 @@
     { "text": "Initializing network interfaces... [ OK ]", "delay": 150 },
     { "text": "Loading portfolio data... [ OK ]", "delay": 200 },
     { "text": "", "delay": 100 },
-    { "text": "Welcome back, ghost.", "delay": 400 },
-    { "text": "TIP: type 'gui' to launch the visual HUD.", "delay": 250 }
+    { "text": "Unknown visitor detected.", "delay": 350 },
+    { "text": "Running guest protocol... [ OK ]", "delay": 200 },
+    { "text": "", "delay": 100 },
+    { "text": "Welcome. You're in Shuva's terminal.", "delay": 400 },
+    {
+      "text": "Type 'help' to see what's available. Or just explore.",
+      "delay": 250
+    }
   ],
 
   "filesystem": {
@@ -160,15 +167,15 @@
       "children": ["flag.txt", ".note"]
     },
     "files": {
-      "README.md": "# Terminal Portfolio v2.0\nType 'help' to get started.\nThis portfolio is JSON-driven. All content lives in portfolio.json.",
+      "README.md": "# Terminal Portfolio v2.0\nType 'help' to get started.\nBuilt by Shuva Kharel — shuva-kharel.dev",
       "skills.txt": "[ OFFENSIVE ]\nNmap, Burp Suite, Metasploit, Gobuster, Nikto, SQLmap\n\n[ DEFENSIVE ]\nSplunk, Wireshark, Suricata, YARA\n\n[ LANGUAGES ]\nPython, Bash, Go, JavaScript\n\n[ OS ]\nParrot OS, Kali Linux, Ubuntu, Windows",
-      "contact.md": "Email    : ghost@proton.me\nGitHub   : github.com/ghost\nLinkedIn : linkedin.com/in/ghost\nTryHackMe: tryhackme.com/p/ghost",
-      "/projects/nmapper/README.md": "# nmapper\nA Python wrapper around Nmap with clean JSON output and port diffing.\nGitHub: github.com/ghost/nmapper",
+      "contact.md": "Email    : [TODO: your real email]\nGitHub   : github.com/shuva-kharel\nLinkedIn : [TODO: your LinkedIn]\nTryHackMe: [TODO: your THM profile]",
+      "/projects/nmapper/README.md": "# nmapper\nA Python wrapper around Nmap with clean JSON output and port diffing.\nGitHub: github.com/shuva-kharel/nmapper",
       "/projects/nmapper/requirements.txt": "python-nmap==0.7.1\nclick==8.1.7\nrich==13.7.0",
       "/projects/nmapper/demo.sh": "#!/bin/bash\n# Quick demo of nmapper\npython3 nmapper.py --target scanme.nmap.org --json out.json\npython3 nmapper.py --diff old.json out.json",
-      "/projects/phishdetect/README.md": "# PhishDetect\nML-based phishing URL detector. Trained on 50k URLs. 94% accuracy.\nGitHub: github.com/ghost/phishdetect",
+      "/projects/phishdetect/README.md": "# PhishDetect\nML-based phishing URL detector. Trained on 50k URLs. 94% accuracy.\nGitHub: github.com/shuva-kharel/phishdetect",
       "/projects/phishdetect/model.py": "# PhishDetect - feature extraction stub\nfrom sklearn.ensemble import RandomForestClassifier\n\ndef extract_features(url: str) -> list[float]:\n    return [len(url), url.count('-'), url.count('.'), int('@' in url)]\n\nclf = RandomForestClassifier(n_estimators=200)",
-      "/projects/keylogger-edu/README.md": "# keylogger-edu\nEducational keylogger with encrypted log storage.\nFor learning only. Never deployed against anyone.\nGitHub: github.com/ghost/keylogger-edu",
+      "/projects/keylogger-edu/README.md": "# keylogger-edu\nEducational keylogger with encrypted log storage.\nFor learning only. Never deployed against anyone.\nGitHub: github.com/shuva-kharel/keylogger-edu",
       "/writeups/htb-lame.md": "# HTB: Lame\nExploited Samba 3.0.20 via CVE-2007-2447 using Metasploit.\nUser: daemon | Root: root",
       "/writeups/thm-relevant.md": "# THM: Relevant\nUploaded an aspx reverse shell via an anonymous SMB share,\nthen escalated from iis apppool to SYSTEM with PrintSpoofer.\nUser + Root flags captured.",
       "/writeups/picoctf-2024.md": "# PicoCTF 2024\nTop 500 finish. 8 challenges solved across web, crypto, and forensics.\n\npicoCTF{json_driven_p0rtf0li0_ftw}",
@@ -184,14 +191,14 @@
       "description": "display hero section",
       "output_type": "welcome",
       "ascii": [
-        "  ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗",
-        "  ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝",
-        "  ██║  ███╗███████║██║   ██║███████╗   ██║   ",
-        "  ██║   ██║██╔══██║██║   ██║╚════██║   ██║   ",
-        "  ╚██████╔╝██║  ██║╚██████╔╝███████║   ██║   ",
-        "   ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝  "
+        "  ███████╗██╗  ██╗██╗   ██╗██╗   ██╗ █████╗ ",
+        "  ██╔════╝██║  ██║██║   ██║██║   ██║██╔══██╗",
+        "  ███████╗███████║██║   ██║██║   ██║███████║",
+        "  ╚════██║██╔══██║╚██╗ ██╔╝╚██╗ ██╔╝██╔══██║",
+        "  ███████║██║  ██║ ╚████╔╝  ╚████╔╝ ██║  ██║",
+        "  ╚══════╝╚═╝  ╚═╝  ╚═══╝    ╚═══╝  ╚═╝  ╚═╝"
       ],
-      "tagline": "Security Researcher. CTF Player. I break things to learn how to fix them.",
+      "tagline": "Cybersecurity Student. CTF Enthusiast. I break things to understand how they work.",
       "version": "Portfolio v2.0",
       "hint": "Type 'help' for commands, or 'gui' to launch the visual HUD."
     },
@@ -200,22 +207,16 @@
       "description": "about current user",
       "output_type": "text",
       "lines": [
-        "Name    : Ghost",
-        "Role    : Cybersecurity Student & Researcher",
+        "Name    : Shuva Kharel",
+        "Role    : Cybersecurity Student",
         "Focus   : Penetration Testing, Web Security, CTFs",
-        "Based   : [Your City]",
+        "Based   : Kathmandu, Nepal",
         "Status  : Open to internships & entry-level roles",
         "",
-        "I'm a cybersecurity student passionate about offensive security.",
-        "I spend my weekends solving CTF challenges on HackTheBox and TryHackMe.",
-        "When I'm not breaking things, I'm building tools to break them faster."
+        "[TODO: Write 2-3 lines about yourself here in your own words.]",
+        "[TODO: What got you into security? What are you working toward?]",
+        "[TODO: Keep it human. Recruiters read this.]"
       ]
-    },
-
-    "about": {
-      "description": "about me",
-      "output_type": "alias",
-      "target": "whoami"
     },
 
     "skills": {
@@ -242,24 +243,11 @@
       "items": [
         {
           "name": "nmapper",
+          "type": "TOOL",
           "desc": "Python wrapper for Nmap with clean JSON output and port diffing between scans.",
           "tags": ["python", "networking", "nmap"],
-          "link": "https://github.com/ghost/nmapper",
-          "stars": 12
-        },
-        {
-          "name": "phishdetect",
-          "desc": "ML-based phishing URL detector. Trained on 50k URLs. 94% detection accuracy.",
-          "tags": ["python", "ml", "security"],
-          "link": "https://github.com/ghost/phishdetect",
-          "stars": 7
-        },
-        {
-          "name": "keylogger-edu",
-          "desc": "Educational keylogger with encrypted log storage. For learning only. Never deployed.",
-          "tags": ["python", "malware-analysis", "educational"],
-          "link": "https://github.com/ghost/keylogger-edu",
-          "stars": 23
+          "link": "https://github.com/shuva-kharel/nmapper",
+          "stars": 0
         }
       ]
     },
@@ -269,28 +257,12 @@
       "output_type": "list",
       "items": [
         {
-          "name": "HTB: Lame",
-          "desc": "Samba exploitation via CVE-2007-2447",
-          "link": "https://blog.ghost.dev/htb-lame",
-          "severity": "HIGH",
-          "platform": "HackTheBox",
-          "date": "2024-03-12"
-        },
-        {
-          "name": "THM: Relevant",
-          "desc": "SMB + PrintSpoofer privilege escalation",
-          "link": "https://blog.ghost.dev/thm-relevant",
-          "severity": "MED",
-          "platform": "TryHackMe",
-          "date": "2024-02-04"
-        },
-        {
-          "name": "PicoCTF 2024",
-          "desc": "Top 500 finish. 8 challenges solved.",
-          "link": "https://blog.ghost.dev/picoctf-2024",
-          "severity": "LOW",
-          "platform": "PicoCTF",
-          "date": "2024-03-28"
+          "name": "",
+          "desc": "",
+          "link": "",
+          "severity": "",
+          "platform": "",
+          "date": ""
         }
       ]
     },
@@ -300,16 +272,16 @@
       "output_type": "timeline",
       "items": [
         {
-          "year": "2022 - Present",
-          "title": "B.Sc. Computer Science (Cybersecurity Track)",
-          "institution": "Your University",
-          "details": "Relevant: Network Security, Cryptography, Ethical Hacking, OS Internals"
+          "year": "2026 - Present",
+          "title": "Bachelor of Science in Cybersecurity",
+          "institution": "Westcliff University",
+          "details": ""
         },
         {
-          "year": "2022",
+          "year": "2024 - 2026",
           "title": "Higher Secondary Education",
-          "institution": "Your School",
-          "details": "Science Stream — Computer Science Major"
+          "institution": "GoldenGate International College",
+          "details": "Science — Computer Science"
         }
       ]
     },
@@ -319,22 +291,10 @@
       "output_type": "certs",
       "items": [
         {
-          "name": "eJPT",
-          "issuer": "eLearnSecurity",
-          "year": "2024",
+          "name": "",
+          "issuer": "",
+          "year": "",
           "status": "active"
-        },
-        {
-          "name": "Google Cybersecurity",
-          "issuer": "Google/Coursera",
-          "year": "2023",
-          "status": "active"
-        },
-        {
-          "name": "OSCP",
-          "issuer": "Offensive Security",
-          "year": "2025",
-          "status": "in-progress"
         }
       ]
     },
@@ -345,32 +305,27 @@
       "items": [
         {
           "platform": "GitHub",
-          "handle": "@ghost",
+          "handle": "@shuva-kharel",
           "link": "https://github.com/shuva-kharel"
         },
         {
           "platform": "LinkedIn",
-          "handle": "ghost-sec",
-          "link": "https://linkedin.com/in/ghost"
+          "handle": "@shuva-kharel",
+          "link": "https://linkedin.com/in/shuva-kharel"
         },
         {
           "platform": "TryHackMe",
-          "handle": "ghost",
-          "link": "https://tryhackme.com/p/ghost",
-          "rank": "Top 5%",
-          "progress": 88
+          "handle": "@shuva",
+          "link": "https://tryhackme.com/p/shuva",
+          "rank": "",
+          "progress": 0
         },
         {
           "platform": "HackTheBox",
-          "handle": "ghost",
-          "link": "https://app.hackthebox.com/profile/ghost",
-          "rank": "Pro Hacker",
-          "progress": 74
-        },
-        {
-          "platform": "Twitter",
-          "handle": "@0xghost",
-          "link": "https://twitter.com/0xghost"
+          "handle": "@shuvakharel",
+          "link": "https://profile.hackthebox.com/profile/019d9f44-f6dc-7070-9f89-edd9f857937b",
+          "rank": "",
+          "progress": 0
         }
       ]
     },
@@ -378,7 +333,7 @@
     "email": {
       "description": "send me an email",
       "output_type": "email",
-      "address": "ghost@proton.me",
+      "address": "hey.shuva@gmail.com",
       "message": "Opening mail client..."
     },
 
@@ -392,37 +347,21 @@
       "description": "print current working directory",
       "output_type": "builtin"
     },
-
     "ls": {
       "description": "list directory contents",
       "output_type": "builtin"
     },
-
-    "cd": {
-      "description": "change directory",
-      "output_type": "builtin"
-    },
-
-    "cat": {
-      "description": "read a file",
-      "output_type": "builtin"
-    },
-
+    "cd": { "description": "change directory", "output_type": "builtin" },
+    "cat": { "description": "read a file", "output_type": "builtin" },
     "echo": {
       "description": "print text to terminal",
       "output_type": "builtin"
     },
-
     "history": {
       "description": "view command history",
       "output_type": "builtin"
     },
-
-    "clear": {
-      "description": "clear the terminal",
-      "output_type": "builtin"
-    },
-
+    "clear": { "description": "clear the terminal", "output_type": "builtin" },
     "help": {
       "description": "list available commands",
       "output_type": "builtin"
@@ -449,20 +388,9 @@
       "output_type": "uses"
     },
 
-    "hall-of-fame": {
-      "description": "view CTF solvers",
-      "output_type": "hof",
-      "message": "These people read the source code."
-    },
-
     "resume": {
       "description": "view and download my resume",
       "output_type": "resume"
-    },
-
-    "sound": {
-      "description": "toggle typing sound effects",
-      "output_type": "builtin"
     },
 
     "motd": {
@@ -478,19 +406,58 @@
         "Root is not a privilege, it's a responsibility.",
         "If you know the enemy and know yourself, you need not fear the result of a hundred battles."
       ]
+    },
+
+    "hall-of-fame": {
+      "description": "CTF solvers who found the flag",
+      "output_type": "hof",
+      "message": "These people actually read the source code.",
+      "solvers": [
+        "[TODO: Add real solver handles here once someone solves your CTF]"
+      ]
+    },
+
+    "share": {
+      "description": "get a shareable link for any command",
+      "output_type": "share",
+      "usage": "share <command>"
     }
   },
 
-  "easter_eggs": {
-    "sound on": { "hidden": true, "output_type": "sound_on" },
-    "sound off": { "hidden": true, "output_type": "sound_off" },
+  "help_categories": {
+    "navigation": ["ls", "cd", "cat", "pwd"],
+    "information": [
+      "whoami",
+      "skills",
+      "projects",
+      "education",
+      "certifications",
+      "writeups",
+      "now",
+      "pgp",
+      "uses",
+      "resume"
+    ],
+    "contact": ["socials", "email"],
+    "system": [
+      "clear",
+      "history",
+      "echo",
+      "themes",
+      "motd",
+      "gui",
+      "share",
+      "help"
+    ]
+  },
 
+  "easter_eggs": {
     "nmap": {
       "hidden": true,
       "output_type": "scan",
       "lines": [
         "Starting Nmap 7.94 ( https://nmap.org )",
-        "Nmap scan report for ghost.dev (127.0.0.1)",
+        "Nmap scan report for shuva-kharel.dev (127.0.0.1)",
         "Host is up (0.0001s latency).",
         "",
         "PORT      STATE  SERVICE    VERSION",
@@ -503,6 +470,7 @@
         "Nmap done: 1 IP address (1 host up) scanned in 2.34 seconds"
       ]
     },
+
     "sudo hire me": {
       "hidden": true,
       "output_type": "sudo",
@@ -515,11 +483,7 @@
       ],
       "redirect_command": "email"
     },
-    "sudo rm -rf /": {
-      "hidden": true,
-      "output_type": "text",
-      "lines": ["Nice try.", "This is a portfolio, not a production server."]
-    },
+
     "hack": {
       "hidden": true,
       "output_type": "scan",
@@ -533,6 +497,7 @@
         "Type 'projects' to see actual security work."
       ]
     },
+
     "flag": {
       "hidden": true,
       "output_type": "flag_submit",
@@ -543,57 +508,19 @@
         "xor": 66
       }
     },
-    "uname -a": {
-      "hidden": true,
-      "output_type": "text",
-      "lines": [
-        "ParrotOS 5.3 ghost-portfolio #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux"
-      ]
-    },
-    "ifconfig": {
-      "hidden": true,
-      "output_type": "text",
-      "lines": [
-        "eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500",
-        "      inet 192.168.1.337  netmask 255.255.255.0",
-        "      ether de:ad:be:ef:ca:fe  txqueuelen 1000",
-        "",
-        "lo:   flags=73<UP,LOOPBACK,RUNNING>  mtu 65536",
-        "      inet 127.0.0.1  netmask 255.0.0.0"
-      ]
-    },
 
-    "ping ghost.dev": {
+    "ping shuva-kharel.dev": {
       "hidden": true,
       "output_type": "scan",
       "lines": [
-        "PING ghost.dev (127.0.0.1): 56 data bytes",
-        "64 bytes from ghost.dev: icmp_seq=0 ttl=64 time=0.31 ms",
-        "64 bytes from ghost.dev: icmp_seq=1 ttl=64 time=0.28 ms",
-        "64 bytes from ghost.dev: icmp_seq=2 ttl=64 time=0.30 ms",
+        "PING shuva-kharel.dev (127.0.0.1): 56 data bytes",
+        "64 bytes from shuva-kharel.dev: icmp_seq=0 ttl=64 time=0.31 ms",
+        "64 bytes from shuva-kharel.dev: icmp_seq=1 ttl=64 time=0.28 ms",
+        "64 bytes from shuva-kharel.dev: icmp_seq=2 ttl=64 time=0.30 ms",
         "",
-        "--- ghost.dev ping statistics ---",
+        "--- shuva-kharel.dev ping statistics ---",
         "3 packets transmitted, 3 received, 0% packet loss",
         "round-trip min/avg/max = 0.28/0.30/0.31 ms"
-      ]
-    },
-
-    "whois ghost": {
-      "hidden": true,
-      "output_type": "text",
-      "lines": [
-        "% IANA WHOIS server",
-        "% for more information on IANA, visit http://www.iana.org",
-        "",
-        "domain:       GHOST",
-        "organisation: Ghost Security Research",
-        "status:       ACTIVE",
-        "",
-        "contact:      ghost@proton.me",
-        "github:       github.com/ghost",
-        "focus:        Breaking things responsibly",
-        "",
-        "source: GHOST-DB"
       ]
     },
 
@@ -618,7 +545,7 @@
       "hidden": true,
       "output_type": "text",
       "lines": [
-        "WHOAMI(1)              Ghost Manual              WHOAMI(1)",
+        "WHOAMI(1)             Shuva's Manual             WHOAMI(1)",
         "",
         "NAME",
         "       whoami - print effective userid",
@@ -628,7 +555,7 @@
         "",
         "DESCRIPTION",
         "       Print the username associated with the current effective",
-        "       user ID — a security researcher who gets too invested",
+        "       user ID — a cybersecurity student who gets too invested",
         "       in CTF challenges at 2am.",
         "",
         "       --verbose    Reveals an unhealthy obsession with nmap",
@@ -637,25 +564,9 @@
         "",
         "BUGS",
         "       Occasionally forgets to eat when deep in a box.",
-        "       Reports bugs to: ghost@proton.me",
+        "       Reports bugs to: run 'email' for contact info",
         "",
-        "Ghost                      2024                      WHOAMI(1)"
-      ]
-    },
-
-    "traceroute ghost.dev": {
-      "hidden": true,
-      "output_type": "scan",
-      "lines": [
-        "traceroute to ghost.dev, 30 hops max, 60 byte packets",
-        " 1  192.168.1.1 (192.168.1.1)  0.812 ms  0.756 ms",
-        " 2  10.0.0.1 (10.0.0.1)  3.214 ms  3.108 ms",
-        " 3  isp-gateway.net  8.432 ms  8.391 ms",
-        " 4  core1.backbone.net  12.773 ms  12.641 ms",
-        " 5  * * *",
-        " 6  * * *",
-        " 7  edge.ghost.dev  18.442 ms  18.310 ms",
-        " 8  ghost.dev (you found me)  0.001 ms"
+        "Shuva Kharel              2024               WHOAMI(1)"
       ]
     },
 
@@ -664,49 +575,9 @@
       "output_type": "text",
       "lines": [
         "root:x:0:0:root:/root:/bin/bash",
-        "ghost:x:1337:1337:Ghost,,,:/home/ghost:/bin/zsh",
+        "shuva:x:1337:1337:Shuva Kharel,,,:/home/shuva:/bin/zsh",
         "recruiter:x:404:404::/dev/null:/bin/false",
         "coffee:x:9999:9999:Essential Process:/dev/stdin:/bin/sh"
-      ]
-    },
-
-    "uptime": {
-      "hidden": true,
-      "output_type": "text",
-      "lines": [
-        "up 847 days, 14:22, 1 user, load average: curiosity, coffee, terminal",
-        "still learning. still building. still breaking things."
-      ]
-    },
-
-    "gpg --verify me": {
-      "hidden": true,
-      "output_type": "text",
-      "lines": [
-        "gpg: Signature made using RSA key",
-        "gpg: Good signature from \"Ghost <ghost@proton.me>\"",
-        "gpg: aka \"Ghost (Security Researcher)\"",
-        "Primary key fingerprint: A1B2 C3D4 E5F6 7890 ABCD",
-        "gpg: WARNING: This key is not certified with a trusted signature",
-        "gpg: There is no indication that the signature belongs to the owner",
-        "gpg: ...but you should probably reach out anyway."
-      ]
-    },
-
-    "ls -la /": {
-      "hidden": true,
-      "output_type": "text",
-      "lines": [
-        "total 1337",
-        "drwxr-xr-x  ghost ghost   projects/",
-        "drwxr-xr-x  ghost ghost   writeups/",
-        "drwxr-xr-x  ghost ghost   certs/",
-        "drwx------  ghost ghost   secret/",
-        "-rw-r--r--  ghost ghost   skills.txt",
-        "-rw-r--r--  ghost ghost   contact.md",
-        "-rw-r--r--  ghost ghost   README.md",
-        "-r--------  ghost ghost   pgp.asc",
-        "----------  ghost ghost   .diary  (nice try)"
       ]
     },
 
@@ -716,31 +587,11 @@
       "lines": ["logout", "There is no escape.", "You are already home."]
     },
 
-    "rm -rf /": {
+    "uname": {
       "hidden": true,
       "output_type": "text",
       "lines": [
-        "rm: it is dangerous to operate recursively on '/'",
-        "rm: use --no-preserve-root to override this failsafe",
-        "",
-        "Nice reflex. That's the right instinct.",
-        "This is a portfolio though, not a server."
-      ]
-    },
-
-    "ssh ghost@ghost.dev": {
-      "hidden": true,
-      "output_type": "text",
-      "lines": [
-        "ssh: connect to host ghost.dev port 22",
-        "The authenticity of host 'ghost.dev' can't be established.",
-        "RSA key fingerprint is A1:B2:C3:D4:E5:F6",
-        "Are you sure you want to continue connecting? (yes/no): yes",
-        "",
-        "Warning: Permanently added 'ghost.dev' to known hosts.",
-        "ghost@ghost.dev: Permission denied (publickey).",
-        "",
-        "...but I respect the attempt."
+        "GhostOS 13.37 — powered by caffeine, curiosity, and a questionable sleep schedule."
       ]
     }
   }

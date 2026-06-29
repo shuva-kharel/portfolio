@@ -17,10 +17,7 @@ const BUILTINS = new Set([
   "history",
   "clear",
   "help",
-  "sound",
 ]);
-
-const SOUND_KEY = "sound_enabled";
 
 export class CommandEngine {
   readonly fs: FileSystem;
@@ -56,10 +53,19 @@ export class CommandEngine {
     const args = parts.slice(1);
 
     // 1) The flag command — the CTF endpoint. Matched on the verb so it can
-    //    carry a submission (flag CTF{...} / flag submit <handle> CTF{...}).
+    //    carry a submission (flag CTF{...}).
     if (cmd === "flag") {
       const flagDef = this.data.easter_eggs["flag"];
       if (flagDef) return { type: "flag_submit", def: flagDef, args };
+    }
+
+    // curl wttr.in[/city] — fetch real weather (handled by the renderer).
+    if (cmd === "curl" && (args[0] ?? "").startsWith("wttr.in")) {
+      const target = args[0];
+      const city = target.includes("/")
+        ? target.slice(target.indexOf("/") + 1)
+        : (this.data.meta.location_city as string | undefined) ?? "";
+      return { type: "weather", def: { output_type: "weather", city } };
     }
 
     // 2) Easter eggs are matched on the exact (normalised) full input BEFORE
@@ -150,39 +156,12 @@ export class CommandEngine {
       case "clear":
         return { type: "empty", effect: { kind: "clear" } };
 
-      case "sound": {
-        const on = localStorage.getItem(SOUND_KEY) === "1";
-        return {
-          type: "text",
-          lines: [
-            `Typing sound is currently ${on ? "ON" : "OFF"}.`,
-            "Use 'sound on' or 'sound off' to change it.",
-          ],
-        };
-      }
-
       case "help":
-        return { type: "help", lines: this.buildHelp() };
+        return { type: "help" };
 
       default:
         return this.notFound(cmd);
     }
-  }
-
-  private buildHelp(): string[] {
-    const entries = Object.entries(this.data.commands).filter(
-      ([, def]) => !def.hidden
-    );
-    const width = entries.reduce((m, [name]) => Math.max(m, name.length), 0);
-
-    const lines = ["Available commands:", ""];
-    for (const [name, def] of entries) {
-      lines.push(`  ${name.padEnd(width + 4)}${def.description ?? ""}`);
-    }
-    lines.push("");
-    lines.push("Tip: use Tab to autocomplete, arrows for history.");
-    lines.push("Some commands are hidden. Explore the filesystem with ls / cat.");
-    return lines;
   }
 
   // -------------------------------------------------------------------------

@@ -14,36 +14,37 @@ import OutputBlock from "./OutputBlock";
 import InputLine, { type InputLineHandle } from "./InputLine";
 import BootSequence from "./BootSequence";
 
-const VISITED_KEY = "terminal_portfolio_visited";
-const SOUND_KEY = "sound_enabled";
+const BOOT_KEY = "portfolio_boot_date";
 
-// A short mechanical key click synthesised with the Web Audio API (white noise
-// with a steep exponential decay) — no external audio file. Only plays when
-// the user has enabled sound via the `sound on` command.
-function playClick() {
-  if (localStorage.getItem(SOUND_KEY) !== "1") return;
-  try {
-    const Ctx =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext })
-        .webkitAudioContext;
-    const ctx = new Ctx();
-    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.02, ctx.sampleRate);
-    const ch = buf.getChannelData(0);
-    for (let i = 0; i < ch.length; i++) {
-      ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / ch.length, 8);
-    }
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    const gain = ctx.createGain();
-    gain.gain.value = 0.08;
-    src.connect(gain);
-    gain.connect(ctx.destination);
-    src.start();
-    src.onended = () => ctx.close();
-  } catch {
-    /* audio unavailable — ignore */
-  }
+// Show the boot sequence on first visit, then at most once per calendar day.
+function shouldShowBoot(): boolean {
+  const last = localStorage.getItem(BOOT_KEY);
+  if (!last) return true;
+  return new Date(last).toDateString() !== new Date().toDateString();
+}
+function markBootSeen(): void {
+  localStorage.setItem(BOOT_KEY, new Date().toISOString());
+}
+
+// Output buffer caps to keep the DOM small on long sessions.
+const MAX_LINES = 300;
+const TRIM_TO = 200;
+const KEEP_TAIL = 3;
+
+// Rough line count for an entry, used only to decide when to trim.
+function estimateLines(e: HistoryEntry): number {
+  let n = e.command !== undefined ? 1 : 0;
+  const r = e.result;
+  if (r?.lines) n += r.lines.length;
+  else if (r?.def) {
+    const d = r.def as Record<string, unknown>;
+    if (Array.isArray(d.lines)) n += d.lines.length;
+    else if (Array.isArray(d.items)) n += d.items.length * 2;
+    else if (d.categories) n += Object.keys(d.categories).length * 2;
+    else if (Array.isArray(d.ascii)) n += d.ascii.length;
+    else n += 3;
+  } else n += 1;
+  return n;
 }
 
 interface Props {
@@ -76,9 +77,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
 
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [path, setPath] = useState(engine.fs.displayPath);
-  const [booting, setBooting] = useState(
-    () => !localStorage.getItem(VISITED_KEY)
-  );
+  const [booting, setBooting] = useState(() => shouldShowBoot());
 
   const idRef = useRef(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -163,7 +162,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
       // Don't add a totally empty echo-less entry (e.g. blank programmatic run).
       const isNoise =
         !echo && result.type === "empty" && !result.lines?.length;
-      if (!isNoise) setEntries((prev) => [...prev, entry]);
+      if (!isNoise) setEntries((prev) => capEntries([...prev, entry]));
 
       // cd (and others) may have changed the working directory.
       setPath(engine.fs.displayPath);
@@ -173,6 +172,29 @@ export default function Terminal({ data, onSetTheme }: Props) {
     },
     [engine, handleEffect]
   );
+
+  // Cap the scrollback: once total lines exceed MAX_LINES, drop the oldest
+  // blocks (but never the last KEEP_TAIL) until under TRIM_TO, and add a single
+  // dim "-- output trimmed --" marker at the top.
+  function capEntries(list: HistoryEntry[]): HistoryEntry[] {
+    const total = list.reduce((s, e) => s + estimateLines(e), 0);
+    if (total <= MAX_LINES) return list;
+    const clean = list.filter((e) => !e.marker);
+    const tail = clean.slice(-KEEP_TAIL);
+    let head = clean.slice(0, -KEEP_TAIL);
+    let count = clean.reduce((s, e) => s + estimateLines(e), 0);
+    while (count > TRIM_TO && head.length > 0) {
+      count -= estimateLines(head[0]);
+      head = head.slice(1);
+    }
+    const marker: HistoryEntry = {
+      id: idRef.current++,
+      path: "",
+      marker: true,
+      result: { type: "text", lines: ["-- output trimmed --"], dim: true },
+    };
+    return [marker, ...head, ...tail];
+  }
 
   // ---- input handlers ------------------------------------------------------
   const handleSubmit = useCallback(
@@ -227,15 +249,14 @@ export default function Terminal({ data, onSetTheme }: Props) {
 
   // ---- boot + welcome ------------------------------------------------------
   const finishBoot = useCallback(() => {
-    localStorage.setItem(VISITED_KEY, "1");
+    markBootSeen();
     setBooting(false);
     execute("welcome", false);
-    execute("motd", false);
     // focus once the input mounts
     requestAnimationFrame(() => inputRef.current?.focus());
   }, [execute]);
 
-  // If the user has visited before, skip boot and run welcome immediately.
+  // If boot is skipped (already seen today), run welcome immediately.
   // The ref guards against StrictMode's double-mount in development.
   const didInit = useRef(false);
   useEffect(() => {
@@ -243,7 +264,6 @@ export default function Terminal({ data, onSetTheme }: Props) {
     didInit.current = true;
     if (!booting) {
       execute("welcome", false);
-      execute("motd", false);
       requestAnimationFrame(() => inputRef.current?.focus());
     }
     // run once on mount only
@@ -291,7 +311,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
               onClear={handleClear}
               onCancel={handleCancel}
               onFocusChange={handleFocusChange}
-              onType={playClick}
+              getHistory={() => history.all()}
             />
           </>
         )}
@@ -312,6 +332,12 @@ export default function Terminal({ data, onSetTheme }: Props) {
           </button>
           <button className="kbd-btn" onClick={() => inputRef.current?.next()}>
             ↓
+          </button>
+          <button
+            className="kbd-btn"
+            onClick={() => inputRef.current?.reverseSearch()}
+          >
+            HIST
           </button>
           <button
             className="kbd-btn"

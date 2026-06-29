@@ -19,8 +19,6 @@ import {
   FiCheckCircle,
   FiExternalLink,
   FiStar,
-  FiGitCommit,
-  FiUsers,
   FiBook,
   FiZap,
   FiTarget,
@@ -376,14 +374,26 @@ function buildHeatmap(seed: number, weeks: number, map: ContribMap | null) {
 }
 const INTENSITY_LABEL = ["none", "low", "medium", "high", "max"];
 
+// "2024-03-14" -> "March 14, 2024" (parsed as a plain calendar date).
+function formatDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split("-").map((n) => parseInt(n, 10));
+  return new Date(y, (m || 1) - 1, d || 1).toLocaleDateString("en", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 function Heatmap({
   seed,
   weeks,
   contrib,
+  disableTip,
 }: {
   seed: number;
   weeks: number;
   contrib: { map: ContribMap; total: number } | null;
+  disableTip: boolean;
 }) {
   const { cells, months } = useMemo(
     () => buildHeatmap(seed, weeks, contrib?.map ?? null),
@@ -393,10 +403,10 @@ function Heatmap({
     null,
   );
   const hasData = !!contrib && contrib.total > 0;
-  const cellTitle = (c: Cell) =>
+  const tipText = (c: Cell) =>
     c.real
-      ? `${c.date}: ${c.count} contribution${c.count !== 1 ? "s" : ""}`
-      : `${c.date} · ${INTENSITY_LABEL[c.intensity]}`;
+      ? `${formatDate(c.date)} — ${c.count} contribution${c.count !== 1 ? "s" : ""}`
+      : `${formatDate(c.date)} · ${INTENSITY_LABEL[c.intensity]}`;
   return (
     <div className="heatmap-wrap">
       <div
@@ -414,9 +424,11 @@ function Heatmap({
           <span
             key={i}
             className={`heat-cell heat-${c.intensity}`}
-            title={cellTitle(c)}
-            onMouseEnter={(e) =>
-              setTip({ text: cellTitle(c), x: e.clientX, y: e.clientY })
+            onMouseEnter={
+              disableTip
+                ? undefined
+                : (e) =>
+                    setTip({ text: tipText(c), x: e.clientX, y: e.clientY - 40 })
             }
           />
         ))}
@@ -437,7 +449,11 @@ function Heatmap({
         createPortal(
           <div
             className="heat-tip"
-            style={{ left: tip.x + 12, top: tip.y + 12 }}
+            style={{
+              left: tip.x,
+              top: tip.y,
+              transform: "translateX(-50%)",
+            }}
           >
             {tip.text}
           </div>,
@@ -574,11 +590,6 @@ export default function HUD() {
   const rootRef = useRef<HTMLDivElement>(null);
   const lastKeyRef = useRef<{ key: string; t: number }>({ key: "", t: 0 });
 
-  const [ghRef, ghVisible] = useReveal<HTMLDivElement>(0);
-  const [ghArmed, setGhArmed] = useState(false);
-  useEffect(() => {
-    if (ghVisible) setGhArmed(true);
-  }, [ghVisible]);
 
   // ---- derived model ------------------------------------------------------
   const model = useMemo(() => {
@@ -658,9 +669,9 @@ export default function HUD() {
     };
   }, [githubUsername]);
 
-  // ---- GitHub live stats (lazy, silent failure) --------------------------
+  // ---- GitHub live stats (silent failure) --------------------------------
   useEffect(() => {
-    if (!ghArmed || !githubUsername) return;
+    if (!githubUsername) return;
     const username = githubUsername;
     let cancelled = false;
     (async () => {
@@ -708,7 +719,7 @@ export default function HUD() {
     return () => {
       cancelled = true;
     };
-  }, [data, ghArmed]);
+  }, [githubUsername]);
 
   // ---- scroll: progress bar + active section -----------------------------
   useEffect(() => {
@@ -928,17 +939,6 @@ export default function HUD() {
     [FiTarget, "PLAYING", model.now.playing],
   ];
 
-  const feed = [
-    "[ghost@parrot]$ ./recon --self",
-    `  user ......... ${meta.user}`,
-    `  role ......... ${role}`,
-    `  projects ..... ${model.projects.length} active`,
-    `  certs ........ ${model.certs.length} earned`,
-    `  writeups ..... ${model.writeups.length} published`,
-    `  status ....... ${status || "online"}`,
-    "[ghost@parrot]$ _",
-  ];
-
   const commsBox = [
     "┌─────────────────────────────┐",
     `│  PING ${model.email}`,
@@ -998,6 +998,26 @@ export default function HUD() {
                       <div className="stat-label">{s.label}</div>
                     </div>
                   ))}
+                  {/* GitHub-derived split cell (repos / followers) */}
+                  <div className="stat-block stat-split">
+                    <SiGithub
+                      className="stat-icon tone-cyan"
+                      size={12}
+                      aria-hidden="true"
+                    />
+                    <div className="stat-split-row">
+                      <span className="stat-split-val tone-cyan">
+                        {github ? github.repos : "—"}
+                      </span>
+                      <span className="stat-split-lbl">REPOS</span>
+                    </div>
+                    <div className="stat-split-row">
+                      <span className="stat-split-val tone-muted">
+                        {github ? github.followers : "—"}
+                      </span>
+                      <span className="stat-split-lbl">FOLLOWERS</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1122,8 +1142,8 @@ export default function HUD() {
               seed={heatSeed}
               weeks={isMobile ? 16 : 26}
               contrib={contrib}
+              disableTip={isMobile}
             />
-            <pre className="feed">{feed.join("\n")}</pre>
           </Panel>
         </div>
 
@@ -1179,85 +1199,38 @@ export default function HUD() {
             </div>
           </Panel>
 
-          <div className="bento-stack" ref={ghRef}>
-            {github && (
-              <Panel label="// GITHUB.LIVE" icon={SiGithub} index={7}>
-                <div className="gh-stats">
-                  <GhStat
-                    Icon={FiLayers}
-                    value={github.repos}
-                    label="REPOS"
-                    tone="cyan"
-                  />
-                  <GhStat
-                    Icon={FiUsers}
-                    value={github.followers}
-                    label="FOLLOWERS"
-                    tone="green"
-                  />
-                  {github.since !== undefined && (
-                    <GhStat
-                      Icon={FiClock}
-                      value={github.since}
-                      label="MEMBER SINCE"
-                      tone="amber"
+          <Panel label="// CERTS.DB" icon={FiAward} index={7}>
+            <div className="cert-timeline">
+              {model.certs.map((cert) => {
+                const inProg = cert.status === "in-progress";
+                const CertIcon = inProg ? FiClock : FiAward;
+                return (
+                  <div className="cert-node" key={cert.name}>
+                    <span
+                      className={`cert-dot ${cert.status === "active" ? "dot-active" : inProg ? "dot-progress" : ""}`}
                     />
-                  )}
-                  {github.lastActive && (
-                    <GhStat
-                      Icon={FiActivity}
-                      value={github.lastActive}
-                      label="LAST ACTIVE"
-                      tone="muted"
-                    />
-                  )}
-                </div>
-                {github.push && (
-                  <div className="gh-push">
-                    <div className="gh-push-head">
-                      <FiGitCommit size={12} aria-hidden="true" /> LAST PUSH
-                    </div>
-                    <div className="gh-push-repo">{github.push.repo}</div>
-                    <div className="gh-push-msg">"{github.push.message}"</div>
-                    <div className="gh-push-ago">{github.push.ago}</div>
-                  </div>
-                )}
-              </Panel>
-            )}
-
-            <Panel label="// CERTS.DB" icon={FiAward} index={8}>
-              <div className="cert-timeline">
-                {model.certs.map((cert) => {
-                  const inProg = cert.status === "in-progress";
-                  const CertIcon = inProg ? FiClock : FiAward;
-                  return (
-                    <div className="cert-node" key={cert.name}>
-                      <span
-                        className={`cert-dot ${cert.status === "active" ? "dot-active" : inProg ? "dot-progress" : ""}`}
-                      />
-                      <div className="cert-body">
-                        <div className="cert-year">{cert.year}</div>
-                        <div className="cert-name">
-                          <CertIcon
-                            className={inProg ? "tone-amber" : "tone-cyan"}
-                            size={12}
-                            aria-hidden="true"
-                          />
-                          {cert.name}
-                        </div>
-                        <div className="cert-issuer">
-                          {cert.issuer}
-                          {inProg && (
-                            <span className="cert-prog"> — IN PROGRESS</span>
-                          )}
-                        </div>
+                    <div className="cert-body">
+                      <div className="cert-year">{cert.year}</div>
+                      <div className="cert-name">
+                        <CertIcon
+                          className={inProg ? "tone-amber" : "tone-cyan"}
+                          size={12}
+                          aria-hidden="true"
+                        />
+                        {cert.name}
+                      </div>
+                      <div className="cert-issuer">
+                        {cert.issuer}
+                        {inProg && (
+                          <span className="cert-prog"> — IN PROGRESS</span>
+                        )}
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            </Panel>
-          </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Panel>
         </div>
 
         {/* ROW 5: SECURE.COMMS */}
@@ -1318,26 +1291,6 @@ export default function HUD() {
           onClose={() => setPaletteOpen(false)}
         />
       )}
-    </div>
-  );
-}
-
-function GhStat({
-  Icon,
-  value,
-  label,
-  tone,
-}: {
-  Icon: IconType;
-  value: number | string;
-  label: string;
-  tone: string;
-}) {
-  return (
-    <div className="gh-stat">
-      <Icon className={`gh-icon tone-${tone}`} size={12} aria-hidden="true" />
-      <div className={`gh-value tone-${tone}`}>{value}</div>
-      <div className="gh-label">{label}</div>
     </div>
   );
 }

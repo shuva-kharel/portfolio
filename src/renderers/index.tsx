@@ -18,7 +18,8 @@ import FlagRenderer from "./FlagRenderer";
 import HofRenderer from "./HofRenderer";
 import MotdRenderer from "./MotdRenderer";
 import ResumeRenderer from "./ResumeRenderer";
-import SoundRenderer from "./SoundRenderer";
+import HelpRenderer from "./HelpRenderer";
+import WeatherRenderer from "./WeatherRenderer";
 
 // Maps a result's output_type to its renderer. New output types only need a
 // renderer here plus a corresponding output_type in portfolio.json.
@@ -66,13 +67,13 @@ export function renderResult(
       return <MotdRenderer result={result} />;
     case "resume":
       return <ResumeRenderer result={result} />;
-    case "sound_on":
-    case "sound_off":
-      return <SoundRenderer result={result} />;
-    case "text":
+    case "weather":
+      return <WeatherRenderer result={result} />;
     case "help":
+      return <HelpRenderer />;
+    case "text":
     default:
-      // text, help, and any unknown type fall back to plain line output.
+      // text and any unknown type fall back to plain line output.
       return <TextRenderer result={result} />;
   }
 }

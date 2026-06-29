@@ -340,6 +340,26 @@
   color: var(--hud-muted);
 }
 
+/* GitHub-derived split stat cell (repos / followers) */
+.stat-split {
+  gap: 6px;
+}
+.stat-split-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.stat-split-val {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+.stat-split-lbl {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--hud-muted);
+}
+
 /* terminal feed (hero right) */
 .identity-feed {
   background: rgba(0, 0, 0, 0.3);

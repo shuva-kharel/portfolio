@@ -10,6 +10,7 @@ export interface Meta {
   version: string;
   title: string;
   theme: string;
+  location_city?: string;
 }
 
 export interface Theme {
@@ -65,6 +66,7 @@ export interface Portfolio {
   now?: Record<string, string>;
   pgp?: Record<string, string>;
   uses?: Record<string, string>;
+  help_categories?: Record<string, string[]>;
   resume?: {
     download_url?: string;
     sections?: Record<string, unknown>;
@@ -86,6 +88,8 @@ export interface CommandResult {
   lines?: string[];
   // Marks this result as an error (renders in theme error color).
   isError?: boolean;
+  // Renders in the dim color (used for system notices like "output trimmed").
+  dim?: boolean;
   // Side effects the Terminal must perform after rendering.
   effect?: Effect;
   // Tokens after the command verb (used by the flag command).
@@ -109,4 +113,6 @@ export interface HistoryEntry {
   command?: string;
   // The result to render below the prompt line (undefined for a bare prompt).
   result?: CommandResult;
+  // True for the synthetic "-- output trimmed --" marker entry.
+  marker?: boolean;
 }
