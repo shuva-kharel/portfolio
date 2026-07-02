@@ -340,7 +340,8 @@
     "themes": {
       "description": "list & switch themes",
       "output_type": "themes",
-      "usage": "themes set <name>"
+      "usage": "themes set <name>",
+      "example": "themes set green"
     },
 
     "pwd": {
@@ -351,7 +352,12 @@
       "description": "list directory contents",
       "output_type": "builtin"
     },
-    "cd": { "description": "change directory", "output_type": "builtin" },
+    "cd": {
+      "description": "change directory",
+      "output_type": "builtin",
+      "usage": "cd <path>",
+      "example": "cd /projects"
+    },
     "cat": { "description": "read a file", "output_type": "builtin" },
     "echo": {
       "description": "print text to terminal",
@@ -420,7 +426,8 @@
     "share": {
       "description": "get a shareable link for any command",
       "output_type": "share",
-      "usage": "share <command>"
+      "usage": "share <command>",
+      "example": "share nmap"
     }
   },
 

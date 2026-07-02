@@ -52,6 +52,8 @@ export interface CommandDef {
   hidden?: boolean;
   target?: string; // for alias
   redirect_command?: string; // for sudo
+  usage?: string; // for --help
+  example?: string; // for --help
   [key: string]: unknown;
 }
 

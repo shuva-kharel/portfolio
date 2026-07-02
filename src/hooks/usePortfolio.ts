@@ -28,7 +28,10 @@ export function usePortfolio(): PortfolioState {
         return res.json();
       })
       .then((data: Portfolio) => {
-        if (!cancelled) setState({ data, error: null, loading: false });
+        if (cancelled) return;
+        // Expose the username for the print stylesheet's header.
+        document.body.setAttribute("data-user", data.meta?.user ?? "");
+        setState({ data, error: null, loading: false });
       })
       .catch((err: unknown) => {
         if (!cancelled) {

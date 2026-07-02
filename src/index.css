@@ -722,3 +722,61 @@ a:hover {
     border-top: 1px solid rgba(0, 212, 255, 0.15);
   }
 }
+
+/* ---- print: a clean, readable resume-style dump ------------------------- */
+@media print {
+  /* Hide interactive / decorative chrome. */
+  .input-line,
+  .boot-sequence,
+  .hud-nav,
+  .return-btn,
+  .kbd-hint,
+  .kbd-toolbar,
+  .scanlines,
+  .hud-bg-layers,
+  .heatmap-wrap,
+  .identity-feed,
+  .heat-tip,
+  .cursor-block,
+  .skip-link,
+  .nav-progress {
+    display: none !important;
+  }
+
+  /* White background, black text; let content flow onto pages. */
+  body,
+  .terminal,
+  .hud-root {
+    background: #fff !important;
+    color: #111 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body::before {
+    content: attr(data-user) " — Portfolio";
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #111;
+  }
+
+  .output-block {
+    color: #222 !important;
+    border-left: 2px solid #ccc;
+    padding-left: 8px;
+    margin-bottom: 8px;
+    page-break-inside: avoid;
+  }
+
+  .hud-panel {
+    border: 1px solid #ccc !important;
+    background: #fff !important;
+    margin-bottom: 12px;
+    opacity: 1 !important;
+    transform: none !important;
+    page-break-inside: avoid;
+  }
+}

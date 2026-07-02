@@ -270,6 +270,20 @@ export default function Terminal({ data, onSetTheme }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Deep link: ?run=<command> pre-runs a command after boot + welcome settle,
+  // then strips the param so it doesn't re-run on refresh.
+  const ranParam = useRef(false);
+  useEffect(() => {
+    if (ranParam.current) return;
+    ranParam.current = true;
+    const cmd = new URLSearchParams(window.location.search).get("run");
+    if (!cmd) return;
+    const delay = shouldShowBoot() ? 4000 : 1500;
+    window.setTimeout(() => handleSubmit(decodeURIComponent(cmd)), delay);
+    window.history.replaceState({}, "", window.location.pathname);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // ---- auto-scroll ---------------------------------------------------------
   useEffect(() => {
     const el = scrollRef.current;

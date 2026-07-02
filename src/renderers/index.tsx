@@ -20,6 +20,7 @@ import MotdRenderer from "./MotdRenderer";
 import ResumeRenderer from "./ResumeRenderer";
 import HelpRenderer from "./HelpRenderer";
 import WeatherRenderer from "./WeatherRenderer";
+import ShareRenderer from "./ShareRenderer";
 
 // Maps a result's output_type to its renderer. New output types only need a
 // renderer here plus a corresponding output_type in portfolio.json.
@@ -69,6 +70,8 @@ export function renderResult(
       return <ResumeRenderer result={result} />;
     case "weather":
       return <WeatherRenderer result={result} />;
+    case "share":
+      return <ShareRenderer result={result} />;
     case "help":
       return <HelpRenderer />;
     case "text":

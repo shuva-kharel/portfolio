@@ -52,6 +52,21 @@ export class CommandEngine {
     const cmd = parts[0].toLowerCase();
     const args = parts.slice(1);
 
+    // 0) `<command> --help` / `<command> -h` — per-command usage.
+    const lastTok = parts[parts.length - 1];
+    if (parts.length >= 2 && (lastTok === "--help" || lastTok === "-h")) {
+      const def = this.data.commands[cmd];
+      if (def) {
+        const lines = [
+          `${cmd} — ${def.description ?? ""}`,
+          "",
+          def.usage ? `USAGE: ${def.usage}` : `USAGE: ${cmd}`,
+        ];
+        if (def.example) lines.push(`EXAMPLE: ${def.example}`);
+        return { type: "text", lines };
+      }
+    }
+
     // 1) The flag command — the CTF endpoint. Matched on the verb so it can
     //    carry a submission (flag CTF{...}).
     if (cmd === "flag") {
@@ -93,6 +108,9 @@ export class CommandEngine {
         }
         case "themes":
           return this.runThemes(args, def);
+        case "share":
+          // Carry the target command so the renderer can build a share link.
+          return { type: "share", def, args };
         case "gui": {
           // Print the configured message, then jump to the visual HUD route.
           const lines =
