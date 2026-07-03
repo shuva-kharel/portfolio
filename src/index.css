@@ -753,7 +753,8 @@ a:hover {
     overflow: visible !important;
   }
 
-  body::before {
+  /* Scoped to non-CV routes: /cv (body.cv-mode) ships its own print header. */
+  body:not(.cv-mode)::before {
     content: attr(data-user) " — Portfolio";
     display: block;
     font-family: "JetBrains Mono", monospace;
@@ -761,6 +762,19 @@ a:hover {
     font-weight: 700;
     margin-bottom: 16px;
     color: #111;
+  }
+
+  /* Point anyone printing the terminal/HUD at the page designed for paper. */
+  body:not(.cv-mode) #root::before {
+    content: "For best results, print from /cv";
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
   }
 
   .output-block {

@@ -227,10 +227,41 @@ export class CommandEngine {
   }
 
   private notFound(cmd: string): CommandResult {
-    return {
-      type: "text",
-      lines: [`command not found: ${cmd} — type 'help' for available commands`],
-      isError: true,
-    };
+    const lines = [`command not found: ${cmd}`];
+    const suggestion = this.closestCommand(cmd);
+    if (suggestion) lines.push(`did you mean: ${suggestion} ?`);
+    lines.push("type 'help' for available commands");
+    return { type: "text", lines, isError: true };
   }
+
+  // Nearest command name within an edit distance of 2 — catches one- or
+  // two-character typos ("porjects" → "projects") without wild guesses.
+  private closestCommand(input: string): string | null {
+    const candidates = [...Object.keys(this.data.commands), ...BUILTINS];
+    let best: string | null = null;
+    let bestDist = 3;
+    for (const cmd of candidates) {
+      const dist = levenshtein(input, cmd);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = cmd;
+      }
+    }
+    return best;
+  }
+}
+
+function levenshtein(a: string, b: string): number {
+  const dp = Array.from({ length: a.length + 1 }, (_, i) =>
+    Array.from({ length: b.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
+  );
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      dp[i][j] =
+        a[i - 1] === b[j - 1]
+          ? dp[i - 1][j - 1]
+          : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+    }
+  }
+  return dp[a.length][b.length];
 }

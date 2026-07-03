@@ -27,8 +27,8 @@
     "editor": "Neovim",
     "terminal": "Kitty",
     "shell": "Zsh + Oh My Zsh",
-    "browser": "Firefox (hardened)",
-    "vpn": "Mullvad"
+    "browser": "Brave",
+    "vpn": "Proton"
   },
 
   "resume": {
@@ -39,7 +39,7 @@
         {
           "year": "2022-Present",
           "title": "B.Sc. Computer Science (Cybersecurity)",
-          "institution": "Your University"
+          "institution": "Westcliff University"
         }
       ],
       "skills_summary": "Penetration Testing · Web Security · Python · Bash · CTFs",

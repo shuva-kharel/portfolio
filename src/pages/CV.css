@@ -1,0 +1,557 @@
+/* ---------------------------------------------------------------------------
+   /cv — light, professional, print-ready CV.
+   Every rule is scoped under body.cv-mode (set by CV.tsx on mount) because
+   Vite bundles all CSS globally and the terminal/HUD must not inherit any of
+   this — especially the print rules.
+
+   Single-page guarantee: all vertical spacing lives in the variables below.
+   The compact values are applied twice — in @media print (covers headless /
+   programmatic printing) and under body.cv-printing (added by CV.tsx on
+   beforeprint so it can measure the compact layout and zoom the wrapper to
+   fit one A4 page regardless of how much content portfolio.json grows).
+--------------------------------------------------------------------------- */
+
+body.cv-mode {
+  background: #f8f9fa;
+
+  /* screen (roomy) values */
+  --cv-wrap-max: 794px; /* A4 width at 96dpi */
+  --cv-wrap-pad: 48px 56px;
+  --cv-div-m: 20px;
+  --cv-sec-mb: 28px;
+  --cv-head-pb: 6px;
+  --cv-head-mb: 14px;
+  --cv-row-mb: 16px;
+  --cv-proj-mb: 18px;
+  --cv-cert-pad: 8px;
+  --cv-cat-mb: 16px;
+  --cv-bio-lh: 1.7;
+  --cv-detail: block; /* tertiary info hidden in the compact layout */
+}
+
+/* Compact layout: 673px = 210mm - 2×16mm side margins at 96dpi. */
+@media print {
+  body.cv-mode {
+    --cv-wrap-max: 673px;
+    --cv-wrap-pad: 0;
+    --cv-div-m: 12px;
+    --cv-sec-mb: 14px;
+    --cv-head-pb: 4px;
+    --cv-head-mb: 8px;
+    --cv-row-mb: 8px;
+    --cv-proj-mb: 10px;
+    --cv-cert-pad: 5px;
+    --cv-cat-mb: 10px;
+    --cv-bio-lh: 1.5;
+    --cv-detail: none;
+  }
+}
+
+body.cv-mode.cv-printing {
+  --cv-wrap-max: 673px;
+  --cv-wrap-pad: 0;
+  --cv-div-m: 12px;
+  --cv-sec-mb: 14px;
+  --cv-head-pb: 4px;
+  --cv-head-mb: 8px;
+  --cv-row-mb: 8px;
+  --cv-proj-mb: 10px;
+  --cv-cert-pad: 5px;
+  --cv-cat-mb: 10px;
+  --cv-bio-lh: 1.5;
+  --cv-detail: none;
+}
+
+body.cv-mode .cv-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+  color: #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.cv-mode .cv-wrapper {
+  max-width: var(--cv-wrap-max);
+  margin: 0 auto;
+  padding: var(--cv-wrap-pad);
+  background: #ffffff;
+}
+
+body.cv-mode .cv-message {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  padding: 0 24px;
+}
+
+/* Screen-only banner shown while portfolio.json is mostly placeholders. */
+body.cv-mode .cv-incomplete-notice {
+  background: #fff8e8;
+  border: 1px solid #f0d888;
+  color: #7a5a00;
+  font-size: 11px;
+  padding: 8px 14px;
+  font-family: "JetBrains Mono", monospace;
+  margin-bottom: 20px;
+}
+
+/* ---- header --------------------------------------------------------------- */
+
+body.cv-mode .cv-header-row {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+body.cv-mode .cv-header-id {
+  flex: 1;
+}
+
+body.cv-mode .cv-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+body.cv-mode .cv-role {
+  font-size: 14px;
+  color: #555;
+  margin: 4px 0 0;
+}
+
+body.cv-mode .cv-location {
+  font-size: 13px;
+  color: #888;
+  margin: 2px 0 0;
+}
+
+body.cv-mode .cv-contact {
+  text-align: right;
+}
+
+body.cv-mode .cv-contact-item {
+  font-size: 12px;
+  color: #444;
+  margin-bottom: 3px;
+}
+
+body.cv-mode .cv-page a {
+  color: #00a8cc;
+  text-decoration: none;
+}
+
+body.cv-mode .cv-page a:hover {
+  text-decoration: underline;
+}
+
+body.cv-mode .cv-status-badge {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 2px;
+}
+
+body.cv-mode .badge-active {
+  background: #e8f8ee;
+  color: #1a7a3a;
+  border: 1px solid #a8d8b8;
+}
+
+body.cv-mode .badge-progress {
+  background: #fff8e8;
+  color: #7a5a00;
+  border: 1px solid #d8c880;
+}
+
+body.cv-mode .cv-header-divider {
+  border-bottom: 2px solid #1a1a1a;
+  margin: var(--cv-div-m) 0;
+}
+
+/* ---- shared section styles ------------------------------------------------ */
+
+body.cv-mode .cv-section {
+  margin-bottom: var(--cv-sec-mb);
+}
+
+body.cv-mode .cv-heading {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #888;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: var(--cv-head-pb);
+  margin: 0 0 var(--cv-head-mb);
+}
+
+body.cv-mode .cv-grid-row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 0 20px;
+  margin-bottom: var(--cv-row-mb);
+}
+
+body.cv-mode .cv-year {
+  font-size: 12px;
+  color: #888;
+  font-family: "JetBrains Mono", monospace;
+  padding-top: 2px;
+}
+
+body.cv-mode .cv-todo {
+  color: #ccc;
+  font-style: italic;
+  font-size: 12px;
+}
+
+/* ---- summary ---------------------------------------------------------------- */
+
+body.cv-mode .cv-bio {
+  font-size: 13px;
+  line-height: var(--cv-bio-lh);
+  color: #333;
+  max-width: 600px;
+  margin: 0 0 8px;
+}
+
+/* ---- education -------------------------------------------------------------- */
+
+body.cv-mode .cv-edu-institution {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+body.cv-mode .cv-edu-title {
+  font-size: 13px;
+  color: #333;
+  margin-top: 2px;
+}
+
+body.cv-mode .cv-edu-details {
+  display: var(--cv-detail);
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ---- skills ------------------------------------------------------------------ */
+
+body.cv-mode .cv-skills-grid {
+  columns: 2;
+  column-gap: 40px;
+}
+
+body.cv-mode .cv-skill-category {
+  break-inside: avoid;
+  margin-bottom: var(--cv-cat-mb);
+}
+
+body.cv-mode .cv-skill-category-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+
+body.cv-mode .cv-chip {
+  display: inline-flex;
+  background: #f0f0f0;
+  color: #333;
+  font-size: 11px;
+  padding: 3px 10px;
+  margin: 2px;
+  border-radius: 2px;
+}
+
+body.cv-mode .cv-chip-small {
+  background: #f5f5f5;
+  font-size: 10px;
+  padding: 2px 7px;
+}
+
+/* ---- projects ------------------------------------------------------------------ */
+
+body.cv-mode .cv-project {
+  margin-bottom: var(--cv-proj-mb);
+}
+
+body.cv-mode .cv-project-top {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+body.cv-mode .cv-project-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+body.cv-mode .cv-project-stars {
+  font-size: 11px;
+  color: #888;
+}
+
+body.cv-mode .cv-project-link {
+  margin-left: auto;
+  font-size: 11px;
+}
+
+body.cv-mode .cv-project-desc {
+  font-size: 12px;
+  color: #444;
+  line-height: 1.6;
+  margin: 4px 0;
+}
+
+body.cv-mode .cv-project-tags {
+  display: var(--cv-detail);
+}
+
+/* ---- certifications ------------------------------------------------------------ */
+
+body.cv-mode .cv-cert-row {
+  display: grid;
+  grid-template-columns: 130px 1fr auto;
+  gap: 0 20px;
+  align-items: center;
+  padding: var(--cv-cert-pad) 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+body.cv-mode .cv-cert-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+body.cv-mode .cv-cert-issuer {
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+
+body.cv-mode .cv-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border: 1px solid;
+  border-radius: 2px;
+}
+
+/* ---- writeups -------------------------------------------------------------------- */
+
+body.cv-mode .cv-platform-badge {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 2px;
+  margin-right: 8px;
+}
+
+body.cv-mode .cv-writeup-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+body.cv-mode .cv-writeup-desc {
+  display: var(--cv-detail);
+  font-size: 12px;
+  color: #666;
+  margin-top: 3px;
+}
+
+body.cv-mode .cv-writeup-link {
+  font-size: 11px;
+}
+
+/* ---- currently -------------------------------------------------------------------- */
+
+body.cv-mode .cv-now-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+body.cv-mode .cv-now-key {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  min-width: 90px;
+}
+
+body.cv-mode .cv-now-value {
+  font-size: 12px;
+  color: #444;
+}
+
+/* ---- footer ------------------------------------------------------------------------- */
+
+body.cv-mode .cv-footer {
+  font-size: 11px;
+  color: #bbb;
+  text-align: center;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 16px;
+  margin-top: 32px;
+}
+
+body.cv-mode .cv-footer p {
+  margin: 2px 0;
+}
+
+/* ---- fixed action buttons (screen only) --------------------------------------------- */
+
+body.cv-mode .cv-actions {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+body.cv-mode .cv-btn {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  padding: 10px 18px;
+  border: none;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+body.cv-mode .cv-btn-print {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
+body.cv-mode .cv-btn-back {
+  background: #f0f0f0;
+  color: #333;
+}
+
+/* ---- mobile ----------------------------------------------------------------------------- */
+
+@media (max-width: 600px) {
+  body.cv-mode .cv-wrapper {
+    padding: 32px 20px;
+  }
+
+  body.cv-mode .cv-header-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  body.cv-mode .cv-contact {
+    text-align: left;
+  }
+
+  body.cv-mode .cv-contact-item {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  body.cv-mode .cv-skills-grid {
+    columns: 1;
+  }
+
+  body.cv-mode .cv-grid-row,
+  body.cv-mode .cv-cert-row {
+    grid-template-columns: 90px 1fr;
+  }
+}
+
+/* ---- print — critical for PDF quality ---------------------------------------------------- */
+
+@media print {
+  body.cv-mode {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.cv-mode .cv-page {
+    min-height: 0;
+  }
+
+  body.cv-mode .cv-wrapper {
+    margin: 0;
+  }
+
+  /* Hide non-CV elements. */
+  body.cv-mode nav,
+  body.cv-mode .cv-actions,
+  body.cv-mode .cv-footer-web,
+  body.cv-mode .cv-incomplete-notice {
+    display: none !important;
+  }
+
+  /* Page break rules — a safety net; the zoom auto-fit in CV.tsx should keep
+     everything on page one, so these only matter if JS is disabled. */
+  body.cv-mode .cv-project,
+  body.cv-mode .cv-grid-row,
+  body.cv-mode .cv-cert-row {
+    page-break-inside: avoid;
+  }
+
+  body.cv-mode h2 {
+    page-break-after: avoid;
+  }
+
+  /* Force light background even in dark mode. */
+  body.cv-mode,
+  body.cv-mode * {
+    background: white !important;
+    color: #1a1a1a !important;
+  }
+
+  /* This page defines its own print header — suppress the global one. */
+  body.cv-mode::before {
+    content: none !important;
+  }
+
+  /* Keep colored badges readable. */
+  body.cv-mode .badge-active {
+    background: #e8f8ee !important;
+    color: #1a7a3a !important;
+  }
+
+  body.cv-mode .badge-progress {
+    background: #fff8e8 !important;
+    color: #7a5a00 !important;
+  }
+
+  /* Links: show URL inline for the printed version... */
+  body.cv-mode a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 9px;
+    color: #888 !important;
+  }
+
+  /* ...but not where the URL is already the visible text. The [href] is
+     needed to out-rank the a[href]::after rule above. */
+  body.cv-mode .cv-contact a[href]::after,
+  body.cv-mode a.cv-project-link[href]::after,
+  body.cv-mode a.cv-writeup-link[href]::after {
+    content: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 18mm 16mm;
+}

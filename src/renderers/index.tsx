@@ -67,6 +67,7 @@ export function renderResult(
     case "motd":
       return <MotdRenderer result={result} />;
     case "resume":
+    case "resume_redirect":
       return <ResumeRenderer result={result} />;
     case "weather":
       return <WeatherRenderer result={result} />;

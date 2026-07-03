@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
   type RefObject,
 } from "react";
@@ -91,6 +92,15 @@ const MONTHS = [
 ];
 
 // ---- utilities ------------------------------------------------------------
+// Real, displayable content — not empty and not a "[TODO: ...]" placeholder.
+function hasContent(value: unknown): value is string {
+  return (
+    typeof value === "string" &&
+    value.trim() !== "" &&
+    !value.trim().startsWith("[TODO")
+  );
+}
+
 function splitName(name: string) {
   const u = name.toUpperCase();
   if (u.length < 3) return { before: u, mid: "", after: "" };
@@ -326,6 +336,24 @@ interface Cell {
   real: boolean;
 }
 type ContribMap = Map<string, { count: number; level: number }>;
+interface ContribData {
+  map: ContribMap;
+  activeDays: number;
+  totalContribs: number;
+}
+
+// Consecutive days with contributions, counting back from today.
+function currentStreak(map: ContribMap): number {
+  let streak = 0;
+  const day = new Date();
+  for (;;) {
+    const entry = map.get(ymd(day));
+    if (!entry || entry.count === 0) break;
+    streak++;
+    day.setDate(day.getDate() - 1);
+  }
+  return streak;
+}
 
 // Local YYYY-MM-DD so grid dates line up with the API's calendar dates.
 function ymd(d: Date): string {
@@ -392,7 +420,7 @@ function Heatmap({
 }: {
   seed: number;
   weeks: number;
-  contrib: { map: ContribMap; total: number } | null;
+  contrib: ContribData | null;
   disableTip: boolean;
 }) {
   const { cells, months } = useMemo(
@@ -402,48 +430,72 @@ function Heatmap({
   const [tip, setTip] = useState<{ text: string; x: number; y: number } | null>(
     null,
   );
-  const hasData = !!contrib && contrib.total > 0;
+  const hasData = !!contrib && contrib.activeDays > 0;
+  const streak = contrib ? currentStreak(contrib.map) : 0;
   const tipText = (c: Cell) =>
     c.real
       ? `${formatDate(c.date)} — ${c.count} contribution${c.count !== 1 ? "s" : ""}`
       : `${formatDate(c.date)} · ${INTENSITY_LABEL[c.intensity]}`;
+  // Keep the tooltip inside the viewport (it's translateX(-50%) around x).
+  const showTip = (c: Cell) => (e: ReactMouseEvent) =>
+    setTip({
+      text: tipText(c),
+      x: Math.max(90, Math.min(e.clientX, window.innerWidth - 90)),
+      y: e.clientY - 40,
+    });
   return (
-    <div className="heatmap-wrap">
-      <div
-        className="heatmap-months"
-        style={{ gridTemplateColumns: `repeat(${weeks}, var(--cell))` }}
-      >
-        {months.map((m, i) => (
-          <span className="heatmap-month" key={i}>
-            {m}
-          </span>
-        ))}
+    <div className="heatmap-inner">
+      <div className="heatmap-stats">
+        {hasData ? (
+          <>
+            <div>
+              <div className="heatmap-big-number">{contrib!.activeDays}</div>
+              <div className="heatmap-stat-label">DAYS ACTIVE</div>
+            </div>
+            <div>
+              <div className="heatmap-mid-number">
+                {contrib!.totalContribs}
+              </div>
+              <div className="heatmap-stat-label">TOTAL CONTRIBUTIONS</div>
+            </div>
+            {streak >= 3 && (
+              <div className="heatmap-streak">↑ {streak} day streak</div>
+            )}
+            <div className="heatmap-range-label">last 6 months</div>
+          </>
+        ) : (
+          <div className="heatmap-stat-label">
+            {contrib ? "NO RECENT ACTIVITY" : "SIMULATED — API UNAVAILABLE"}
+          </div>
+        )}
       </div>
-      <div className="heatmap-grid" onMouseLeave={() => setTip(null)}>
-        {cells.map((c, i) => (
-          <span
-            key={i}
-            className={`heat-cell heat-${c.intensity}`}
-            onMouseEnter={
-              disableTip
-                ? undefined
-                : (e) =>
-                    setTip({ text: tipText(c), x: e.clientX, y: e.clientY - 40 })
-            }
-          />
-        ))}
-      </div>
-      <div className="heatmap-legend">
-        <span className="legend-text">LESS</span>
-        {[0, 1, 2, 3, 4].map((n) => (
-          <span key={n} className={`legend-cell heat-${n}`} />
-        ))}
-        <span className="legend-text">MORE</span>
-      </div>
-      <div className="heatmap-total">
-        {hasData
-          ? `${contrib!.total} days of contributions in the last 6 months`
-          : "— contributions data unavailable"}
+      <div className="heatmap-wrap">
+        <div
+          className="heatmap-months"
+          style={{ gridTemplateColumns: `repeat(${weeks}, var(--cell))` }}
+        >
+          {months.map((m, i) => (
+            <span className="heatmap-month" key={i}>
+              {m}
+            </span>
+          ))}
+        </div>
+        <div className="heatmap-grid" onMouseLeave={() => setTip(null)}>
+          {cells.map((c, i) => (
+            <span
+              key={i}
+              className={`heat-cell heat-${c.intensity}`}
+              onMouseEnter={disableTip ? undefined : showTip(c)}
+            />
+          ))}
+        </div>
+        <div className="heatmap-legend">
+          <span className="legend-text">LESS</span>
+          {[0, 1, 2, 3, 4].map((n) => (
+            <span key={n} className={`legend-cell heat-${n}`} />
+          ))}
+          <span className="legend-text">MORE</span>
+        </div>
       </div>
       {tip &&
         createPortal(
@@ -577,10 +629,7 @@ export default function HUD() {
   const isMobile = useIsMobile();
 
   const [github, setGithub] = useState<GithubInfo | null>(null);
-  const [contrib, setContrib] = useState<{
-    map: ContribMap;
-    total: number;
-  } | null>(null);
+  const [contrib, setContrib] = useState<ContribData | null>(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [toast, setToast] = useState("");
   const [highlightProject, setHighlightProject] = useState("");
@@ -589,6 +638,8 @@ export default function HUD() {
 
   const rootRef = useRef<HTMLDivElement>(null);
   const lastKeyRef = useRef<{ key: string; t: number }>({ key: "", t: 0 });
+  // While set (epoch ms), scroll events don't recompute the active section.
+  const suppressActiveRef = useRef(0);
 
 
   // ---- derived model ------------------------------------------------------
@@ -612,9 +663,15 @@ export default function HUD() {
         name,
         value: categoryProficiency(skills),
       })),
-      projects: (c.projects?.items as Project[] | undefined) ?? [],
-      certs: (c.certifications?.items as Cert[] | undefined) ?? [],
-      writeups: (c.writeups?.items as Writeup[] | undefined) ?? [],
+      projects: ((c.projects?.items as Project[] | undefined) ?? []).filter(
+        (p) => hasContent(p.name),
+      ),
+      certs: ((c.certifications?.items as Cert[] | undefined) ?? []).filter(
+        (x) => hasContent(x.name),
+      ),
+      writeups: ((c.writeups?.items as Writeup[] | undefined) ?? []).filter(
+        (w) => hasContent(w.name),
+      ),
       socials: (c.socials?.items as Social[] | undefined) ?? [],
       email: (c.email?.address as string | undefined) ?? "",
       now: (data.now as Record<string, string> | undefined) ?? {},
@@ -651,14 +708,16 @@ export default function HUD() {
           const cutoff = new Date();
           cutoff.setDate(cutoff.getDate() - 26 * 7);
           const map: ContribMap = new Map();
-          let total = 0;
+          let activeDays = 0;
+          let totalContribs = 0;
           for (const d of json.contributions ?? []) {
             if (new Date(d.date) >= cutoff) {
               map.set(d.date, { count: d.count, level: d.level });
-              if (d.count > 0) total++;
+              if (d.count > 0) activeDays++;
+              totalContribs += d.count;
             }
           }
-          setContrib({ map, total });
+          setContrib({ map, activeDays, totalContribs });
         },
       )
       .catch(() => {
@@ -722,40 +781,61 @@ export default function HUD() {
   }, [githubUsername]);
 
   // ---- scroll: progress bar + active section -----------------------------
+  // Active section is computed from scroll position, not an
+  // IntersectionObserver: the page is short enough that the bottom sections
+  // (intel, contact) can never scroll up into an observation band near the
+  // top of the viewport, so an observer-based approach permanently sticks on
+  // an earlier section. Instead: the last section whose top has crossed the
+  // 30%-of-viewport line wins, and hitting the bottom of the page always
+  // activates the final section.
   useEffect(() => {
     const root = rootRef.current;
     if (!root || !model) return;
     const onScroll = () => {
       const max = root.scrollHeight - root.clientHeight;
       setProgress(max > 0 ? root.scrollTop / max : 0);
+      // Skip active-section updates right after a nav click so the clicked
+      // link stays highlighted while smooth-scroll settles.
+      if (Date.now() < suppressActiveRef.current) return;
+      const rootTop = root.getBoundingClientRect().top;
+      const line = root.clientHeight * 0.3;
+      let current = SECTIONS[0][1];
+      let bestTop = -Infinity;
+      for (const [, id] of SECTIONS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top - rootTop;
+        // Strictly greater: skills/projects share a row top, and the first
+        // of a tied pair (skills) should win during organic scrolling.
+        if (top <= line && top > bestTop) {
+          bestTop = top;
+          current = id;
+        }
+      }
+      if (max > 0 && root.scrollTop >= max - 4) {
+        current = SECTIONS[SECTIONS.length - 1][1];
+      }
+      setActiveId(current);
     };
     onScroll();
     root.addEventListener("scroll", onScroll, { passive: true });
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible?.target.id) setActiveId(visible.target.id);
-      },
-      { root, threshold: [0.25, 0.5], rootMargin: "-20% 0px -50% 0px" },
-    );
-    SECTIONS.forEach(([, id]) => {
-      const el = document.getElementById(id);
-      if (el) io.observe(el);
-    });
     return () => {
       root.removeEventListener("scroll", onScroll);
-      io.disconnect();
     };
   }, [model]);
 
   // ---- palette items ------------------------------------------------------
-  const scrollTo = (id: string) =>
+  const scrollTo = (id: string) => {
+    // Highlight the chosen section immediately; skills/projects share a row,
+    // so scroll position alone can't tell them apart after a click.
+    if (SECTIONS.some(([, sid]) => sid === id)) {
+      setActiveId(id);
+      suppressActiveRef.current = Date.now() + 900;
+    }
     document
       .getElementById(id)
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const paletteItems = useMemo<PaletteItem[]>(() => {
     if (!data || !model) return [];
@@ -1150,6 +1230,13 @@ export default function HUD() {
         {/* ROW 4: INTEL + (GITHUB stacked CERTS) */}
         <div className="bento bento-14-1">
           <Panel label="// INTEL.FEED" icon={FiShield} id="intel" index={6}>
+            {model.writeups.length === 0 && (
+              <div className="hud-empty-state">
+                <FiShield size={20} style={{ opacity: 0.2 }} />
+                <div>No writeups yet.</div>
+                <div>Add writeup links to portfolio.json</div>
+              </div>
+            )}
             <div className="intel-list">
               {model.writeups.map((w, i) => {
                 const sev =
@@ -1200,6 +1287,13 @@ export default function HUD() {
           </Panel>
 
           <Panel label="// CERTS.DB" icon={FiAward} index={7}>
+            {model.certs.length === 0 && (
+              <div className="hud-empty-state">
+                <FiAward size={20} style={{ opacity: 0.2 }} />
+                <div>No certifications yet.</div>
+                <div>Add certs to portfolio.json</div>
+              </div>
+            )}
             <div className="cert-timeline">
               {model.certs.map((cert) => {
                 const inProg = cert.status === "in-progress";
@@ -1257,6 +1351,11 @@ export default function HUD() {
                         rel="noopener noreferrer"
                       >
                         {s.handle}
+                        <FiExternalLink
+                          className="social-ext-icon"
+                          size={9}
+                          aria-hidden="true"
+                        />
                       </a>
                     </div>
                   );
@@ -1267,6 +1366,11 @@ export default function HUD() {
                   <span className="comms-spacer" />
                   <a className="comms-handle" href={`mailto:${model.email}`}>
                     {model.email}
+                    <FiExternalLink
+                      className="social-ext-icon"
+                      size={9}
+                      aria-hidden="true"
+                    />
                   </a>
                 </div>
               </div>
