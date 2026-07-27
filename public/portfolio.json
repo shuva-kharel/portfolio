@@ -223,17 +223,11 @@
       "description": "view my skillset",
       "output_type": "table",
       "categories": {
-        "Offensive Security": [
-          "Nmap",
-          "Burp Suite",
-          "Metasploit",
-          "Gobuster",
-          "SQLmap"
-        ],
-        "Defensive Security": ["Splunk", "Wireshark", "Suricata", "YARA"],
-        "Programming": ["Python", "Bash", "Go", "JavaScript"],
-        "Platforms": ["HackTheBox", "TryHackMe", "PicoCTF"],
-        "Operating Systems": ["Parrot OS", "Kali Linux", "Ubuntu"]
+        "Offensive Security": ["Nmap", "Burp Suite"],
+        "Defensive Security": ["Wireshark"],
+        "Programming": ["C", "C++", "Bash"],
+        "Platforms": ["TryHackMe"],
+        "Operating Systems": ["Linux", "Windows"]
       }
     },
 
@@ -242,11 +236,58 @@
       "output_type": "projects",
       "items": [
         {
-          "name": "nmapper",
-          "type": "TOOL",
-          "desc": "Python wrapper for Nmap with clean JSON output and port diffing between scans.",
-          "tags": ["python", "networking", "nmap"],
-          "link": "https://github.com/shuva-kharel/nmapper",
+          "name": "Ainchopaincho",
+          "type": "WEB APP",
+          "desc": "A community borrowing platform that helps people lend and borrow everyday items through verified profiles, KYC verification, transparent borrow pricing, real-time in-app chat, and a secure borrowing workflow.",
+          "tags": ["react", "express", "socket.io"],
+          "link": "https://ainchopaincho.ggsrclub.com",
+          "stars": 0
+        },
+        {
+          "name": "GGSRClub",
+          "type": "WEB APP",
+          "desc": "A centralized club management platform for the GoldenGate Science and Robotics Club, enabling member management, event organization, announcements, registrations, certifications, and community engagement.",
+          "tags": ["react", "django"],
+          "link": "https://www.ggsrclub.com",
+          "stars": 0
+        },
+        {
+          "name": "SoundSight",
+          "type": "AI PROJECT",
+          "desc": "A real-time AI-powered visual assistant for blind and low-vision users that provides scene understanding, OCR, currency recognition, obstacle detection, face recognition, traffic light detection, and voice-guided navigation in English and Nepali using a distributed Laptop + Raspberry Pi architecture.",
+          "tags": [
+            "python",
+            "computer-vision",
+            "yolo",
+            "ocr",
+            "raspberry-pi",
+            "fastapi",
+            "opencv"
+          ],
+          "link": "https://github.com/shuva-kharel/SoundSight",
+          "stars": 0
+        },
+        {
+          "name": "DjangoVideoChat",
+          "type": "WEB APP",
+          "desc": "A real-time video conferencing web application built with Django and Agora SDK, allowing users to create or join video chat rooms through a simple, responsive interface for seamless online communication.",
+          "tags": ["django", "python", "agora", "webrtc"],
+          "link": "https://video-chat.shuvakharel.com.np",
+          "stars": 0
+        },
+        {
+          "name": "ExamForge",
+          "type": "WEB APP",
+          "desc": "An AI-powered exam preparation platform that generates dynamic practice question papers using Google Gemini, rephrasing questions while preserving concepts to promote critical thinking, reduce memorization, and provide a unique exam experience every time.",
+          "tags": [
+            "typescript",
+            "react",
+            "vite",
+            "nodejs",
+            "express",
+            "google-gemini"
+          ],
+          "link": "https://github.com/shuva-kharel/examforge",
           "stars": 0
         }
       ]
