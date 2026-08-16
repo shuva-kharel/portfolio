@@ -1,12 +1,34 @@
 {
   "meta": {
     "user": "shuva",
-    "host": "blackarch",
+    "host": "parrot",
     "prompt_symbol": "$",
     "version": "2.0",
     "title": "Shuva Kharel — Portfolio",
     "theme": "amber",
     "location_city": "Kathmandu"
+  },
+
+  "now": {
+    "learning": "C++ for low-level exploit development",
+    "building": "",
+    "reading": "The Linux Command Line A Complete Introduction",
+    "playing": "TryHackMe CTFs"
+  },
+
+  "pgp": {
+    "fingerprint": "A1B2 C3D4 E5F6 7890 ABCD EF12 3456 7890",
+    "key_server": "keys.openpgp.org",
+    "note": "Verify before you trust. Always."
+  },
+
+  "uses": {
+    "os": "Parrot OS Security Edition",
+    "editor": "Neovim",
+    "terminal": "Kitty",
+    "shell": "Zsh + Oh My Zsh",
+    "browser": "Brave",
+    "vpn": "Proton"
   },
 
   "resume": {
@@ -87,8 +109,8 @@
   "boot_sequence": [
     { "text": "GNU GRUB version 2.06", "delay": 0 },
     { "text": "", "delay": 100 },
-    { "text": "Loading BlackArch...", "delay": 300 },
-    { "text": "Kernel 6.1.0-blackarch1-amd64 loaded.", "delay": 200 },
+    { "text": "Loading ParrotOS...", "delay": 300 },
+    { "text": "Kernel 6.1.0-parrot1-amd64 loaded.", "delay": 200 },
     { "text": "Mounting filesystems...", "delay": 150 },
     { "text": "Starting threat intelligence modules... [ OK ]", "delay": 200 },
     { "text": "Initializing network interfaces... [ OK ]", "delay": 150 },
@@ -107,15 +129,58 @@
   "filesystem": {
     "/": {
       "type": "dir",
-      "children": ["contact.md", "README.md"]
+      "children": [
+        "projects/",
+        "writeups/",
+        "certs/",
+        "skills.txt",
+        "contact.md",
+        "README.md"
+      ]
+    },
+    "/projects": {
+      "type": "dir",
+      "children": ["nmapper/", "phishdetect/", "keylogger-edu/"]
+    },
+    "/projects/nmapper": {
+      "type": "dir",
+      "children": ["README.md", "requirements.txt", "demo.sh"]
+    },
+    "/projects/phishdetect": {
+      "type": "dir",
+      "children": ["README.md", "model.py"]
+    },
+    "/projects/keylogger-edu": {
+      "type": "dir",
+      "children": ["README.md"]
+    },
+    "/writeups": {
+      "type": "dir",
+      "children": ["htb-lame.md", "thm-relevant.md", "picoctf-2024.md"]
+    },
+    "/certs": {
+      "type": "dir",
+      "children": ["ejpt.md", "google-cybersec.md"]
     },
     "/secret": {
       "type": "dir",
       "children": ["flag.txt", ".note"]
     },
     "files": {
-      "README.md": "# Terminal Portfolio v2.0\nType 'help' to get started.\nBuilt by Shuva Kharel",
-      "contact.md": "Email    : hey.shuva@gmail.com\nGitHub   : github.com/shuva-kharel\nLinkedIn : https://linkedin.com/in/shuva-kharel\nTryHackMe: https://tryhackme.com/p/shuva",
+      "README.md": "# Terminal Portfolio v2.0\nType 'help' to get started.\nBuilt by Shuva Kharel — shuva-kharel.dev",
+      "skills.txt": "[ OFFENSIVE ]\nNmap, Burp Suite, Metasploit, Gobuster, Nikto, SQLmap\n\n[ DEFENSIVE ]\nSplunk, Wireshark, Suricata, YARA\n\n[ LANGUAGES ]\nPython, Bash, Go, JavaScript\n\n[ OS ]\nParrot OS, Kali Linux, Ubuntu, Windows",
+      "contact.md": "Email    : [TODO: your real email]\nGitHub   : github.com/shuva-kharel\nLinkedIn : [TODO: your LinkedIn]\nTryHackMe: [TODO: your THM profile]",
+      "/projects/nmapper/README.md": "# nmapper\nA Python wrapper around Nmap with clean JSON output and port diffing.\nGitHub: github.com/shuva-kharel/nmapper",
+      "/projects/nmapper/requirements.txt": "python-nmap==0.7.1\nclick==8.1.7\nrich==13.7.0",
+      "/projects/nmapper/demo.sh": "#!/bin/bash\n# Quick demo of nmapper\npython3 nmapper.py --target scanme.nmap.org --json out.json\npython3 nmapper.py --diff old.json out.json",
+      "/projects/phishdetect/README.md": "# PhishDetect\nML-based phishing URL detector. Trained on 50k URLs. 94% accuracy.\nGitHub: github.com/shuva-kharel/phishdetect",
+      "/projects/phishdetect/model.py": "# PhishDetect - feature extraction stub\nfrom sklearn.ensemble import RandomForestClassifier\n\ndef extract_features(url: str) -> list[float]:\n    return [len(url), url.count('-'), url.count('.'), int('@' in url)]\n\nclf = RandomForestClassifier(n_estimators=200)",
+      "/projects/keylogger-edu/README.md": "# keylogger-edu\nEducational keylogger with encrypted log storage.\nFor learning only. Never deployed against anyone.\nGitHub: github.com/shuva-kharel/keylogger-edu",
+      "/writeups/htb-lame.md": "# HTB: Lame\nExploited Samba 3.0.20 via CVE-2007-2447 using Metasploit.\nUser: daemon | Root: root",
+      "/writeups/thm-relevant.md": "# THM: Relevant\nUploaded an aspx reverse shell via an anonymous SMB share,\nthen escalated from iis apppool to SYSTEM with PrintSpoofer.\nUser + Root flags captured.",
+      "/writeups/picoctf-2024.md": "# PicoCTF 2024\nTop 500 finish. 8 challenges solved across web, crypto, and forensics.\n\npicoCTF{json_driven_p0rtf0li0_ftw}",
+      "/certs/ejpt.md": "# eJPT - eLearnSecurity Junior Penetration Tester\nIssued: 2024\nScore : 18/20",
+      "/certs/google-cybersec.md": "# Google Cybersecurity Professional Certificate\nIssuer : Google / Coursera\nIssued : 2023\n8 courses covering SIEM, Linux, SQL, Python, and incident response.",
       "/secret/flag.txt": "Almost. The flag needs a key.\nTry XOR with 0x42.\nEncrypted: 01160439307176261d362a711d3172373021711d2e3729713f\n\nWhen you've decoded it, submit with:\n  flag CTF{...}",
       "/secret/.note": "flag format: CTF{...}\nDecode the hex in flag.txt, XOR each byte with 0x42."
     }
@@ -133,8 +198,8 @@
         "  ███████║██║  ██║ ╚████╔╝  ╚████╔╝ ██║  ██║",
         "  ╚══════╝╚═╝  ╚═╝  ╚═══╝    ╚═══╝  ╚═╝  ╚═╝"
       ],
-      "tagline": "Cybersecurity Student",
-      "version": "Portfolio",
+      "tagline": "Cybersecurity Student. CTF Enthusiast. I break things to understand how they work.",
+      "version": "Portfolio v2.0",
       "hint": "Type 'help' for commands, or 'gui' to launch the visual GUI."
     },
 
@@ -144,9 +209,13 @@
       "lines": [
         "Name    : Shuva Kharel",
         "Role    : Cybersecurity Student",
-        "Focus   : Offensive Security, CTFs, Vulnerability Research",
+        "Focus   : Penetration Testing, Web Security, CTFs",
         "Based   : Kathmandu, Nepal",
-        "Status  : Seeking cybersecurity internships & entry-level security roles"
+        "Status  : Open to internships & entry-level roles",
+        "",
+        "[TODO: Write 2-3 lines about yourself here in your own words.]",
+        "[TODO: What got you into security? What are you working toward?]",
+        "[TODO: Keep it human. Recruiters read this.]"
       ]
     },
 
@@ -154,62 +223,38 @@
       "description": "view my skillset",
       "output_type": "table",
       "categories": {
-        "Offensive Security": ["Pentesting", "Web Security", "Red Teaming"],
-        "Vulnerability Research": [
-          "Reverse Engineering",
-          "Exploit Development",
-          "Fuzzing"
-        ],
-        "Binary Security": ["Binary Exploitation", "x86-64", "Ghidra"],
-        "Programming": ["C", "C++", "Python", "Bash"],
-        "Security Tools": ["Nmap", "Burp Suite", "Wireshark", "Metasploit"],
-        "CTFs & Labs": ["TryHackMe", "Hack The Box", "picoCTF"],
+        "Offensive Security": ["Nmap", "Burp Suite"],
+        "Defensive Security": ["Wireshark"],
+        "Programming": ["C", "C++", "Bash"],
+        "Platforms": ["TryHackMe"],
         "Operating Systems": ["Linux", "Windows"]
       }
     },
+
     "projects": {
       "description": "view my projects",
       "output_type": "projects",
       "items": [
         {
-          "name": "Vaultkey",
-          "type": "SECURITY PROJECT",
-          "desc": "A hardware-backed, zero-knowledge password manager built in Rust. Uses WebAuthn and modern authenticated encryption to keep secrets encrypted and under the user's control, with self-hosted synchronization through Docker.",
-          "tags": [
-            "rust",
-            "security",
-            "cryptography",
-            "webauthn",
-            "sqlite",
-            "docker",
-            "jwt"
-          ],
-          "links": {
-            "github": "https://github.com/shuva-kharel/vaultkey"
-          },
+          "name": "Ainchopaincho",
+          "type": "WEB APP",
+          "desc": "A community borrowing platform that helps people lend and borrow everyday items through verified profiles, KYC verification, transparent borrow pricing, real-time in-app chat, and a secure borrowing workflow.",
+          "tags": ["react", "express", "socket.io"],
+          "link": "https://ainchopaincho.ggsrclub.com",
           "stars": 0
         },
         {
-          "name": "dotlnk",
-          "type": "OPEN SOURCE",
-          "desc": "An open-source, static-first link-in-bio platform powered by simple JSON. Features customizable profiles, multiple themes and layouts, QR sharing, a local profile editor, and self-hosting support.",
-          "tags": [
-            "typescript",
-            "json",
-            "static",
-            "open-source",
-            "self-hosted"
-          ],
-          "links": {
-            "github": "https://github.com/shuva-kharel/dotlnk",
-            "live": "https://lnk.shuvakharel.com.np"
-          },
+          "name": "GGSRClub",
+          "type": "WEB APP",
+          "desc": "A centralized club management platform for the GoldenGate Science and Robotics Club, enabling member management, event organization, announcements, registrations, certifications, and community engagement.",
+          "tags": ["react", "django"],
+          "link": "https://www.ggsrclub.com",
           "stars": 0
         },
         {
           "name": "SoundSight",
           "type": "AI PROJECT",
-          "desc": "A real-time AI visual assistant for blind and low-vision users, combining scene understanding, OCR, currency recognition, obstacle detection, face recognition, traffic light detection, and voice-guided navigation through a distributed Laptop + Raspberry Pi architecture.",
+          "desc": "A real-time AI-powered visual assistant for blind and low-vision users that provides scene understanding, OCR, currency recognition, obstacle detection, face recognition, traffic light detection, and voice-guided navigation in English and Nepali using a distributed Laptop + Raspberry Pi architecture.",
           "tags": [
             "python",
             "computer-vision",
@@ -219,47 +264,21 @@
             "fastapi",
             "opencv"
           ],
-          "links": {
-            "github": "https://github.com/shuva-kharel/SoundSight"
-          },
-          "stars": 0
-        },
-        {
-          "name": "Ainchopaincho",
-          "type": "WEB APP",
-          "desc": "A community borrowing platform for lending and borrowing everyday items through verified profiles, KYC verification, transparent pricing, real-time chat, and a secure borrowing workflow.",
-          "tags": ["react", "express", "socket.io"],
-          "links": {
-            "github": "https://github.com/shuva-kharel/ainchopaincho",
-            "live": "https://ainchopaincho.ggsrclub.com"
-          },
-          "stars": 0
-        },
-        {
-          "name": "GGSRClub",
-          "type": "WEB APP",
-          "desc": "A centralized club management platform for the GoldenGate Science and Robotics Club, supporting member management, events, announcements, registrations, certifications, and community engagement.",
-          "tags": ["react", "django"],
-          "links": {
-            "live": "https://www.ggsrclub.com"
-          },
+          "link": "https://github.com/shuva-kharel/SoundSight",
           "stars": 0
         },
         {
           "name": "DjangoVideoChat",
           "type": "WEB APP",
-          "desc": "A real-time video conferencing application built with Django and Agora SDK, allowing users to create or join video rooms through a simple and responsive interface.",
+          "desc": "A real-time video conferencing web application built with Django and Agora SDK, allowing users to create or join video chat rooms through a simple, responsive interface for seamless online communication.",
           "tags": ["django", "python", "agora", "webrtc"],
-          "links": {
-            "github": "https://github.com/shuva-kharel/DjangoVideoChat",
-            "live": "https://video-chat.shuvakharel.com.np"
-          },
+          "link": "https://video-chat.shuvakharel.com.np",
           "stars": 0
         },
         {
           "name": "ExamForge",
-          "type": "AI PROJECT",
-          "desc": "An AI-powered exam preparation platform that generates dynamic practice papers using Google Gemini, rephrasing questions while preserving concepts to encourage critical thinking and reduce memorization.",
+          "type": "WEB APP",
+          "desc": "An AI-powered exam preparation platform that generates dynamic practice question papers using Google Gemini, rephrasing questions while preserving concepts to promote critical thinking, reduce memorization, and provide a unique exam experience every time.",
           "tags": [
             "typescript",
             "react",
@@ -268,10 +287,23 @@
             "express",
             "google-gemini"
           ],
-          "links": {
-            "github": "https://github.com/shuva-kharel/examforge"
-          },
+          "link": "https://github.com/shuva-kharel/examforge",
           "stars": 0
+        }
+      ]
+    },
+
+    "writeups": {
+      "description": "view CTF writeups",
+      "output_type": "list",
+      "items": [
+        {
+          "name": "",
+          "desc": "",
+          "link": "",
+          "severity": "",
+          "platform": "",
+          "date": ""
         }
       ]
     },
@@ -282,49 +314,30 @@
       "items": [
         {
           "year": "2026 - Present",
-          "title": "B.Sc. Cybersecurity",
-          "institution": "Presidential Graduate School",
-          "details": "Affiliated with Westcliff University"
+          "title": "Bachelor of Science in Cybersecurity",
+          "institution": "Westcliff University",
+          "details": ""
         },
         {
           "year": "2024 - 2026",
           "title": "Higher Secondary Education",
           "institution": "GoldenGate International College",
-          "details": "Science - Computer Science"
+          "details": "Science — Computer Science"
         }
       ]
     },
 
     "certifications": {
-      "description": "certifications and achievements",
+      "description": "certifications earned",
       "output_type": "certs",
-      "categories": {
-        "professional": {
-          "label": "PROFESSIONAL CERTIFICATIONS",
-          "items": [
-            {
-              "name": "CC - Certified in Cybersecurity",
-              "issuer": "ISC2",
-              "year": "2026",
-              "status": "earned",
-              "link": "https://www.isc2.org/certifications/cc",
-              "image": "/certifications/isc2-cc.png"
-            }
-          ]
-        },
-        "achievements": {
-          "label": "COMPETITIONS & ACHIEVEMENTS",
-          "items": [
-            {
-              "name": "1st Place — Cybersecurity Hackathon",
-              "issuer": "XYZ Hackathon",
-              "year": "2026",
-              "status": "winner",
-              "image": "/certifications/test.png"
-            }
-          ]
+      "items": [
+        {
+          "name": "",
+          "issuer": "",
+          "year": "",
+          "status": "active"
         }
-      }
+      ]
     },
 
     "socials": {
@@ -354,11 +367,6 @@
           "link": "https://profile.hackthebox.com/profile/019d9f44-f6dc-7070-9f89-edd9f857937b",
           "rank": "",
           "progress": 0
-        },
-        {
-          "platform": "Links",
-          "handle": "shuva",
-          "link": "https://lnk.shuvakharel.com.np/shuva"
         }
       ]
     },
@@ -412,9 +420,48 @@
       "text": ["Opening GUI interface...", "→ /gui"]
     },
 
+    "now": {
+      "description": "what i'm currently up to",
+      "output_type": "now"
+    },
+
+    "pgp": {
+      "description": "my PGP public key info",
+      "output_type": "pgp"
+    },
+
+    "uses": {
+      "description": "tools and setup i use daily",
+      "output_type": "uses"
+    },
+
     "resume": {
       "description": "view and download my resume",
       "output_type": "resume"
+    },
+
+    "motd": {
+      "description": "message of the day",
+      "output_type": "motd",
+      "quotes": [
+        "The quieter you become, the more you can hear.",
+        "Security is a process, not a product.",
+        "There are two types of companies: those hacked, and those who don't know it yet.",
+        "Amateurs hack systems. Professionals hack people.",
+        "Privacy is not something I'm merely entitled to, it's an absolute prerequisite.",
+        "The best defense is knowing how to attack.",
+        "Root is not a privilege, it's a responsibility.",
+        "If you know the enemy and know yourself, you need not fear the result of a hundred battles."
+      ]
+    },
+
+    "hall-of-fame": {
+      "description": "CTF solvers who found the flag",
+      "output_type": "hof",
+      "message": "These people actually read the source code.",
+      "solvers": [
+        "[TODO: Add real solver handles here once someone solves your CTF]"
+      ]
     },
 
     "share": {
@@ -433,10 +480,23 @@
       "projects",
       "education",
       "certifications",
+      "writeups",
+      "now",
+      "pgp",
+      "uses",
       "resume"
     ],
     "contact": ["socials", "email"],
-    "system": ["clear", "history", "echo", "themes", "gui", "share", "help"]
+    "system": [
+      "clear",
+      "history",
+      "echo",
+      "themes",
+      "motd",
+      "gui",
+      "share",
+      "help"
+    ]
   },
 
   "easter_eggs": {
@@ -445,7 +505,7 @@
       "output_type": "scan",
       "lines": [
         "Starting Nmap 7.94 ( https://nmap.org )",
-        "Nmap scan report for shuvakharel.com.np (127.0.0.1)",
+        "Nmap scan report for shuva-kharel.dev (127.0.0.1)",
         "Host is up (0.0001s latency).",
         "",
         "PORT      STATE  SERVICE    VERSION",
@@ -497,18 +557,35 @@
       }
     },
 
-    "ping shuvakharel.com.np": {
+    "ping shuva-kharel.dev": {
       "hidden": true,
       "output_type": "scan",
       "lines": [
-        "PING shuvakharel.com.np (127.0.0.1): 56 data bytes",
-        "64 bytes from shuvakharel.com.np: icmp_seq=0 ttl=64 time=0.31 ms",
-        "64 bytes from shuvakharel.com.np: icmp_seq=1 ttl=64 time=0.28 ms",
-        "64 bytes from shuvakharel.com.np: icmp_seq=2 ttl=64 time=0.30 ms",
+        "PING shuva-kharel.dev (127.0.0.1): 56 data bytes",
+        "64 bytes from shuva-kharel.dev: icmp_seq=0 ttl=64 time=0.31 ms",
+        "64 bytes from shuva-kharel.dev: icmp_seq=1 ttl=64 time=0.28 ms",
+        "64 bytes from shuva-kharel.dev: icmp_seq=2 ttl=64 time=0.30 ms",
         "",
-        "--- shuvakharel.com.np ping statistics ---",
+        "--- shuva-kharel.dev ping statistics ---",
         "3 packets transmitted, 3 received, 0% packet loss",
         "round-trip min/avg/max = 0.28/0.30/0.31 ms"
+      ]
+    },
+
+    "fortune": {
+      "hidden": true,
+      "output_type": "fortune",
+      "quotes": [
+        "The quieter you become, the more you can hear. — Kali motto",
+        "There are two types of companies: those that have been hacked and those who don't know it. — John Chambers",
+        "Security is not a product, but a process. — Bruce Schneier",
+        "If you think technology can solve your security problems, then you don't understand the problems. — Bruce Schneier",
+        "The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a lead-lined room. — Gene Spafford",
+        "Amateurs hack systems, professionals hack people. — Bruce Schneier",
+        "Hackers are breaking the systems for profit. Before, it was about intellectual curiosity. — Kevin Mitnick",
+        "Being able to break security doesn't make you a hacker any more than being able to hotwire a car makes you an automotive engineer.",
+        "Privacy is not something that I'm merely entitled to, it's an absolute prerequisite. — Marlon Brando",
+        "The internet is the world's largest library. It's just that all the books are on the floor. — John Allen Paulos"
       ]
     },
 

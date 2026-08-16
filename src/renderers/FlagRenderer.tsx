@@ -18,7 +18,7 @@ export default function FlagRenderer({ result }: { result: CommandResult }) {
 
   const expected = useMemo(
     () => (check ? xorDecodeHex(check.hex, check.xor) : ""),
-    [check]
+    [check],
   );
 
   const lines = useMemo<{ text: string; ok?: boolean; err?: boolean }[]>(() => {
@@ -37,7 +37,7 @@ export default function FlagRenderer({ result }: { result: CommandResult }) {
     if (attempt === expected) {
       out.push({ text: "Correct. That's the flag.", ok: true });
       out.push({
-        text: "DM me on GitHub with your handle to be listed.",
+        text: "VAMOSSS!!!",
         ok: true,
       });
     } else {

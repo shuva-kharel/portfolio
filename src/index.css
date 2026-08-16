@@ -19,8 +19,8 @@
   --border: #333333;
   --cursor: #e8a838;
 
-  --font: "JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas,
-    monospace;
+  --font:
+    "JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
   --fs: 14px;
   --lh: 1.6;
 }
@@ -329,34 +329,88 @@ a:hover {
   flex-direction: column;
   gap: 14px;
 }
+
 .project-block {
   border-left: 2px solid var(--accent);
   padding-left: 12px;
 }
+
 .project-head {
   display: flex;
   align-items: baseline;
   gap: 12px;
 }
+
+.project-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
 .project-name {
   color: var(--accent);
   font-weight: 700;
 }
+
+.project-type {
+  font-size: 0.75rem;
+  opacity: 0.55;
+  letter-spacing: 0.04em;
+}
+
 .project-stars {
   color: var(--dim);
 }
+
 .project-desc {
   margin: 4px 0;
   color: var(--text);
 }
+
 .project-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 4px;
 }
+
 .tag-badge {
   color: var(--prompt-host);
+}
+
+.project-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  width: fit-content;
+  text-decoration: none;
+}
+
+.project-link-label {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.project-link-url {
+  color: var(--text);
+  opacity: 0.7;
+  word-break: break-all;
+}
+
+.project-link:hover .project-link-url {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.project-empty {
+  opacity: 0.6;
 }
 
 /* ---- list (writeups) ---------------------------------------------------- */
@@ -435,35 +489,104 @@ a:hover {
 .renderer-certs {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 24px;
 }
-.cert-row {
-  display: grid;
-  grid-template-columns: 220px 200px 70px auto;
-  align-items: center;
+
+.cert-category {
+  display: flex;
+  flex-direction: column;
+}
+
+.cert-category-title {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.cert-category-line {
+  color: var(--dim);
+  margin-bottom: 12px;
+}
+
+.cert-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cert-item {
+  border-left: 2px solid var(--accent);
+  padding-left: 12px;
+}
+
+.cert-main {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
   gap: 10px;
 }
+
 .cert-name {
   color: var(--accent);
-  font-weight: 500;
+  font-weight: 600;
 }
-.cert-issuer {
-  color: var(--text);
-}
-.cert-year {
-  color: var(--dim);
-}
+
 .cert-status {
-  justify-self: start;
-  padding: 0 8px;
-  border: 1px solid currentColor;
-  font-size: 0.85em;
+  font-size: 0.8rem;
+  opacity: 0.8;
 }
-.status-active {
+
+.status-earned,
+.status-winner {
   color: var(--success);
 }
+
 .status-in-progress {
   color: var(--accent);
+}
+
+.status-finalist {
+  color: var(--prompt-host);
+}
+
+.cert-meta {
+  display: flex;
+  gap: 7px;
+  margin-top: 3px;
+  color: var(--dim);
+  font-size: 0.9rem;
+}
+
+.cert-separator {
+  opacity: 0.5;
+}
+
+.cert-link,
+.cert-view-image {
+  display: block;
+  width: fit-content;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.cert-link {
+  color: var(--link);
+}
+
+.cert-view-image {
+  color: var(--dim);
+}
+
+.cert-link:hover,
+.cert-view-image:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.cert-empty {
+  color: var(--dim);
 }
 
 /* ---- socials ------------------------------------------------------------ */
@@ -667,7 +790,7 @@ a:hover {
   color: var(--dim);
   letter-spacing: 1px;
 }
-.mobile-hud-btn {
+.mobile-gui-btn {
   flex: 0 0 auto;
   background: none;
   border: 1px solid var(--accent);
@@ -678,7 +801,7 @@ a:hover {
   padding: 6px 12px;
   cursor: pointer;
 }
-.mobile-hud-btn:active {
+.mobile-gui-btn:active {
   background: var(--accent);
   color: var(--bg);
 }
@@ -728,12 +851,12 @@ a:hover {
   /* Hide interactive / decorative chrome. */
   .input-line,
   .boot-sequence,
-  .hud-nav,
+  .gui-nav,
   .return-btn,
   .kbd-hint,
   .kbd-toolbar,
   .scanlines,
-  .hud-bg-layers,
+  .gui-bg-layers,
   .heatmap-wrap,
   .identity-feed,
   .heat-tip,
@@ -746,7 +869,7 @@ a:hover {
   /* White background, black text; let content flow onto pages. */
   body,
   .terminal,
-  .hud-root {
+  .gui-root {
     background: #fff !important;
     color: #111 !important;
     height: auto !important;
@@ -764,7 +887,7 @@ a:hover {
     color: #111;
   }
 
-  /* Point anyone printing the terminal/HUD at the page designed for paper. */
+  /* Point anyone printing the terminal/GUI at the page designed for paper. */
   body:not(.cv-mode) #root::before {
     content: "For best results, print from /cv";
     display: block;
@@ -785,7 +908,7 @@ a:hover {
     page-break-inside: avoid;
   }
 
-  .hud-panel {
+  .gui-panel {
     border: 1px solid #ccc !important;
     background: #fff !important;
     margin-bottom: 12px;

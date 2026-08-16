@@ -15,7 +15,7 @@ export const config = { runtime: "edge" };
 const P = portfolio as any;
 
 const WIDTH = 58;
-const SITE = "https://ghost.dev";
+const SITE = "https://shuvakharel.com.np";
 
 function center(text: string): string {
   const pad = Math.max(0, WIDTH - text.length);
@@ -38,7 +38,7 @@ function parseWhoami(): Record<string, string> {
 }
 
 function buildText(): string {
-  const user: string = (P.meta?.user ?? "ghost").toUpperCase();
+  const user: string = (P.meta?.user ?? "shuva").toUpperCase();
   const info = parseWhoami();
   const role = (info.role ?? "Security Researcher").toUpperCase();
   const tagline: string = P.commands?.welcome?.tagline ?? "";
@@ -110,7 +110,9 @@ function buildText(): string {
   // Footer
   out.push("  Impressive. Most people just open a browser.");
   out.push(`  For the full experience: ${SITE}`);
-  out.push(`  For the terminal experience: ssh ${P.meta?.user ?? "ghost"}@ghost.dev`);
+  out.push(
+    `  For the terminal experience: ssh ${P.meta?.user ?? "shuva"}@shuva.dev`,
+  );
   out.push("");
 
   return out.join("\n");

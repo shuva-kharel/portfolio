@@ -76,7 +76,11 @@ export class FileSystem {
     const target = pathArg ? this.resolve(pathArg) : this.cwd;
 
     const dir = this.getDir(target);
-    if (!dir) return { lines: [`ls: cannot access '${pathArg}': No such directory`], error: true };
+    if (!dir)
+      return {
+        lines: [`ls: cannot access '${pathArg}': No such directory`],
+        error: true,
+      };
 
     if (!long) return { lines: [dir.children.join("   ")] };
 
@@ -88,7 +92,7 @@ export class FileSystem {
       const size = isDir ? "4096" : String(512 + child.length * 37);
       const date = "Jun 28 13:37";
       lines.push(
-        `${perms}  1 ghost ghost  ${size.padStart(5)} ${date} ${child}`
+        `${perms}  1 shuva shuva  ${size.padStart(5)} ${date} ${child}`,
       );
     }
     return { lines };
@@ -103,10 +107,7 @@ export class FileSystem {
 
     // Try, in order: full resolved path, bare basename, the raw arg.
     const content =
-      this.files[resolved] ??
-      this.files[basename] ??
-      this.files[arg] ??
-      null;
+      this.files[resolved] ?? this.files[basename] ?? this.files[arg] ?? null;
 
     if (content === null) {
       // Distinguish "it's a directory" from "no such file".

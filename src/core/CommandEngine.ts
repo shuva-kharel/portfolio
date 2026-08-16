@@ -79,7 +79,7 @@ export class CommandEngine {
       const target = args[0];
       const city = target.includes("/")
         ? target.slice(target.indexOf("/") + 1)
-        : (this.data.meta.location_city as string | undefined) ?? "";
+        : ((this.data.meta.location_city as string | undefined) ?? "");
       return { type: "weather", def: { output_type: "weather", city } };
     }
 
@@ -112,12 +112,18 @@ export class CommandEngine {
           // Carry the target command so the renderer can build a share link.
           return { type: "share", def, args };
         case "gui": {
-          // Print the configured message, then jump to the visual HUD route.
-          const lines =
-            (def.text as string[] | undefined) ??
-            (def.lines as string[] | undefined) ??
-            ["Opening HUD interface...", "→ /hud"];
-          return { type: "text", def, lines, effect: { kind: "navigate", to: "/hud" } };
+          // Print the configured message, then jump to the visual GUI route.
+          const lines = (def.text as string[] | undefined) ??
+            (def.lines as string[] | undefined) ?? [
+              "Opening GUI interface...",
+              "→ /gui",
+            ];
+          return {
+            type: "text",
+            def,
+            lines,
+            effect: { kind: "navigate", to: "/gui" },
+          };
         }
         case "email":
           return {
@@ -146,7 +152,9 @@ export class CommandEngine {
 
       case "cd": {
         const err = this.fs.cd(args[0] ?? "~");
-        return err ? { type: "text", lines: [err], isError: true } : { type: "empty" };
+        return err
+          ? { type: "text", lines: [err], isError: true }
+          : { type: "empty" };
       }
 
       case "ls": {
@@ -168,7 +176,10 @@ export class CommandEngine {
       case "history": {
         const all = this.history.all();
         const lines = all.map((c, i) => `${String(i + 1).padStart(4)}  ${c}`);
-        return { type: "text", lines: lines.length ? lines : ["(no history yet)"] };
+        return {
+          type: "text",
+          lines: lines.length ? lines : ["(no history yet)"],
+        };
       }
 
       case "clear":
@@ -253,7 +264,9 @@ export class CommandEngine {
 
 function levenshtein(a: string, b: string): number {
   const dp = Array.from({ length: a.length + 1 }, (_, i) =>
-    Array.from({ length: b.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
+    Array.from({ length: b.length + 1 }, (_, j) =>
+      i === 0 ? j : j === 0 ? i : 0,
+    ),
   );
   for (let i = 1; i <= a.length; i++) {
     for (let j = 1; j <= b.length; j++) {

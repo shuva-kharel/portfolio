@@ -1,7 +1,7 @@
 {
-  "name": "ghost@parrot — Security Portfolio",
-  "short_name": "ghost.dev",
-  "description": "Security researcher terminal portfolio",
+  "name": "shuva@blackarch — Portfolio",
+  "short_name": "shuva",
+  "description": "Personal portfolio of Shuva.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#080d14",
@@ -23,8 +23,8 @@
   ],
   "shortcuts": [
     {
-      "name": "HUD Dashboard",
-      "url": "/hud",
+      "name": "GUI Dashboard",
+      "url": "/gui",
       "description": "Visual portfolio dashboard"
     }
   ]

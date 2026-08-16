@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------------------------
    /cv — light, professional, print-ready CV.
    Every rule is scoped under body.cv-mode (set by CV.tsx on mount) because
-   Vite bundles all CSS globally and the terminal/HUD must not inherit any of
+   Vite bundles all CSS globally and the terminal/GUI must not inherit any of
    this — especially the print rules.
 
    Single-page guarantee: all vertical spacing lives in the variables below.
@@ -10,6 +10,33 @@
    beforeprint so it can measure the compact layout and zoom the wrapper to
    fit one A4 page regardless of how much content portfolio.json grows).
 --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   CV screen scrolling
+   The main terminal app may lock document scrolling, so the CV route
+   explicitly restores normal page scrolling.
+--------------------------------------------------------------------------- */
+
+html:has(body.cv-mode),
+body.cv-mode {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100%;
+}
+
+body.cv-mode #root {
+  height: auto !important;
+  min-height: 100vh;
+  overflow: visible !important;
+}
+
+body.cv-mode .cv-page {
+  min-height: 100vh;
+  height: auto !important;
+  overflow: visible !important;
+  padding-bottom: 100px;
+}
 
 body.cv-mode {
   background: #f8f9fa;
@@ -70,6 +97,8 @@ body.cv-mode .cv-page {
 }
 
 body.cv-mode .cv-wrapper {
+  box-sizing: border-box;
+  width: 100%;
   max-width: var(--cv-wrap-max);
   margin: 0 auto;
   padding: var(--cv-wrap-pad);
@@ -304,9 +333,16 @@ body.cv-mode .cv-project-stars {
   color: #888;
 }
 
-body.cv-mode .cv-project-link {
+body.cv-mode .cv-project-links {
   margin-left: auto;
+  display: flex;
+  gap: 10px;
   font-size: 11px;
+  white-space: nowrap;
+}
+
+body.cv-mode .cv-project-links a {
+  color: #00a8cc;
 }
 
 body.cv-mode .cv-project-desc {
@@ -319,35 +355,114 @@ body.cv-mode .cv-project-desc {
 body.cv-mode .cv-project-tags {
   display: var(--cv-detail);
 }
+/* ---- certifications ------------------------------------------------------- */
 
-/* ---- certifications ------------------------------------------------------------ */
+body.cv-mode .cv-cert-category {
+  margin-bottom: var(--cv-cat-mb);
+}
+
+body.cv-mode .cv-cert-category-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #555;
+  margin: 0 0 4px;
+}
 
 body.cv-mode .cv-cert-row {
   display: grid;
-  grid-template-columns: 130px 1fr auto;
-  gap: 0 20px;
+  grid-template-columns: 90px minmax(0, 1fr) auto;
+  gap: 0 16px;
   align-items: center;
+
   padding: var(--cv-cert-pad) 0;
-  border-bottom: 1px solid #f0f0f0;
+
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+body.cv-mode .cv-cert-main {
+  min-width: 0;
 }
 
 body.cv-mode .cv-cert-name {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   color: #1a1a1a;
+}
+
+body.cv-mode .cv-cert-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+body.cv-mode .cv-cert-name a:hover {
+  text-decoration: underline;
 }
 
 body.cv-mode .cv-cert-issuer {
   font-size: 11px;
-  color: #888;
+  color: #666;
   margin-top: 2px;
 }
 
+/* ---- certification meta -------------------------------------------------- */
+/*
+ * Keeps the status and certificate link stacked:
+ *
+ *   EARNED
+ *   Certificate
+ */
+
+body.cv-mode .cv-cert-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+
+  min-width: 70px;
+}
+
+body.cv-mode .cv-cert-link {
+  color: inherit;
+  text-decoration: none;
+  font-size: 9px;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+body.cv-mode .cv-cert-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- status badge --------------------------------------------------------- */
+
 body.cv-mode .cv-badge {
-  font-size: 10px;
-  padding: 2px 8px;
-  border: 1px solid;
+  display: inline-block;
+
+  padding: 2px 7px;
+
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  line-height: 1.3;
+
   border-radius: 2px;
+  white-space: nowrap;
+}
+
+body.cv-mode .badge-active {
+  background: #e8f8ee;
+  color: #1a7a3a;
+  border: 1px solid #a8d8b8;
+}
+
+body.cv-mode .badge-progress {
+  background: #fff8e8;
+  color: #7a5a00;
+  border: 1px solid #d8c880;
 }
 
 /* ---- writeups -------------------------------------------------------------------- */
@@ -478,21 +593,70 @@ body.cv-mode .cv-btn-back {
 
 /* ---- print — critical for PDF quality ---------------------------------------------------- */
 
+/* ---- print — critical for PDF quality ----------------------------------- */
+
 @media print {
+  /*
+   * ============================================================
+   * PRINT / PDF BASE
+   * ============================================================
+   */
+
   body.cv-mode {
+    overflow: visible !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
   body.cv-mode .cv-page {
-    min-height: 0;
+    min-height: 0 !important;
+    height: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: visible !important;
+
+    break-before: auto;
+    break-after: auto;
+    break-inside: auto;
+
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: auto;
   }
 
   body.cv-mode .cv-wrapper {
-    margin: 0;
+    box-sizing: border-box;
+
+    width: 100%;
+    max-width: var(--cv-wrap-max);
+
+    margin: 0 auto !important;
+
+    overflow: visible !important;
+
+    break-before: auto;
+    break-after: auto;
+    break-inside: auto;
+
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: auto;
   }
 
-  /* Hide non-CV elements. */
+  /*
+   * ============================================================
+   * HIDE SCREEN-ONLY ELEMENTS
+   * ============================================================
+   */
+
   body.cv-mode nav,
   body.cv-mode .cv-actions,
   body.cv-mode .cv-footer-web,
@@ -500,56 +664,215 @@ body.cv-mode .cv-btn-back {
     display: none !important;
   }
 
-  /* Page break rules — a safety net; the zoom auto-fit in CV.tsx should keep
-     everything on page one, so these only matter if JS is disabled. */
+  /*
+   * ============================================================
+   * PAGE BREAK CONTROL
+   * ============================================================
+   *
+   * Keep individual entries together.
+   *
+   * IMPORTANT:
+   * Do NOT force page breaks between projects/certifications.
+   * The CV scaling logic in CV.tsx is responsible for fitting
+   * the document onto the A4 page.
+   */
+
   body.cv-mode .cv-project,
-  body.cv-mode .cv-grid-row,
-  body.cv-mode .cv-cert-row {
+  body.cv-mode .cv-cert-row,
+  body.cv-mode .cv-grid-row {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  body.cv-mode .cv-project-links,
+  body.cv-mode .cv-cert-link {
+    break-inside: avoid;
     page-break-inside: avoid;
   }
 
-  body.cv-mode h2 {
+  body.cv-mode h1,
+  body.cv-mode h2,
+  body.cv-mode h3 {
+    break-after: avoid;
     page-break-after: avoid;
   }
 
-  /* Force light background even in dark mode. */
+  body.cv-mode .cv-section {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  body.cv-mode p {
+    orphans: 2;
+    widows: 2;
+  }
+
+  /*
+   * ============================================================
+   * MONOCHROME CV
+   * ============================================================
+   */
+
   body.cv-mode,
   body.cv-mode * {
-    background: white !important;
+    background: #ffffff !important;
     color: #1a1a1a !important;
   }
 
-  /* This page defines its own print header — suppress the global one. */
   body.cv-mode::before {
     content: none !important;
   }
 
-  /* Keep colored badges readable. */
-  body.cv-mode .badge-active {
-    background: #e8f8ee !important;
-    color: #1a7a3a !important;
+  /*
+   * ============================================================
+   * HEADER
+   * ============================================================
+   */
+
+  body.cv-mode .cv-name {
+    color: #111111 !important;
   }
 
+  body.cv-mode .cv-role {
+    color: #222222 !important;
+  }
+
+  body.cv-mode .cv-location {
+    color: #666666 !important;
+  }
+
+  /*
+   * Keep the main header divider stronger than section dividers.
+   */
+
+  body.cv-mode .cv-header-divider {
+    border-color: #222222 !important;
+  }
+
+  /*
+   * ============================================================
+   * STATUS BADGE
+   * ============================================================
+   */
+
+  body.cv-mode .cv-status-badge {
+    background: #f5f5f5 !important;
+    color: #1a1a1a !important;
+    border: 1px solid #b5b5b5 !important;
+  }
+
+  /*
+   * ============================================================
+   * CERTIFICATION BADGES
+   * ============================================================
+   */
+
+  body.cv-mode .badge-active,
   body.cv-mode .badge-progress {
-    background: #fff8e8 !important;
-    color: #7a5a00 !important;
+    background: #f5f5f5 !important;
+    color: #1a1a1a !important;
+    border: 1px solid #b5b5b5 !important;
   }
 
-  /* Links: show URL inline for the printed version... */
+  /*
+   * ============================================================
+   * LINKS
+   * ============================================================
+   *
+   * Keep links clickable in the PDF.
+   *
+   * IMPORTANT:
+   * Do not append the URL after the visible text.
+   *
+   * Example:
+   *
+   *   GitHub
+   *
+   * instead of:
+   *
+   *   GitHub (https://github.com/...)
+   */
+
   body.cv-mode a[href]::after {
-    content: " (" attr(href) ")";
-    font-size: 9px;
-    color: #888 !important;
+    content: none !important;
   }
 
-  /* ...but not where the URL is already the visible text. The [href] is
-     needed to out-rank the a[href]::after rule above. */
-  body.cv-mode .cv-contact a[href]::after,
-  body.cv-mode a.cv-project-link[href]::after,
-  body.cv-mode a.cv-writeup-link[href]::after {
-    content: none;
+  body.cv-mode a[href] {
+    color: #1a1a1a !important;
+    text-decoration: none !important;
+  }
+
+  body.cv-mode .cv-project-links a,
+  body.cv-mode .cv-contact a,
+  body.cv-mode .cv-cert-link,
+  body.cv-mode .cv-writeup-link {
+    color: #1a1a1a !important;
+    text-decoration: none !important;
+  }
+
+  /*
+   * ============================================================
+   * SECTION HEADINGS / DIVIDERS
+   * ============================================================
+   */
+
+  body.cv-mode .cv-heading {
+    color: #111111 !important;
+    border-color: #d0d0d0 !important;
+  }
+
+  /*
+   * ============================================================
+   * SECONDARY INFORMATION
+   * ============================================================
+   */
+
+  body.cv-mode .cv-year,
+  body.cv-mode .cv-cert-issuer,
+  body.cv-mode .cv-project-stars,
+  body.cv-mode .cv-location {
+    color: #666666 !important;
+  }
+
+  /*
+   * ============================================================
+   * SKILLS / TAGS
+   * ============================================================
+   */
+
+  body.cv-mode .cv-chip,
+  body.cv-mode .cv-chip-small {
+    background: transparent !important;
+    color: #1a1a1a !important;
+    border-color: #b5b5b5 !important;
+  }
+
+  /*
+   * ============================================================
+   * PROJECT LINKS
+   * ============================================================
+   */
+
+  body.cv-mode .cv-project-links {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /*
+   * ============================================================
+   * CERTIFICATE LINKS
+   * ============================================================
+   */
+
+  body.cv-mode .cv-cert-link {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   A4 PAGE
+--------------------------------------------------------------------------- */
 
 @page {
   size: A4;

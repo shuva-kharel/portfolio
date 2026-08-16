@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Effect, HistoryEntry, Portfolio } from "../types";
 import { CommandEngine } from "../core/CommandEngine";
@@ -102,7 +96,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
       const keyboard = Math.max(0, window.innerHeight - vv.height);
       document.documentElement.style.setProperty(
         "--keyboard-height",
-        `${keyboard}px`
+        `${keyboard}px`,
       );
       const el = scrollRef.current;
       if (el) el.scrollTop = el.scrollHeight;
@@ -129,14 +123,14 @@ export default function Terminal({ data, onSetTheme }: Props) {
           execute(effect.input, false);
           break;
         case "navigate":
-          // `gui` jumps to the visual HUD route in the same tab.
+          // `gui` jumps to the visual GUI route in the same tab.
           navigate(effect.to);
           break;
       }
     },
     // execute is defined below and stable via useCallback
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onSetTheme, navigate]
+    [onSetTheme, navigate],
   );
 
   // ---- run a command -------------------------------------------------------
@@ -160,8 +154,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
       };
 
       // Don't add a totally empty echo-less entry (e.g. blank programmatic run).
-      const isNoise =
-        !echo && result.type === "empty" && !result.lines?.length;
+      const isNoise = !echo && result.type === "empty" && !result.lines?.length;
       if (!isNoise) setEntries((prev) => capEntries([...prev, entry]));
 
       // cd (and others) may have changed the working directory.
@@ -170,7 +163,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
       // Apply any immediate side effect attached to the result.
       if (result.effect) handleEffect(result.effect);
     },
-    [engine, handleEffect]
+    [engine, handleEffect],
   );
 
   // Cap the scrollback: once total lines exceed MAX_LINES, drop the oldest
@@ -202,7 +195,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
       history.push(value);
       execute(value, true);
     },
-    [execute, history]
+    [execute, history],
   );
 
   const handleHistoryPrev = useCallback(() => history.prev(), [history]);
@@ -215,9 +208,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
       if (tokens.length <= 1) {
         const frag = tokens[0] ?? "";
         if (frag === "") return null;
-        const matches = engine
-          .commandNames()
-          .filter((c) => c.startsWith(frag));
+        const matches = engine.commandNames().filter((c) => c.startsWith(frag));
         if (matches.length === 0) return null;
         if (matches.length === 1) return matches[0] + " ";
         return commonPrefix(matches);
@@ -239,7 +230,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
 
       return null;
     },
-    [engine]
+    [engine],
   );
 
   const handleClear = useCallback(() => setEntries([]), []);
@@ -313,7 +304,11 @@ export default function Terminal({ data, onSetTheme }: Props) {
         ) : (
           <>
             {entries.map((entry) => (
-              <OutputBlock key={entry.id} entry={entry} onEffect={handleEffect} />
+              <OutputBlock
+                key={entry.id}
+                entry={entry}
+                onEffect={handleEffect}
+              />
             ))}
             <InputLine
               ref={inputRef}
@@ -334,10 +329,7 @@ export default function Terminal({ data, onSetTheme }: Props) {
       {/* Mobile-only helper toolbar above the keyboard. Hidden on desktop via
           CSS. mousedown is prevented so tapping doesn't blur the input. */}
       {!booting && focused && (
-        <div
-          className="kbd-toolbar"
-          onMouseDown={(e) => e.preventDefault()}
-        >
+        <div className="kbd-toolbar" onMouseDown={(e) => e.preventDefault()}>
           <button className="kbd-btn" onClick={() => inputRef.current?.tab()}>
             TAB
           </button>

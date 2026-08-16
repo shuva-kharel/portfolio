@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import type { CSSProperties } from "react";
 
 // A deliberately bare 404: a fake segfault / kernel-panic dump on the same dark
-// background as the terminal, JetBrains Mono, nothing else. No nav, no HUD.
+// background as the terminal, JetBrains Mono, nothing else. No nav, no GUI.
 const wrap: CSSProperties = {
   margin: 0,
   minHeight: "100vh",
@@ -49,16 +49,17 @@ export default function NotFound() {
       <div style={{ marginTop: 24 }}>
         <button style={promptStyle} onClick={() => navigate("/")}>
           <span style={{ color: "var(--prompt-user, #e8a838)" }}>
-            [ghost@parrot]
-          </span>
-          <span style={{ color: "var(--prompt-path, #a0a0a0)" }}>[~]</span>$ cd /
-        </button>
-        <button style={promptStyle} onClick={() => navigate("/hud")}>
-          <span style={{ color: "var(--prompt-user, #e8a838)" }}>
-            [ghost@parrot]
+            [shuva@blackarch]
           </span>
           <span style={{ color: "var(--prompt-path, #a0a0a0)" }}>[~]</span>$ cd
-          /hud
+          /
+        </button>
+        <button style={promptStyle} onClick={() => navigate("/gui")}>
+          <span style={{ color: "var(--prompt-user, #e8a838)" }}>
+            [shuva@blackarch]
+          </span>
+          <span style={{ color: "var(--prompt-path, #a0a0a0)" }}>[~]</span>$ cd
+          /gui
         </button>
       </div>
     </div>
