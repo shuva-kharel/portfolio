@@ -14,7 +14,7 @@ import {
 import { usePortfolio } from "../hooks/usePortfolio";
 import type { Portfolio } from "../types";
 
-import "./gui.css";
+import "./GUI.css";
 
 /* =========================================================
    TYPES
